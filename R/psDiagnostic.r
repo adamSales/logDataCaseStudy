@@ -3,35 +3,29 @@ library(bayesplot)
 set.seed(613)
 samp <- sample(1:nrow(draws$studEff),size=1000)
 draws1k <- lapply(draws, function(x) if(NCOL(x)==1) x[samp] else x[samp,])
-Ymean <- with(c(sdat,draws1k),
-              teacherEffY[,teacher]+schoolEffY[,school]+pairEffect[,pair]+sweep(studEff,1,a1,'*')+
-              sweep(sweep(studEff,1,b1,'*'),2,Z,'*')+betaY%*%t(X))
 
-Yrep <- sapply(1:1000,function(i) rnorm(sdat$nstud,Ymean[i,],draws1k$sigY[i,sdat$Z+1]))
-
-## overall Y
-ppc_dens_overlay(sdat$Y,t(Yrep))+ggtitle('Pooled Treatment and Control')
-ggsave('figure/ppcYoverall.jpg')
+ppc_dens_overlay(sdat$Y,draws1k$Yrep)+ggtitle('Pooled Treatment and Control')
+ggsave('output/ppcYoverall.jpg')
 
 ppc_dens_overlay(sdat$Y[sdat$Z==1],t(Yrep)[,sdat$Z==1])+ggtitle('Treatment Group')
-ggsave('figure/ppcYtrt.jpg')
+ggsave('output/ppcYtrt.jpg')
 
 ppc_dens_overlay(sdat$Y[sdat$Z==0],t(Yrep)[,sdat$Z==0])+ggtitle('Control Group')
-ggsave('figure/ppcYctl.jpg')
+ggsave('output/ppcYctl.jpg')
 
 ### residual plots
 fitd <- rowMeans(Yrep)
 qplot(fitd,sdat$Y-fitd,xlab='Fitted Values',ylab='Residuals',main='Overall')
-ggsave('figure/residPlotOverall.jpg')
+ggsave('output/residPlotOverall.jpg')
 
 qplot(fitd[sdat$Z==1],sdat$Y[sdat$Z==1]-fitd[sdat$Z==1],xlab='Fitted Values',ylab='Residuals',main='Treatment Group')
-ggsave('figure/residPlotTrt.jpg')
+ggsave('output/residPlotTrt.jpg')
 
 qplot(fitd[sdat$Z==0],sdat$Y[sdat$Z==0]-fitd[sdat$Z==0],xlab='Fitted Values',ylab='Residuals',main='Control Group')
-ggsave('figure/residPlotCtl.jpg')
+ggsave('output/residPlotCtl.jpg')
 
 
-pdf('figure/qqPlots.pdf', height=3,width=6)
+pdf('output/qqPlots.pdf', height=3,width=6)
 par(mfrow=c(1,2))
 qqnorm(sdat$Y[sdat$Z==1]-fitd[sdat$Z==1],main='Treatment Group')
 qqline(sdat$Y[sdat$Z==1]-fitd[sdat$Z==1])
@@ -46,13 +40,24 @@ samp <- sample(1:1000,9)
 lp <- with(c(sdat,draws1k),studEff[,studentM]+secEff[,section])
 prob <- exp(lp)/(1+exp(lp))
 p <- ppc_error_binned(sdat$grad,prob[samp,])
-ggplot2::ggsave('figure/binnedplot.pdf',p)
+ggplot2::ggsave('output/binnedplot.pdf',p)
 
 ### ppc m-bar
 mbarRep <- apply(prob,1,function(p) aggregate(rbinom(length(sdat$grad),1,p),by=list(sdat$studentM),FUN=mean)$x)
 mbar <- aggregate(sdat$grad,by=list(sdat$studentM),FUN=mean)$x
 ppc_dens_overlay(mbar,t(mbarRep))
-ggsave('figure/mbarPPC.jpg')
+ggsave('output/mbarPPC.jpg')
+
+
+
+############################
+## robustness checks
+############################
+
+### drop treatment cases w/o usage data (same dataset as obs study and mediation analysis)
+sdatDrop <- makeStanDat(dat,x,missingUsage=FALSE)
+psmodDrop <- stan('R/prinStratStan.stan',data=sdatDrop)
+save(psmodDrop,file='output/psmodDrop.RData')
 
 mainb1 <- summary(psmod1,par='b1')[[1]]['b1',]
 robustness <- data.frame(Value=mainb1['mean'],Coefficient='Main Model',HighInner=mainb1['75%'],LowInner=mainb1['25%'],
@@ -94,4 +99,10 @@ ggplot(rob2,aes(x=Value,y=Coefficient))+geom_point(size=2)+
     theme_minimal()+
     ylab('')+xlab(expression(b[1]))+scale_x_continuous(breaks=c(-0.1,-0.05,0,0.05))+geom_vline(xintercept=0,linetype='dotted')+theme(text=element_text(size=15))
 
-ggsave('figure/robustness.pdf',height=8,width=6)
+ggsave('output/robustness.pdf',height=8,width=6)
+
+
+
+##################################
+### fake data models
+################################
