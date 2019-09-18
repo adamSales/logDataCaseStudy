@@ -66,7 +66,7 @@ sdatFConst <- within(sdatF,{
  }
 )
 
-constEff <- stan('R/psmod.stan',data=sdatFConst,iter=3000,chains=6)
+constEff <- stan('R/prinStratStan.stan',data=sdatFConst,iter=3000,chains=6)
 
 ##cat('\n\n\n\n',rep('-',40),'\n','TRUTH: CONSTANT EFFECT ATE=0.18\n',rep('-',40),'\n\n\n')
 ##print(constEff,c('a0','a1','b0','b1'),c(0.05,0.95))
@@ -84,7 +84,7 @@ datLin$Y[datLin$treatment==1] <- datLin$Y[datLin$treatment==1]+datLin$te[datLin$
 
 sdatFlin <- makeStanDat(datLin,advanceF)
 
-linEff <- stan('R/psmod.stan',data=sdatFlin,iter=3000,chains=6)
+linEff <- stan('R/prinStratStan.stan',data=sdatFlin,iter=3000,chains=6)
 ##cat('\n\n\n\n',rep('-',40),'\n','TRUTH: LINEAR EFFECT b1=',round(mean(effs$b1),2),'\n',rep('-',40),'\n\n\n')
 ##print(linEff,c('a0','a1','b0','b1'),c(0.05,0.95))
 
@@ -106,7 +106,7 @@ sdatFquad <- makeStanDat(datQuad,advanceF)
 
 
 
-quadEff <- stan('R/psmod.stan',data=sdatFquad,iter=3000,chains=6)
+quadEff <- stan('R/prinStratStan.stan',data=sdatFquad,iter=3000,chains=6)
 
 ##cat('\n\n\n\n',rep('-',40),'\n','TRUTH: QUADRATIC EFFECT',rep('-',40),'\n\n\n')
 ##print(constEff,c('a0','a1','b0','b1'),c(0.05,0.95))
