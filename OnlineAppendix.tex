@@ -1,0 +1,67 @@
+\section{Observational Study}
+\subsection{Covariate Balance Plot}
+\begin{figure}
+\centering
+\includegraphics[width=0.95\textwidth]{balancePlot.pdf}
+\caption{Standardized differences on baseline covariates between
+  students in the treatment group with $H=0$ and $H=1$, before and
+  after propensity score matching. The dotted vertical lines are at
+  $\pm$0.25 and $\pm$0.05, corresponding to What Works Clearinghouse
+  standards.}
+\label{fig:balance}
+\end{figure}
+
+Figure \ref{fig:balance} shows covariate balance before and after the
+match.
+The red squares in the figure represent covariate standardized differences
+between the two groups before adjustment; apparently, $H=1$ and $H=0$
+students varied on a number of characteristics.
+$H=1$ students tended to have lower pretest scores, were less likely
+to be fluent in English, gifted, white, or Asian, and in ninth grade,
+but more likely to need special education.
+
+\subsection{Continuous Measure of Hint Use}
+
+As an alternative to treating $H$ as binary, we may model hint requests continuously, via
+the IRT parameter $\eta$.
+Doing so effectively assumes a stronger version of matched
+ignorability: within matched sets potential outcomes $Y(\eta)$ are
+independent of $\eta$.
+Adding covariates to the regression weakens this assumption, by using
+the regression model to adjust for observed confounding between $\eta$
+and $Y(\eta)$ left over after the match.
+
+We hypothesized that the effect of variance in $\eta$ may not be
+monotonic: that there is an optimal proclivity to request a hint that
+is greater than zero.
+Students asking for too many  hints may be wheel spinning
+\citep[c.f.][]{wheelSpinning} or not putting in sufficient effort to
+learn the material, while students who request too few hints are not
+taking advantage of a useful learning resource.
+To estimate the effect of $\eta$ on posttest
+scores---i.e. $Y(\eta=r_1)-Y(\eta=r_0)$ for $r_1$ and $r_2$ two
+hypothetical values of $\eta$---we regressed $Y$ on matched set
+indicators, the full set of covariates, and penalized splines for
+pretest and $\eta$, using the \texttt{gam} function of the
+\texttt{mgcv} package in \texttt{R} \citep{mgcv}.
+
+Figure \ref{fig:gam} plots estimates of $\eta$ against adjusted
+posttest scores, with the estimated effects of all the regressors
+other than $\eta$ subtracted out.
+The estimated effect of $\eta$ is plotted as a line, with the dotted
+lines giving an approximate 95\% confidence region.
+Our hypothesis of a non-monotonic $\eta$ effect was not borne out:
+the fitted line is monotonically negative throughout.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.95\textwidth]{continuousMatched.pdf}
+\caption{Results from a model estimating the effect of continuous hint
+  parameter $\eta$ on posttest scores. Each point on the graph plots a
+  the posterior mode of $\eta_i$ for subject $i$ in the treatment
+  group against $Y_{adj}$, $i$'s posttest score minus the model's
+  predictions based on all regressors other than $\eta$. The slope of the
+  regression line is the estimated effect of local changes in $\eta$
+  on $Y$.}
+\label{fig:gam}
+\end{figure}
