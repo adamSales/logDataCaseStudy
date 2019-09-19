@@ -40,3 +40,16 @@ vignettes/*.pdf
 *.pdf
 
 *.jpg
+
+*~
+
+*.bbl
+*.aux
+*.log
+*.out
+*.blg
+#*
+*.docx
+v0/*
+v1/*
+output/*
