@@ -52,3 +52,4 @@ datF$teachid2 <- factor(datF$teachid2)
 ### now delete usage data for "control" group
 xF <- x[x$field_id%in%datF$field_id[datF$treatment==1],]
 
+
