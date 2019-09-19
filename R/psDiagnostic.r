@@ -1,4 +1,6 @@
 library(bayesplot)
+
+
 ### make Yrep
 set.seed(613)
 samp <- sample(1:nrow(draws$studEff),size=1000)
@@ -56,6 +58,7 @@ ggsave('output/mbarPPC.jpg')
 
 ### drop treatment cases w/o usage data (same dataset as obs study and mediation analysis)
 sdatDrop <- makeStanDat(dat,x,missingUsage=FALSE)
+
 psmodDrop <- stan('R/prinStratStan.stan',data=sdatDrop)
 save(psmodDrop,file='output/psmodDrop.RData')
 

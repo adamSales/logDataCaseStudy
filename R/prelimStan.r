@@ -93,53 +93,13 @@ xOrig <- x
     mutate(prevErr=lag(nerrs1))%>%
     filter(!is.na(prevErr),prevErr>0)
 
- save(dat,x,file='hintsData.RData')
+ save(dat,x,file='data/hintsData.RData')
 
 
 
 
 
-makeStanDat <- function(dat,x,xInteract=FALSE,missingUsage=TRUE){
-  stanDat <- list()
 
-  if(!missingUsage)
-    dat <- filter(dat,field_id%in%x$field_id)
-
-  x <- droplevels(x)
- dat <- droplevels(dat)
-
- x$section <- as.factor(x$section)
-
- stanDat$nsecWorked <- nrow(x)
- stanDat$nstud <- nrow(dat)
- stanDat$nteacher <- nlevels(dat$teachid2)
- stanDat$nschool <- nlevels(dat$schoolid2)
- stanDat$nsec <- nlevels(x$section)
- stanDat$npair <- nlevels(dat$pair)
-
- stanDat$teacher <- as.numeric(as.factor(dat$teachid2))
- stanDat$pair <- as.numeric(dat$pair)
- stanDat$school <- as.numeric(dat$school)
- stanDat$studentM <- seq(stanDat$nstud)[match(x$field_id,dat$field_id)]
- stanDat$section <- as.numeric(x$section)
-
- stanDat$grad <- as.numeric(x$hint)
-
- X <- model.matrix(~poly(xirt,2)+race+sex+spec,data=dat)[,-1]
- if(xInteract) X <- model.matrix(~poly(xirt,2)*(race+sex+spec)+(race+sex+spec)^2+state,data=dat)[,-1]
- stanDat$X <- scale(X)
- stanDat$ncov <- ncol(X)
-
-
- stanDat$Z <- as.numeric(dat$treatment)
-
- stanDat$Y <- dat$Y
-
- stanDat
-}
-
-
-sdat <- makeStanDat(dat,x)
 
 
 
