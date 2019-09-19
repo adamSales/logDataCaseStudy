@@ -87,3 +87,13 @@ modSum <- function(mod){
     }
   }
 }
+
+
+currentCode <- function(){
+  functions <- list()
+  for(ll in ls(name=.GlobalEnv))
+    if(is.function(get(ll,envir=.GlobalEnv)))
+      functions[[ll]] <- get(ll,envir=.GlobalEnv)
+  functions$timestamp <- Sys.time()
+  functions
+}
