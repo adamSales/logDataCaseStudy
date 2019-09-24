@@ -12,7 +12,7 @@ load('data/hintsData.RData')
 ##############################################
 
 ### use data, E[studEff] from main model
-load('output/hintPS.RData')
+load('fitModels/hintPS.RData')
 dat$U <- colMeans(rstan::extract(psmod1,'studEff')[[1]])
 ### U has a couple outliers:
 ## newRng <- quantile(dat$U,c(0.25,0.75))+c(-1,1)*2*IQR(dat$U)

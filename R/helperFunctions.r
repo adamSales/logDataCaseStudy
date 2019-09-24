@@ -97,3 +97,36 @@ currentCode <- function(){
   functions$timestamp <- Sys.time()
   functions
 }
+
+pdMod <- function(mod,row=1,column=1,func){
+    draws <- extract(mod)
+    samp <- seq(1,length(draws$b1),length=1000)
+    Usamp <- draws$studEff[samp,]
+    iqr <- apply(Usamp,1,IQR)
+    studEff95 <- quantile(Usamp,c(0.025,0.975))
+    Usamp[Usamp<studEff95[1] | Usamp>studEff95[2]] <- NA
+    trtEff <- sweep(sweep(Usamp,1,draws$b1[samp],'*'),1,draws$b0[samp],'+')
+
+
+
+    if(missing(func)){
+        func <- function(x) mean(draws$b0)+mean(draws$b1)*x
+        knownTruth <- FALSE
+    } else knownTruth <- TRUE
+    truth <- curve(func,from=studEff95[1],to=studEff95[2],n=length(samp)/3)
+    avg <- curve(mean(draws$b0)+x*mean(draws$b1),
+                 from=studEff95[1],to=studEff95[2],n=length(samp)/3)
+    postDraw <- curve(mean(draws$b0)+x*mean(draws$b1),
+                      from=studEff95[1],to=studEff95[2],n=length(samp)-length(truth$x)-length(avg$x))
+    x <- c(postDraw$x,truth$x,avg$x)
+    y <- c(postDraw$y,truth$y,avg$y)
+    if(knownTruth) truthOrAvg <- c(rep('Posterior\nDraws',length(postDraw$x)),rep('True\nEffect',length(truth$x)),rep('Posterior\nAverage',length(avg$x))) else
+     truthOrAvg <- c(rep('Posterior\nDraws',length(postDraw$x)),rep('Posterior\nAverage',length(avg$x)+length(truth$x)))
+
+#    if(knownTruth) title <- paste('True Effe
+
+    pd <- data.frame(b0=draws$b0[samp],b1=draws$b1[samp],id=1:length(samp),row=row,column=column,xmin=studEff95[1],xmax=studEff95[2],ymin=min(trtEff,na.rm=T),ymax=max(trtEff,na.rm=T),x=x,y=y,
+                     truthOrAvg=truthOrAvg,
+                     iqr=iqr)
+    pd
+}
