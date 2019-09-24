@@ -10,7 +10,7 @@ datLin <- datF
 datLin$te <- mean(effs$b0)+mean(effs$b1)*datF$U
 datLin$Y[datLin$treatment==1] <- datLin$Y[datLin$treatment==1]+datLin$te[datLin$treatment==1]
 
-sdatFlin <- makeStanDat(datLin,advanceF)
+sdatFlin <- makeStanDat(datLin,xF)
 
 linEff <- stan('R/prinStratStan.stan',data=sdatFlin,iter=3000,chains=6)
 ##cat('\n\n\n\n',rep('-',40),'\n','TRUTH: LINEAR EFFECT b1=',round(mean(effs$b1),2),'\n',rep('-',40),'\n\n\n')
@@ -18,7 +18,7 @@ linEff <- stan('R/prinStratStan.stan',data=sdatFlin,iter=3000,chains=6)
 
 modSum(linEff)
 
-save(linEff,sdatFlin,functions,file='output/linEff.RData');rm(linEff);gc();
+save(linEff,sdatFlin,functions,file='fitModels/linEff.RData');rm(linEff);gc();
 
 
 

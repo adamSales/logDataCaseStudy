@@ -18,4 +18,4 @@ modSum(constEff)
 
 ##cat('\n\n\n\n',rep('-',40),'\n','TRUTH: CONSTANT EFFECT ATE=0.18\n',rep('-',40),'\n\n\n')
 ##print(constEff,c('a0','a1','b0','b1'),c(0.05,0.95))
-save(constEff,sdatF,functions,file='output/constEff.RData')
+save(constEff,sdatF,functions,file='fitModels/constEff.RData')

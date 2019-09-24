@@ -11,7 +11,7 @@ datQuad <- within(datF,{
     Y[treatment==1] <- Y[treatment==1]+te[treatment==1]
 })
 
-sdatFquad <- makeStanDat(datQuad,advanceF)
+sdatFquad <- makeStanDat(datQuad,xF)
 
 
 
@@ -22,7 +22,7 @@ quadEff <- stan('R/prinStratStan.stan',data=sdatFquad,iter=3000,chains=6)
 
 modSum(quadEff)
 
-save(quadEff,sdatFquad,functions,file='output/quadEff.RData'); rm(quadEff); gc();
+save(quadEff,sdatFquad,functions,file='fitModels/quadEff.RData'); rm(quadEff); gc();
 
 
 
