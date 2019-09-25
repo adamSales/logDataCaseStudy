@@ -1,3 +1,4 @@
+library(tikzDevice)
 ### run all four fake models
 
 source('R/fakePrep.r')
@@ -6,28 +7,28 @@ source('R/fakeConstEff.r')
 source('R/fakeLinEff.r')
 source('R/fakeQuadEff.r')
 
-
+extract <- rstan::extract
 
 ######################
 ### results from fake models
 #####################
 estEff <- list()
-load('fitModels/noEffect.RData')
+print(load('fitModels/noEffect.RData'))
 pd <- pdMod(noEff,1,1,function(x) x*0)
 estEff$noEff <- summary(noEff,par=c('b0','b1'))[[1]]
 rm(noEff);gc()
 
-load('fitModels/constEff.RData')
+print(load('fitModels/constEff.RData'))
 pd <- rbind(pd,pdMod(constEff,1,2,function(x) x*0+0.18))
 estEff$constEff <- summary(constEff,par=c('b0','b1'))[[1]]
 rm(constEff); gc()
 
-load('fitModels/linEff.RData')
+print(load('fitModels/linEff.RData'))
 pd <- rbind(pd,pdMod(linEff,2,1,function(x) mean(effs$b0)+x*mean(effs$b1)))
 estEff$linEff <- summary(linEff,par=c('b0','b1'))[[1]]
 rm(linEff);gc()
 
-load('fitModels/quadEff.RData')
+print(load('fitModels/quadEff.RData'))
 U <- datF$U
 mux <- mean(U)
 te <- -(U-mux)^2
@@ -44,10 +45,15 @@ pd <- within(pd,{
     title[row==1 & column==1] <- paste0('$\\tau=0$\n$\\hat{\\tau}=',sprintf("%.2f",estEff$noEff['b0',1]),
                                         ifelse(estEff$noEff['b1',1]>0,'+',''),
                                         sprintf("%.2f",estEff$noEff['b1',1]),'\\eta_T$')
-    title[row==1 & column==2] <- paste0('$\\tau=0.18+\\epsilon$\n$\\hat{\\tau}=',sprintf("%.2f",estEff$constEff['b0',1]),
+    title[row==1 & column==2] <- paste0('$\\tau=0.18+\\epsilon$\n$\\hat{\\tau}=',
+                                        sprintf("%.2f",estEff$constEff['b0',1]),
                                         ifelse(estEff$constEff['b1',1]>0,'+',''),
                                         sprintf("%.2f",estEff$constEff['b1',1]),'\\eta_T$')
-    title[row==2 & column==1] <- paste0('$\\tau=0.13-0.02\\eta_T$\n$\\hat{\\tau}=',sprintf("%.2f",estEff$linEff['b0',1]),
+    title[row==2 & column==1] <- paste0('$\\tau=',
+                                        round(mean(effs$b0),2),'+',
+                                        round(mean(effs$b1),2),
+                                        '\\eta_T$\n$\\hat{\\tau}=',
+                                        sprintf("%.2f",estEff$linEff['b0',1]),
                                         ifelse(estEff$linEff['b1',1]>0,'+',''),
                                         (sprintf("%.2f",estEff$linEff['b1',1])),'\\eta_T$')
     title[row==2 & column==2] <- paste0('$\\tau=-0.04\\eta_T^2+0.01\\eta_T+0.02$\n$\\hat{\\tau}=',
@@ -61,11 +67,11 @@ pd <- within(pd, {
                                    title[row==2 & column==1][1],
                                    title[row==2 & column==2][1]))})
 
-tikz('figure/fakePlots.tex',standAlone=TRUE,width=6,height=6)
+tikz('output/fakePlots.tex',standAlone=TRUE,width=6,height=6)
 print(ggplot(pd)+
     geom_abline(aes(intercept=b0,slope=b1,group=id),color='red')+
     coord_cartesian(xlim=c(min(pd$xmin),max(pd$xmax)),ylim=c(min(pd$ymin),max(pd$ymax)),expand=FALSE)+
-    geom_line(aes(x=x,y=y,group=truthOrAvg,linetype=truthOrAvg,color=truthOrAvg,alpha=truthOrAvg),size=1.5)#+
+    geom_line(aes(x=x,y=y,group=truthOrAvg,linetype=truthOrAvg,color=truthOrAvg,alpha=truthOrAvg),size=1.5)+
     facet_wrap(~title,ncol=2)+xlab('$\\eta_T$')+ylab('$\\hat{\\tau}(\\eta_T)$')+
     labs(group=NULL,color=NULL,linetype=NULL)+
     #theme(strip.background = element_blank(),strip.text.x = element_blank(),strip.text.y=element_blank())+

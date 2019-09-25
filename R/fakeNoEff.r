@@ -15,7 +15,7 @@ modSum(noEff)
 
 ##cat('\n\n\n\n',rep('-',40),'\n','TRUTH: NO EFFECT\n',rep('-',40),'\n\n\n')
 ##print(noEff,c('a0','a1','b0','b1'),c(0.05,0.95))
-save(noEff,sdatF,functions,file='output/noEffect.RData'); rm(noEff); gc()
+save(noEff,sdatF,functions,file='fitModels/noEffect.RData'); rm(noEff); gc()
 
 
 
