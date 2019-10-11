@@ -21,7 +21,13 @@ source('~/Box Sync/rcode/printXbal.r')
 
 source('R/prelimStan.r')
 
-sdat <- makeStanDat(dat,x)
+## usage data availability
+
+Nt <- sum(dat$treatment)
+
+obsUse=sum(dat$field_id[dat$treatment==1]%in%x$field_id)
+
+sdat <- makeStanDat(dat,x,missingUsage=FALSE)
 
 source('R/covariateTable.r')
 
@@ -191,11 +197,15 @@ dir2.1ci <- coefci(dir2.1,'treatment',vcov.=dir2.1vcv)
 
 
 ########## principal stratification
+if(is.null(getOption('mc.cores'))) options(mc.cores = 6)
+if(getOption('mc.cores')<6)  options(mc.cores = 6)
+
+functions <- currentCode()
 
 ### NOT RUN
-## psmod1 <- stan('R/prinStratStan.stan',data=sdat)
-## save(psmod1,file='output/hintPS.RData')
-load('output/hintPS.RData')
+psmod1 <- stan('R/prinStratStan.stan',data=sdat,chains=6,iter=6000)
+save(psmod1,sdat,functions,file='fitModels/hintPS.RData')
+load('fitModels/hintPS.RData')
 
 
 

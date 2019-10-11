@@ -15,12 +15,12 @@ functions <- currentCode()
 load('data/hintsData.RData')
 
 ### drop treatment cases w/o usage data (same dataset as obs study and mediation analysis)
-sdatDrop <- makeStanDat(dat,x,missingUsage=FALSE)
+sdatFull <- makeStanDat(dat,x,missingUsage=TRUE)
 
-psmodDrop <- stan('R/prinStratStan.stan',data=sdatDrop,chains=6,iter=3000)
+psmodFull <- stan('R/prinStratStan.stan',data=sdatFull,chains=6,iter=6000)
 
-modSum(psmodDrop)
+modSum(psmodFull)
 
-psmodDropSumm <- summary(psmodDrop)$summary
+psmodFullSumm <- summary(psmodFull)$summary
 
-save(psmodDrop,sdatDrop,functions,file='fitModels/psmodDrop.RData'); rm(psmodDrop); gc()
+save(psmodFull,sdatFull,functions,file='fitModels/psmodFull.RData'); rm(psmodFull); gc()

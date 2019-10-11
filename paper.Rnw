@@ -346,18 +346,22 @@ Log data were missing for some students, either because the log files were not r
 Treatment schools with mastery data missing
 for 90\% or more students were omitted from the analysis, along with
 their entire randomization block.
-Of the remaining 2,390 students, 87\% (2,091) had log
+Of the remaining \Sexpr{Nt} students, \Sexpr{round(obsUse/Nt*100)}\% (\Sexpr{prettyNum(obsUse,',')}) had log
 data.
-The students with missing log data were dropped from the observational
-study and mediation analysis, but included in the principal
-stratification study.
+For the sake of simplicity, the treatment students without log data
+were dropped from the study.\footnote{Including these students in a
+  principal stratification model is straightforward \citep{aoas}; see
+  the online supplement for results from a model including them, which
+  were broadly similar to the results presented here. Including
+  subjects with missing log data in a mediation or observational study
+  design can be more problematic \citep[see, e.g.][]{li2017identifiability}.}
 Problem log data for sections that were not part of the
 standard CTA1 Algebra I curriculum and problems worked by fewer than 100
 students were omitted from the
 dataset.
 
-All told, the main analysis included $n=$5308 students, 2390 of whom were assigned to the CTA1 condition and 2918 of whom were assigned to control.
-The students were nested within 116 teachers, in 43 schools across five states.
+All told, the main analysis included $n=$\Sexpr{prettyNum(sdat$nstud,',')} students, \Sexpr{prettyNum(sum(sdat$Z),',')} of whom were assigned to the CTA1 condition and \Sexpr{prettyNum(with(sdat,nstud-sum(Z)),',')} of whom were assigned to control.
+The students were nested within \Sexpr{sdat[['nteacher']]} teachers, in \Sexpr{sdat[['nschool']]} schools across five states.
 
 
 \subsection{The Role of Hints\footnote{This subsection draws heavily
