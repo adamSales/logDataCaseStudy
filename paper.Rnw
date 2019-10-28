@@ -120,7 +120,7 @@ studies of causal mechanisms.
 While statistical models of log data are nearly as old as the data itself
 \citep[e.g.][]{corbett1994knowledge}, data from an RCT differs in
 two principal ways from more traditional domains.
-RCTs feature randomization of treatment assignment, and a post-test
+RCTs feature randomization of treatment assignment, and a posttest
 (or some other outcome) administered to both users and non-users.
 These factors allow for causal modeling.
 
@@ -234,7 +234,7 @@ on posttest scores $Y$, is represented by figure (a).
 This approach, which we will discuss in Section
 \ref{sec:observational}, discards the control group from the RCT and
 uses techniques from observational studies to determine if and how requesting
-a greater number of hints affects post-test scores.
+a greater number of hints affects posttest scores.
 For the sake of illustration, we will use techniques similar to those
 discussed in \citet{rosenbaum2002observational},
  \citet{hansen2009b}, and \citet{ho:etal:2007}, combining a propensity
@@ -367,7 +367,7 @@ The students were nested within \Sexpr{sdat[['nteacher']]} teachers, in \Sexpr{s
 \subsection{The Role of Hints\footnote{This subsection draws heavily
   on comments from an anonymous reviewer.}}
 Students using the Cognitive Tutor Algebra software work algebra
-problems on a computer, instead of on paper, as is typical.
+problems on a computer.
 Each problem in the software is associated with a set of skills that
 the student must master, and a path (or set of paths) to solving the
 problem.
@@ -387,29 +387,33 @@ also reason to be skeptical \cite[See][for an overview of the theory]{aleven2016
 First of all, as, e.g., \citet{anderson1995cognitive} points out, ``if
 students never receive help of any sort, they are in danger of becoming
 permanently stuck on some problem'' (p. 190).
-That is, hints give students who are stuck a way to continue working
-after getting stuck.
+That is, hints give students who are stuck a way to continue working.
 Hints may also boost learning by ``helping students identify relevant features in
 problems'' \citep[][p. 6]{aleven2016help},  that is, point students
 towards aspects of the problem that are ``most important for the goals
 of learning'' \citep[][p. 782]{koedinger2012knowledge}.
-The final available ``bottom out'' hint typically gives the student
-the answer.
-Students who bottom out then see a worked example, which can be an
+Hints can help improve students' self-awareness and
+problem-solving strategy, such as by clarifying which skills they have
+and have not mastered.
+
+Most problems are associated with several hints, arranged in a
+sequence so that a student who remains stuck after one hint may
+request another.
+The last hint in the sequence will show a complete solution to the
+problem---essentially showing students a worked example, which can be an
 effective tool for learning \citep[e.g.][]{sweller1985use}.
-Finally, hints can help improve students' meta-cognitive states, such
-as their self-knowledge of skills.
 
 On the other hand, all of these theoretical mechanisms rely on
 students to play their part.
 In order for hints to be instructive, students need to reflect on
-their content, for instance with ``self-explanation''
-\citep[c.f.][]{renkl1998learning}.
-In the same vein, hints need to be well-designed in order to be
-effective \citep{mckendree1990effective}.
+their content in productive ways.
 This suggests that hints may be helpful for some students but not for
 others.
-They may even be harmful: as \citet{koedinger2007exploring} put it
+In the same vein, hints need to be well-designed in order to be
+effective \citep{mckendree1990effective}, so some hints may be more
+helpful than others.
+
+Hints may even be harmful: as \citet{koedinger2007exploring} put it
 (p. 241),
 ``many lines of research and theory suggest the importance of \dots
 withholding information from students so that they can exercise, test,
@@ -440,26 +444,25 @@ estimate hint effects.
 analytical methods to control for confounding.
 \citet{goldin2012learner} investigated two sources of heterogeneity in
 the effect of a hint request: by student and by the ``level'' of the
-hint (the first, second, or third ``bottom out''  hint available for a given problem).
+hint (the first, second, or final hint available for a given problem).
 They found that, indeed, the effect of asking for a hint varies
 between students, but on average it is negative for the first two
-hints requested on a problem, but positive for the bottom out hint.
+hints requested on a problem, but positive for the final hint.
 
 \subsection{Measuring Hint Usage in the CTA1 Data}
 Unlike previous studies of hint usage, the CTA1 study was not designed
 to estimate the effect of hint usage; its purpose was to estimate the
-effect of CTA1 as a package.
-Like \citet{beck2008does} and \citet{goldin2012learner}, but unlike
-\citet{anderson1995cognitive} and \citet{singh2011feedback}, hint
-usage was not randomized.
-On the other hand, the CTA1 study includes a posttest, like the
-randomized studies but unlike the observational studies cited here.
+effect of CTA1 as a package, including the associated textbook and
+recommended classroom practices.
+Access to the full CTA1 curriculum was randomized, rather than any
+specific aspect of usage, and effectiveness was measured with a
+standardized posttest covering a broad range of Algebra I skills.
 In this regard, the CTA1 study is similar to other large-scale
 evaluations of educational technology which do not randomize usage but
-do include a post-test.
+do include a posttest.
 
 The CTA1 study was of a much longer duration than
-any study of hint effects that we are aware of: students had access to the tutor for an entire
+any of the studies of hint effects we are aware of: students had access to the tutor for an entire
 school year before the posttest.
 This factor allows for much more data for each student than shorter
 studies, as well as more variability in the types of problems and
@@ -481,13 +484,13 @@ of hint level, our focus is on the overall average effect of
 requesting any hints; therefore, the variable measuring a student's
 hint request on a problem was set one if the student requested any
 hints on that problem, and zero otherwise.
-(More mundanely, we do not have access to data
-describing the number of hints available for every problem, which
-would hinder interpretation of any other measure of hint usage.)
+% (More mundanely, we do not have access to data
+% describing the number of hints available for every problem, which
+% would hinder interpretation of any other measure of hint usage.)
 
 Lastly, any observational study of hint usage must contend with the
 fact that students are unlikely to request hints on problems that they
-already know how to solve (other than by accident).
+already know how to solve.
 Hence, any measure of hint usage is necessarily also a measure of
 student ability---students who know more algebra will almost certainly
 request fewer hints.
@@ -500,10 +503,10 @@ found the problem at least somewhat difficult, and that, in this case,
 she responded to that difficulty by requesting a hint.
 Our interest is in the second implication, not the first.
 Conversely, the significance of a student's decision to forgo a hint
-depends on how challenging he or she finds the problem.
+depends in part on how challenging he or she finds the problem.
 Hint request frequency combines students' hint requests (or non-requests) from both
 problems they find challenging and trivial, so is a poor measure of
-students' use of the hint feature.
+students' disposition to use the hint feature.
 
 Ideally, we would solve this problem by only including data on
 problem-student pairs in which the problem was challenging to the
@@ -521,10 +524,10 @@ measure hint frequency.
 
 This measure is inversely related to the ratio of the percentage (of all
 problems) a student makes an error without having requested a hint,
-to the percentage of problems a student requests a hint
+to the percentage of problems a student requests a hint.%
 \footnote{Technically, if $h$ is the event that a student requests
 a hint on a problem and $e$ is the event that the student makes
-an error, then $Pr(h|h\text{ or }e)=1/\{1+Pr(h\text{ and not }e)/Pr(h)\}$}.
+an error, then $Pr(h|h\text{ or }e)=1/\{1+Pr(e\text{ and not }h)/Pr(h)\}$.}
 Making an error on a problem without having requested a hint reflects
 a hesitance to request a hint when one might have been warranted.
 $\bar{h}$ ignores the class of challenging problems on which students
@@ -541,7 +544,7 @@ that $H_i=\indicator{h_i>c}$, where $\indicator{x}=1$ if $x$ is true
 and 0 otherwise.
 To choose $c$, we fit a two-component modified Rasch mixture model
 \citep{rasch} to hint request data, described in an online appendix.
-The model classified approximately \Sexpr{round(mixProp*100)} of students as
+The model classified approximately \Sexpr{round(mixProp*100)}\% of students as
 high-hint users, so we chose $c=0.6$, approximately the
 \Sexpr{round((1-mixProp)*100)}th percentile of $\bar{h}$.
 This definition agreed with the model's classification in
@@ -561,7 +564,7 @@ had they requested hints more (or less) often?
 Let $Y_i$ represent subject $i$'s posttest score, and let $Z_i$ represent
 $i$'s treatment status (i.e. the CTA1 or control group).
 Following \citet{neyman} and \citet{rubin}, let $Y_i(Z=1)$ be
-the posttest score student $i$ would exhibit were $i$ (perhaps
+the posttest score student $i$ would achieve were $i$ (perhaps
 counterfactually) assigned to the treatment condition, and
 $Y_i(Z=0)$ the score were $i$ assigned to control.
 Then the CTA1 treatment effect for student $i$ is $Y_i(Z=1)-Y_i(Z=0)$.
@@ -592,10 +595,7 @@ available, the ATE of $H$ on $Y$ would be identified.
 
 Let $\bm{x}_i$ represent a vector of baseline covariates for subject $i$.
 In our study of hints, $\bm{x}$ includes indicators for state, school
-id, class id, grade (9th or higher), race (White/Asian,
-Black/Multi-Racial, or Hispanic/American Indian/Alaskan Native),
-special education status, economic disadvantage, and English language
-learner status, as well as pre-test scores.
+id, class id, and the variables described in Table \ref{tab:covariateBalance}.
 Then we assume \citep[c.f.][]{rosenbaum1983central}:
 \begin{ass}{Strong Ignorability}
 \begin{equation*}
@@ -618,15 +618,17 @@ his or her covariate vector $\bm{x}$.
 \citet{rosenbaum1983central} shows that conditioning on $\pi$ is
 equivalent to conditioning on $\bm{x}$.
 We estimated $\pi$ using a Bayesian multilevel logistic regression,
-with weakly informative priors, using the \texttt{rstanarm} package in
-\texttt{R} \citep{rstanarm}.
+using the \texttt{lme4} package in
+\texttt{R} \citep{lme4}.
 The propensity score model was:
 \begin{equation*}
 \pi_i=logit^{-1}(\alpha+\bm{\tilde{x}}\bm{\beta}+\epsilon^{state}+\epsilon^{school}+\epsilon^{class})
 \end{equation*}
 where $\bm{\tilde{x}}$ is the $\bm{x}$ vector excluding indicators for
 state, school, and class, which were each included using random
-intercepts modeled as normally distributed.
+intercepts modeled as normally distributed, including missingness
+indicators for grade, race, sex, and economic disadvantage, and
+a natural spline with five degrees of freedom for pretest.
 
 We constructed an optimal full matching design \citep{hansen2004} to
 condition on estimated propensity scores $\hat{\pi}$ using the
@@ -648,14 +650,14 @@ For instance, one matched set included 30 $H=1$ subjects matched to a
 single $H=0$ subject, and another matched 21 $H=0$ subjects to a
 single $H=1$ subject.
 
-Table \ref{fig:balance} in the online appendix shows that
+Figure \ref{fig:balance} in the online appendix shows that
 matching largely eliminated mean differences in pre-treatment
 covariates between $H=1$ and $H=0$ students.
 The only notable exception is in pretest scores: $H=1$ students tended
 to have slightly higher pretest scores than their matched comparisons
 with $H=0$.
 The p-value from an omnibus covariate balance test
-\citep{covBal} is 0.26.
+\citep{covBal} is \Sexpr{prettyNum(round(balMod[['overall']]['matched','p.value'],2))}.
 
 Let $m_i$ be a categorical variable denoting the matched set that $i$
 belongs to.
@@ -696,7 +698,7 @@ respectively.
 The row labeled ANCOVA of Table \ref{tab:matchResults} gives the
 coefficient on $H$ from a regression of Y on $H$ along with indicators for matched set,
 racial categories, grade, ESL status, economic disadvantage, and sex,
-along with linear and quadratic terms for pre-test (the standard error
+along with a natural spline with five degrees of freedom for pretest (the standard error
 and confidence interval use the ``HC3'' sandwich estimator,
 \citealt{sandwichPackage}).
 This regression adjusts for imbalances in these covariates within
@@ -882,7 +884,7 @@ decomposed in two ways: as $\delta(1)+\xi(0)$ or as
 $\delta(0)+\xi(1)$.
 These decompositions can potentially reveal the role hints play in the
 CTA1 treatment effect: $\delta(1)$ gives the extent to which
-assignment to CTA1 affects a student's post-test score by (possibly)
+assignment to CTA1 affects a student's posttest score by (possibly)
 causing him or her to request hints.
 $\xi(0)$ gives the effect of assignment to CTA1 if hints were,
 perhaps counterfactually, held at their control level, $H=0$.
@@ -1190,7 +1192,7 @@ The covariates in the model, $\bm{x}_i$, were detailed in Table
 including a quadratic term for pretest, which was added as a column of
 $\bm{x}_i$.
 
-We modeled students' post-test scores $Y$ as
+We modeled students' posttest scores $Y$ as
 conditionally normal:
 \begin{multline}\label{eq:outcomeSubmodel}
  Y|\left(Z_i,\bm{x}_i,\bm{\theta},\eta(1)\right) \sim \\ \mathcal{N}\left(
