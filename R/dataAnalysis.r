@@ -10,16 +10,27 @@ library(rstan)
 library(lme4)
 traceplot <- rstan::traceplot
 select <- dplyr::select
+options(stringsAsFactors=FALSE)
 
 omar <- par()$mar
 
+### this is a tool to skip the most computationally-expensive steps but run everything else:
+runFull <- FALSE
+cat('\n\n----------------------------------------------------\n')
+cat('Warning: runFull=',runFull,'\n')
+cat('----------------------------------------------------\n\n')
 
 source('R/helperFunctions.r')
 source('~/Box Sync/rcode/matchingFunctions.r')
 source('~/Box Sync/rcode/hhh.r')
 source('~/Box Sync/rcode/printXbal.r')
 
-source('R/prelimStan.r')
+if(runFull) source('R/prelimStan.r') else load('data/hintsData.RData')
+
+## for printing nice CIs
+printci <- function(ci) paste0('[',paste(sprintf('%.2f',ci),collapse=','),']')
+
+citopm <- function(ci) paste(sprintf('%.2f',c(median(ci),(ci[2]-ci[1])/2)),collapse='$\\pm$')
 
 ## usage data availability
 
@@ -28,6 +39,11 @@ Nt <- sum(dat$treatment)
 obsUse=sum(dat$field_id[dat$treatment==1]%in%x$field_id)
 
 sdat <- makeStanDat(dat,x,missingUsage=FALSE)
+
+Ntot <- sdat$nstud
+NtFinal <- sum(sdat$Z)
+nteacher <- sdat$nteacher
+nschool <- sdat$nschool
 
 source('R/covariateTable.r')
 
@@ -53,9 +69,11 @@ sdat2 <- with(
   )
 )
 
+cat('
 ###########################################################################################
 ### defining "high hint users"
 ###########################################################################################
+',as.character(Sys.time()),'\n')
 
 ### raw means
 hintAvg <-
@@ -77,8 +95,8 @@ hintAvgStud%>%
 
 ### rasch mixture model?
 ##NOT RUN
-## source('R/raschMixture.r')
-load('output/raschMixOutput.RData')
+if(runFull) source('R/raschMixture.r') else load('output/raschMixOutput.RData')
+
 mixProp <- round(mean(hintAvgStud$classProb),1)
 
 hintAvgStud$M <- hintAvgStud$propHintStud>=quantile(hintAvgStud$propHintStud,1-mixProp)
@@ -89,18 +107,20 @@ agree=with(hintAvgStud,mean(M==Mmod))
 dat1 <- inner_join(dat,select(hintAvgStud,field_id,propHintStud,M))#%>%
 #  mutate(M=propHintStud>.6)
 
-
+cat('
 ##########################################################################################
 ### propensity score matching
 ##########################################################################################
-
+',as.character(Sys.time()),'\n')
 ##NOT RUN
+## this is a record of stuff I tried w/ matching
 ## source('R/matching.r')
 
- psmod3.2 <- ## stan_
-   glmer(M~(1|state)+(1|schoolid2)+(1|classid2)+sex+grade+race+ns(xirt,5)+spec+esl+gradeMIS+raceMIS+sexMIS+frlMIS,family=binomial,data=dat1)
-save(psmod3.2,file='output/psmod.RData')
-load('output/psmod.RData')
+if(runFull){
+  psmod3.2 <- ## stan_
+    glmer(M~(1|state)+(1|schoolid2)+(1|classid2)+sex+grade+race+ns(xirt,5)+spec+esl+gradeMIS+raceMIS+sexMIS+frlMIS,family=binomial,data=dat1)
+  save(psmod3.2,file='output/psmod.RData')
+} else load('output/psmod.RData')
 
 dist3 <- match_on(M~predict(psmod3.2,type='link'),within=exactMatch(M~schoolid2,data=dat1),data=dat1)
 m3 <- fullmatch(dist3,data=dat1)
@@ -116,20 +136,21 @@ dat1$match <- m3
 
 save(dat1,file='data/dat1.RData')
 
+cat('
 ##########################################################################################
 ### estimate treatment effects (obs. study)
 ##########################################################################################
+',as.character(Sys.time()),'\n')
 
+anova <- lm(Y~M+match,data=dat1)
+anovavcv <- vcovHC(anova)
+anovat <- coeftest(anova,anovavcv)[2,]
+anovaci <- coefci(anova,'MTRUE',vcov.=anovavcv)
 
-out1 <- lm(Y~M+match,data=dat1)
-out1vcv <- vcovHC(out1)
-out1t <- coeftest(out1,out1vcv)[2,]
-out1ci <- coefci(out1,'MTRUE',vcov.=out1vcv)
-
-summary(out1.1 <- lm(Y~M+splines::ns(xirt,5)+race+grade+esl+frl+sex+match,data=dat1))$coef[1:5,]
-out1.1vcv <- vcovHC(out1.1)
-out1.1t <- coeftest(out1.1,out1.1vcv)[2,]
-out1.1ci <- coefci(out1.1,'MTRUE',vcov.=out1.1vcv)
+summary(ancova <- lm(Y~M+splines::ns(xirt,5)+race+grade+esl+frl+sex+match,data=dat1))$coef[1:5,]
+ancovavcv <- vcovHC(ancova)
+ancovat <- coeftest(ancova,ancovavcv)[2,]
+ancovaci <- coefci(ancova,'MTRUE',vcov.=ancovavcv)
 
 ### ATE and TOT weights
 dat1 <-
@@ -138,16 +159,18 @@ dat1 <-
   mutate(ntot=n(),ntrt=sum(M),nctl=ntot-ntrt,eff=mean(Y[M])-mean(Y[!M]),winv=(1/nctl+1/ntrt))
 
 
-out2 <- update(out1.1,weights=winv)
-out2vcv <- vcovHC(out2)
-out2t <- coeftest(out2,out2vcv)[2,]
-out2ci <- coefci(out2,'MTRUE',vcov.=out2vcv)
+atevcv <- vcovHC(ate)
+atet <- coeftest(ate,atevcv)[2,]
+ateci <- coefci(ate,'MTRUE',vcov.=atevcv)
 
 
-out3 <- update(out1.1,weights=ntrt*winv)
-out3vcv <- vcovHC(out3)
-out3t <- coeftest(out3,out3vcv)[2,]
-out3ci <- coefci(out3,'MTRUE',vcov.=out3vcv)
+tot <- update(ancova,weights=ntrt*winv)
+totvcv <- vcovHC(tot)
+tott <- coeftest(tot,totvcv)[2,]
+totci <- coefci(tot,'MTRUE',vcov.=totvcv)
+
+
+
 
 
 ### sensitivity analysis
@@ -159,14 +182,14 @@ rrr <- rhos(dat1$Y,X=X)
 X$M <- dat1$M
 ttt <- Tz(X=X,treatment='M')
 
-interval(ttt['xirt'],rrr['xirt'],b=out1.1t[1], se=out1.1t[2],df=out1.1$df)
-interval(ttt['xirt']/2,rrr['xirt'],b=out1.1t[1], se=out1.1t[2],df=out1.1$df)
 
 
+
+cat('
 ##########################################################################################
 ### mediation analysis
 ##########################################################################################
-
+',as.character(Sys.time()),'\n')
 
 
 ### direct effects
@@ -176,8 +199,8 @@ datC <- subset(dat,treatment==0)
 datC$yhat <- datC$Y
 dat2 <- rbind(dat1[,names(datC)],datC)
 
-dir1 <- lmer(yhat~treatment+pair+(1|classid2)+(1|schoolid2),data=dat2)
-dir2 <- update(dir1,.~.+poly(xirt,2)+race+grade+esl+frl+sex)
+#dir1 <- lmer(yhat~treatment+pair+(1|classid2)+(1|schoolid2),data=dat2)
+#dir2 <- update(dir1,.~.+poly(xirt,2)+race+grade+esl+frl+sex)
 
 dir1.1 <- lm(yhat~treatment+pair,data=dat2)
 dir1.1vcv <- vcovCR(dir1.1,dat2$schoolid2,type='CR2')
@@ -194,28 +217,30 @@ dir2.1ci <- coefci(dir2.1,'treatment',vcov.=dir2.1vcv)
 
 
 
-
-
+cat('
+############################
 ########## principal stratification
+############################
+',as.character(Sys.time()),'\n')
+
 if(is.null(getOption('mc.cores'))) options(mc.cores = 6)
 if(getOption('mc.cores')<6)  options(mc.cores = 6)
 
 functions <- currentCode()
 
 ### NOT RUN
-psmod1 <- stan('R/prinStratStan.stan',data=sdat,chains=6,iter=6000)
-save(psmod1,sdat,functions,file='fitModels/hintPS.RData')
-load('fitModels/hintPS.RData')
-
-
+if(runFull){
+  psmod1 <- stan('R/prinStratStan.stan',data=sdat,chains=6,iter=6000)
+  save(psmod1,sdat,functions,file='fitModels/hintPS.RData')
+} else load('fitModels/hintPS.RData')
 
 draws <- rstan::extract(psmod1)
 
-
+cat('
 ############################
 ######## main effect plot
 #########################
-
+',as.character(Sys.time()),'\n')
 
 pdMain <- pdMod(psmod1)
 ## pdMain <- within(pdMain,
@@ -244,10 +269,12 @@ p1 <- ggplot(pdMain)+
 #dev.off()
 #tools::texi2dvi('mainEffects.tex', pdf = T, clean = T)
 
-
+cat('
 #########################################
 ### eta_T vs Y
 #########################################
+',as.character(Sys.time()),'\n')
+
 pooledSD <- with(sdat, sqrt(((sum(Z)-1)*var(Y[Z==1])+(sum(1-Z)-1)*var(Y[Z==0]))/(nstud-2)))
 draw <- which.min(abs(draws$b1-mean(draws$b1)))
 plotDat <- with(sdat,data.frame(Y=scale(Y,center=mean(Y[Z==0]),scale=pooledSD),
@@ -278,6 +305,13 @@ grid.arrange(p1,p2,nrow=1)
 dev.off()
 tools::texi2dvi('output/psModel.tex', pdf = T, clean = T)
 
+cat('
+#########################################
+### saving
+#########################################
+',as.character(Sys.time()),'\n')
 
+big <- sapply(ls(),function(x) object.size(get(x))>1e7)
+save(list=names(big)[!big],file='output/analysis.RData')
 
-
+cat('done', as.character(Sys.time()),'\n')

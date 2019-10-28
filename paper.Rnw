@@ -73,16 +73,15 @@ library(knitr)
 opts_chunk$set(
 echo=FALSE,results='asis',warning = FALSE,message = FALSE,cache=TRUE,error = FALSE
 )
-
+pn <- function(...) prettyNum(...,big.mark=',')
+library(xtable)
 @
 
 <<runStuff,include=FALSE,eval=FALSE>>=
 source('R/dataAnalysis.r')
-big <- sapply(ls(),function(x) object.size(get(x))>2*1e7)
-save(list=ls()[!big],file='output/analysis.RData')
 @
 
-<<loadStuff,include=FALSE>>=
+<<loadStuff,cache=FALSE>>=
 load('output/analysis.RData')
 @
 
@@ -360,8 +359,8 @@ standard CTA1 Algebra I curriculum and problems worked by fewer than 100
 students were omitted from the
 dataset.
 
-All told, the main analysis included $n=$\Sexpr{prettyNum(sdat$nstud,',')} students, \Sexpr{prettyNum(sum(sdat$Z),',')} of whom were assigned to the CTA1 condition and \Sexpr{prettyNum(with(sdat,nstud-sum(Z)),',')} of whom were assigned to control.
-The students were nested within \Sexpr{sdat[['nteacher']]} teachers, in \Sexpr{sdat[['nschool']]} schools across five states.
+All told, the main analysis included $n=$\Sexpr{prettyNum(Ntot,',')} students, \Sexpr{pn(NtFinal)} of whom were assigned to the CTA1 condition and \Sexpr{pn(Ntot-NtFinal)} of whom were assigned to control.
+The students were nested within \Sexpr{pn(nteacher)} teachers, in \Sexpr{pn(nschool)} schools across five states.
 
 
 \subsection{The Role of Hints\footnote{This subsection draws heavily
@@ -545,8 +544,9 @@ and 0 otherwise.
 To choose $c$, we fit a two-component modified Rasch mixture model
 \citep{rasch} to hint request data, described in an online appendix.
 The model classified approximately \Sexpr{round(mixProp*100)}\% of students as
-high-hint users, so we chose $c=0.6$, approximately the
-\Sexpr{round((1-mixProp)*100)}th percentile of $\bar{h}$.
+high-hint users, so we chose $c$ as the
+\Sexpr{round((1-mixProp)*100)}th percentile of $\bar{h}$,
+approximately \Sexpr{sprintf('%.1f',quantile(hintAvgStud[['propHintStud']],1-mixProp))}.
 This definition agreed with the model's classification in
 approximately \Sexpr{round(agree*100)}\% of cases.
 
@@ -646,11 +646,11 @@ analysis in the following section.
 Each matched set was allowed to contain any positive number of $H=1$
 and any positive number of $H=0$ subjects, resulting in matches of
 variable size and composition.
-For instance, one matched set included 30 $H=1$ subjects matched to a
-single $H=0$ subject, and another matched 21 $H=0$ subjects to a
+For instance, one matched set included \Sexpr{max(sapply(levels(m3),function(ll) sum(optmatch:::getZfromMatch(m3)[m3==ll])))} $H=1$ subjects matched to a
+single $H=0$ subject, and another matched \Sexpr{max(sapply(levels(m3),function(ll) sum(!optmatch:::getZfromMatch(m3)[m3==ll])))} $H=0$ subjects to a
 single $H=1$ subject.
 
-Figure \ref{fig:balance} in the online appendix shows that
+Figure \ref{fig:balance} and Table \ref{tab:balance} in the online appendix show that
 matching largely eliminated mean differences in pre-treatment
 covariates between $H=1$ and $H=0$ students.
 The only notable exception is in pretest scores: $H=1$ students tended
@@ -699,31 +699,64 @@ The row labeled ANCOVA of Table \ref{tab:matchResults} gives the
 coefficient on $H$ from a regression of Y on $H$ along with indicators for matched set,
 racial categories, grade, ESL status, economic disadvantage, and sex,
 along with a natural spline with five degrees of freedom for pretest (the standard error
-and confidence interval use the ``HC3'' sandwich estimator,
+and confidence interval using the ``HC3'' sandwich estimator,
 \citealt{sandwichPackage}).
 This regression adjusts for imbalances in these covariates within
 matched sets \citep[c.f.][]{biasAdjust}; its estimate is similar to
 the others.
 
+<<obsStudyEst,results='asis',echo=FALSE>>=
 
-\begin{table}
-\centering
-\begin{tabular}{crllcll}
-&&Est.&SE&95\% CI&$\rho^2$&$T_Z$\\
-\hline
-\multirow{4}{*}{Estimate}%&ANOVA& -0.22 &0.04 &[-0.30,-0.13]&0&0\\
-&ATE&-0.24&0.05&[-0.33,-0.14]&0&0\\
-&TOT&-0.21&0.06&[-0.33,-0.10]&0&0\\
-&ANCOVA&-0.22&0.04&[-0.31,-0.14]&0&0\\
-\hline
-\multirow{2}{*}{Sensitivity}&[Pretest]&-0.22&&[-0.55,0.10]&0.17&-13.14\\
-&[Pretest/2]&-0.22&&[-0.40,-0.05]&0.08&-6.57\\
-\hline
-\end{tabular}
-\caption{Estimates with and without regression adjustment and
-  sensitivity analysis of the effect of hint usage.}
-\label{tab:matchResults}
-\end{table}
+
+matchTEtab <-
+  cbind(
+    data.frame(Effect=c('ANOVA','ATE','TOT','ANCOVA')),
+    rbind(anovat,atet,tott,ancovat)[,c('Estimate','Std. Error')],
+    CI=vapply(list(anovaci,ateci,totci,ancovaci),printci,'a'),
+    `$T_Z$`=0,
+    `$\\rho^2$`=0
+  )
+
+for(tt in c(ttt['xirt'],ttt['xirt']/2))
+  matchTEtab <- add_case(matchTEtab,
+    Effect=ifelse(tt==ttt['xirt'],"[Pretest]","[Pretest/2]"),
+    Estimate=ancovat[1],
+    CI=printci(interval(tt,rrr['xirt'],b=ancovat[1], se=ancovat[2],df=ancova$df)),
+    `$\\rho^2$`=rrr['xirt'],
+    `$T_Z$`=tt)
+
+matchTEtab <- cbind(
+  ` `=c('\\multirow{4}{*}{Estimate}',rep('',3),'\\multirow{2}{*}{Sensitivity}',''),
+  matchTEtab
+)
+
+matchTEtab <- add_case(matchTEtab,` `='\\hline',.before=5)#,rep(NA,ncol(matchTEtab)-1)),matchTEtab[5:6,])
+
+print(xtable(matchTEtab,
+  align='rllrrrrr',
+  caption='Estimates with and without regression adjustment and sensitivity analysis of the effect of hint usage.',
+  label='tab:matchResults'),
+  include.rownames=FALSE,sanitize.text.function =function(x) x)
+@
+
+% \begin{table}
+% \centering
+% \begin{tabular}{crllcll}
+% &&Est.&SE&95\% CI&$\rho^2$&$T_Z$\\
+% \hline
+% \multirow{4}{*}{Estimate}%&ANOVA& -0.22 &0.04 &[-0.30,-0.13]&0&0\\
+% &ATE&-0.24&0.05&[-0.33,-0.14]&0&0\\
+% &TOT&-0.21&0.06&[-0.33,-0.10]&0&0\\
+% &ANCOVA&-0.22&0.04&[-0.31,-0.14]&0&0\\
+% \hline
+% \multirow{2}{*}{Sensitivity}&[Pretest]&-0.22&&[-0.55,0.10]&0.17&-13.14\\
+% &[Pretest/2]&-0.22&&[-0.40,-0.05]&0.08&-6.57\\
+% \hline
+% \end{tabular}
+% \caption{Estimates with and without regression adjustment and
+%   sensitivity analysis of the effect of hint usage.}
+% \label{tab:matchResults}
+% \end{table}
 
 Matched ignorability is a very strong assumption, so these results
 should not be taken at face value---especially if weaker students ask for hints at
@@ -770,9 +803,9 @@ In our example, we operationalized strong ignorability with a
 propensity-score matching design, but other observational study
 designs may apply as well.
 
-We found that hint requests have a negative effect: students who tend
-to request hints more often than the median score lower on the
-posttest, after controlling for observed covariates.
+We found that hint requests have a negative effect: students who
+requested hints more often than the \Sexpr{round((1-mixProp)*100)}th
+percentile score lower on the posttest, after controlling for observed covariates.
 When hint usage is expressed numerically, we find a monotonically
 decreasing relationship between hint requests and posttest scores---as
 far as we can tell, the optimal strategy is to never request a hint.
@@ -780,7 +813,7 @@ However, this observed effect may be due to confounding.
 If, say, weaker students ask for hints more often and score lower
 on the posttest regardless of hint usage, posttest scores will be
 anticorrelated with hint requests.
-This could even be the case after control for pretest scores and other
+This could even be the case after controlling for pretest scores and other
 covariates, if these failed to capture all of the relevant dimensions
 of student ability.
 We found that an unobserved confounder that predicts both hint usage
@@ -903,18 +936,20 @@ Further, were we to operationalize hint behavior as a continuous
 variable, as may seem natural, mediation analysis in this case would
 also be nearly impossible.
 This is because students assigned to the control group request exactly
-zero hints, whereas merely nine members of the treatment group
+zero hints, whereas merely
+\Sexpr{english(sum(hintAvgStud[['propHintStud']]==0))}
+members of the treatment group
 requested no hints over the course of the study, and these students
 barely used the tutor at all.
 That being the case, the data provide little to no information about
 the distribution of potential outcomes when the software is used
 but no hints are requested.
 
-Our solution was to dichotomize hint requests with a median split, as
+Our solution was to dichotomize hint requests, as
 described above, essentially re-defining the causal question.
-Half of the treatment group and all of the control group has
-$H=0$---requesting hints at a rate less than the (treatment group)
-median.
+\Sexpr{round((mixProp)*100)}\% of the treatment group and all of the control group has
+$H=0$---requesting hints at a rate less than the
+\Sexpr{round((1-mixProp)*100)}th percentile of the treatment group.
 To make sense of the respective roles of $H$ and $\hcont$, the
 continuous measure on which it is based, we may imagine a process in
 which students are assigned $H$, and under that constraint choose a
@@ -1016,10 +1051,10 @@ This can be re-written (omitting conditioning on $Z$):
 \\[2ex]
 &=(\EE[Y(1,1)|H=1]-\EE[Y(1,0)|H=1])Pr(H=1)
 \end{align*}
-Since $Pr(H=1)=1/2$ ($H$ was defined with a median split),
-$\hat{\Delta}=TOT/2$.
-Estimated thusly, the indirect effect is negative: $-0.11$, with
-a standard error of 0.03.
+Since $Pr(H=1)=$\Sexpr{round(1-mixProp,2)},
+$\hat{\Delta}=$\Sexpr{round(1-mixProp,2)}$TOT$.
+Estimated thusly, the indirect effect is negative: \Sexpr{round(tott[1]*(1-mixProp),2)}, with
+a standard error of \Sexpr{round(tott[2]*(1-mixProp),2)}.
 This analysis suggests that the availability of excessive hints
 actually \emph{lowers} the treatment effect.
 CTA1 works not because of hints, but despite them.
@@ -1043,10 +1078,11 @@ The clustering of subjects within schools can be accounted for in a
 number of ways, such as including random intercepts for school or
 computing cluster-robust standard error estimates.
 Following the latter route, and using the \texttt{clubSandwich}
-package in \texttt{R} \citep{clubsandwich}, we estimated a direct effect of $0.16\pm
-0.24$.
+package in \texttt{R} \citep{clubsandwich}, we estimated a direct
+effect of
+\Sexpr{citopm(dir1.1ci)}.
 Including covariates in the regression produces a direct effect of
-$0.19\pm 0.21$.
+\Sexpr{citopm(dir2.1ci)}.
 
 \subsection{Mediation Analysis: Interpretation and Discussion}
 Here we have used mediation analysis as a formal framework to

@@ -99,7 +99,7 @@ currentCode <- function(){
 }
 
 pdMod <- function(mod,row=1,column=1,func){
-    draws <- extract(mod)
+    draws <- rstan::extract(mod)
     samp <- seq(1,length(draws$b1),length=1000)
     Usamp <- draws$studEff[samp,]
     iqr <- apply(Usamp,1,IQR)
