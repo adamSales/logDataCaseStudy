@@ -93,7 +93,7 @@ xOrig <- x
     mutate(prevErr=lag(nerrs1))%>%
     filter(!is.na(prevErr),prevErr>0)
 
- save(dat,x,file='data/hintsData.RData')
+ save(dat,x,covs,file='data/hintsData.RData')
 
 
 

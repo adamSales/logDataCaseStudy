@@ -15,7 +15,7 @@
 \usepackage{xr}
 \usepackage{tikz}
 \usepackage{authblk}
-
+\usepackage[section]{placeins}
 %\usepackage{endfloat}
 
 \doublespacing
@@ -53,7 +53,7 @@
 
 
 
-
+\renewenvironment{knitrout}{\begin{singlespace}}{\end{singlespace}}
 
 \title{Student Log-Data from a Randomized Evaluation of Educational
   Technology: A Causal Case Study}
@@ -75,13 +75,15 @@ echo=FALSE,results='asis',warning = FALSE,message = FALSE,cache=TRUE,error = FAL
 )
 pn <- function(...) prettyNum(...,big.mark=',')
 library(xtable)
+library(english)
+
 @
 
 <<runStuff,include=FALSE,eval=FALSE>>=
 source('R/dataAnalysis.r')
 @
 
-<<loadStuff,cache=FALSE>>=
+<<loadStuff,cache=TRUE>>=
 load('output/analysis.RData')
 @
 
@@ -163,10 +165,18 @@ hints experienced different treatment effects.
 
 Our intention is to develop, demonstrate, and contrast these three
 approaches to modeling log data.
-We hope that this paper can serve as a starting point for
-applied educational researchers interested in mining this rich
-resource, and that this paper helps spur methodological interest in
-this problem.
+A rich, and often polemic, literature surrounds principal
+stratification and mediation analysis
+\citep[e.g.][]{rubin2004direct,vanderweele2011principal,pearl2011principal,mealli2012refreshing,vanderweele2012comments}.
+\citet{vanderweele2008simple}, \citet{jo2008causal} and others have
+derived formal equivalencies between parameters under certain
+conditions.
+Our contribution will build on this literature in two ways: first, by
+providing a detailed demonstration of matching, mediation analysis,
+and principal stratification on the same dataset, and second by
+focusing on the applicability of these three methods in the specific
+context of studying implementation data from an EdTech randomized
+experiment.
 
 After a brief overview of the three causal approaches we will discuss,
 the next section will provide background for the case-study,
@@ -539,7 +549,7 @@ The observational study and (especially) the mediation analysis we
 describe below require a dichotomous measurement of hint usage: is a
 student a high or low hint user?
 To this end, we dichotomize $\bar{h}$ by comparing it to a cutoff value, so
-that $H_i=\indicator{h_i>c}$, where $\indicator{x}=1$ if $x$ is true
+that $H_i=\indicator{\bar{h}_i>c}$, where $\indicator{x}=1$ if $x$ is true
 and 0 otherwise.
 To choose $c$, we fit a two-component modified Rasch mixture model
 \citep{rasch} to hint request data, described in an online appendix.
@@ -572,9 +582,9 @@ A similar structure applies to hint request for students in the
 treatment group.
 For these students, let the potential outcomes be $Y_i(Z=1,H=1)$ and
 $Y_i(Z=1,H=0)$ or $Y_i(H=1)$ and $Y_i(H=0)$ for short.
-For a study measuring hint requests as a continuous variable, we may
-define $Y_i(\hcont)$, the posttest score $i$ would exhibit were $i$ to
-request hints with proclivity $\hcont$.
+% For a study measuring hint requests as a continuous variable, we may
+% define $Y_i(\bar{h})$, the posttest score $i$ would exhibit were $i$ to
+% request hints with proclivity $\bar{h}$.
 This structure implicitly assumes ``non-interference,'' that one
 student's treatment assignment $Z$ or hint proclivity $H$ does not
 affect another student's posttest scores.
@@ -789,57 +799,6 @@ A slightly less conservative sensitivity analysis, labeled
 predict $H$ and $\rho$ half as well as pretest scores.
 This sensitivity interval is wide, but entirely negative.
 
-\subsection{The Observational Study Approach: Interpretation and Discussion}
-The observational study approach to log data seeks to estimate the
-effect of a usage parameter, estimated from  computer log data, on
-outcomes.
-This approach does not exploit randomization---in fact, it discards
-the control group entirely.
-However, it depends heavily on another feature of RCTs: namely, an
-outcome measured for all participants, in this case a posttest.
-Causal identification derives not from randomization, but from an
-untestable ignorability assumption, coupled with a sensitivity analysis.
-In our example, we operationalized strong ignorability with a
-propensity-score matching design, but other observational study
-designs may apply as well.
-
-We found that hint requests have a negative effect: students who
-requested hints more often than the \Sexpr{round((1-mixProp)*100)}th
-percentile score lower on the posttest, after controlling for observed covariates.
-When hint usage is expressed numerically, we find a monotonically
-decreasing relationship between hint requests and posttest scores---as
-far as we can tell, the optimal strategy is to never request a hint.
-However, this observed effect may be due to confounding.
-If, say, weaker students ask for hints more often and score lower
-on the posttest regardless of hint usage, posttest scores will be
-anticorrelated with hint requests.
-This could even be the case after controlling for pretest scores and other
-covariates, if these failed to capture all of the relevant dimensions
-of student ability.
-We found that an unobserved confounder that predicts both hint usage
-and posttest scores just as strongly as the pretest could explain the
-entire observed relationship.
-The data, coupled with the existence of such a missing covariate, are
-consistent with both positive and negative effects of hint requests.
-On the other hand, covariates that are as important as pretests are
-quite rare in practice---this confounding scenario might not be
-plausible after all.
-A less extreme missing confounder, predicting $Y$ and $H$ with half
-the strength of the pretest, cannot explain the observed relationship,
-and is only consistent with negative effects of hint requests.
-
-Despite being hobbled by the lack of randomization, and the resultant
-threat of confounding, the observational study approach provides weak
-evidence that hints are harmful to posttest scores---a potentially
-important finding.
-This result, if confirmed in other scenarios and other analyses, may
-inform student behavior in the tutor and future tutor designs.
-However, since it ignores the control group from the CTA1 RCT, it does
-not shed light on the CTA1 causal mechanisms---it does not explain the
-CTA1 effect.
-However, its design and results figure prominently in mediation
-analysis, which does.
-
 \section{Mediation Analysis}\label{sec:mediation}
 The goal of causal mediation analysis is to decompose a treatment
 effect into an ``indirect'' or ``mediated''
@@ -950,18 +909,18 @@ described above, essentially re-defining the causal question.
 \Sexpr{round((mixProp)*100)}\% of the treatment group and all of the control group has
 $H=0$---requesting hints at a rate less than the
 \Sexpr{round((1-mixProp)*100)}th percentile of the treatment group.
-To make sense of the respective roles of $H$ and $\hcont$, the
+To make sense of the respective roles of $H$ and $\bar{h}$, the
 continuous measure on which it is based, we may imagine a process in
 which students are assigned $H$, and under that constraint choose a
-value for $\hcont$.
-In the control group all students are assigned $H=0$ and $\hcont=0$, but
+value for $\bar{h}$.
+In the control group all students are assigned $H=0$ and $\bar{h}=0$, but
 in the treatment group half of students have $H=1$ and half have
-$H=0$, and $\hcont$ varies within those groups.
+$H=0$, and $\bar{h}$ varies within those groups.
 That structure implies a ``treatment mediator interaction''
 where the effect of the mediator on the outcome varies by treatment
 status.
 Of course, in our example treatment mediator interactions are not
-identified, since $H=0$ and $\hcont=0$ in the control group, and very
+identified, since $H=0$ and $\bar{h}=0$ in the control group, and very
 few treatment students asked for 0 hints.
 In any event, dichotomizing hint requests likely undersells the role
 of hints, but allows a tractable mediation analysis.
@@ -1084,24 +1043,6 @@ effect of
 Including covariates in the regression produces a direct effect of
 \Sexpr{citopm(dir2.1ci)}.
 
-\subsection{Mediation Analysis: Interpretation and Discussion}
-Here we have used mediation analysis as a formal framework to
-interpret the results of the observational study in Section
-\ref{sec:observational} in terms of the overall CTA1 treatment effect.
-Doing so requires some conceptual and statistical acrobatics, such as
-relying on a dichotomized measurement of hint requests and strictly
-counterfactual potential outcomes, but can nevertheless yield
-interesting and interpretable results.
-Specifically, our analysis showed that CTA1 affected students'
-posttest scores in (at least) two opposite ways: by allowing hints, it
-lowered their posttest scores, but its other mechanisms increased
-their scores by an even greater amount.
-
-Like the observational study, these results are subject to
-confounding; indeed, the sensitivity analysis in the Section
-\ref{sec:observational} suggests that these results, too, may be
-explained due to a missing confounder.
-
 
 
 \section{Principal Stratification}\label{sec:principalStratification}
@@ -1113,30 +1054,31 @@ Principal stratification \citep[PS;][]{frangakis} takes a different approach ent
 In the PS approach, $Y(0)=Y(Z=0)$ and $Y(1)=Y(Z=1)$ are the only potential
 outcomes for $Y$.
 As in mediation analysis, hint behavior has potential outcomes as
-well; modeling hint requests continuously with the $\hcont$ parameter
-from (\ref{eq:rasch}) gives potential values $\hcont(1)$ and $\hcont(0)$,
-though only $\hcont(1)$ is relevant in the CTA1 study.
+well.
+Specifically, the rate at which as student requests hints, $\bar{h}$,
+has potential values $\bar{h}(1)$ and $\bar{h}(0)$,
+though only $\bar{h}(1)$ is relevant in the CTA1 study.
 
 The goal of principal stratification is to estimate ``principal
 effects'':
 \begin{equation*}
-\tau(r)=\EE[Y(1)-Y(0)|\hcont(1)=r]
+\tau(r)=\EE[Y(1)-Y(0)|\bar{h}(1)=r]
 \end{equation*}
 This is the treatment effect for subjects who \emph{would} request
-hints at level $\hcont(1)=r$, if assigned to the treatment condition.
+hints at level $\bar{h}(1)=r$, if assigned to the treatment condition.
 Whereas the focus of the observational study and mediation
-analysis was the relationship between $\hcont$ and posttest scores, the
-focus of PS is the relationship between $\hcont$ and treatment effects.
-Estimating $\tau(r)$ requires estimating $\EE[Y(0)|\hcont(1)=r]$,
-despite the fact that $\hcont(1)$ is never observed at the same time as
+analysis was the relationship between $\bar{h}$ and posttest scores, the
+focus of PS is the relationship between $\bar{h}$ and treatment effects.
+Estimating $\tau(r)$ requires estimating $\EE[Y(0)|\bar{h}(1)=r]$,
+despite the fact that $\bar{h}(1)$ is never observed at the same time as
 $Y(0)$. Note that despite this fact, $\tau(r)$ does not depend on
 strictly counterfactual quantities, as in mediation analysis.
-$\hcont(1)$ is defined for subjects in both randomized groups, but only
+$\bar{h}(1)$ is defined for subjects in both randomized groups, but only
 observed in the treatment group.
 
-In previous sections $\hcont$ was dichotomized into $H$; such
+In previous sections $\bar{h}$ was dichotomized into $H$; such
 dichotomization is not necessary here.
-However, $\hcont$ has some disadvantages as a continuous measure of
+However, $\bar{h}$ has some disadvantages as a continuous measure of
 hint usage.
 For one, since it is essentially a sample mean over a subset of each student's
 worked problems, much of its variance is driven by the total number of
@@ -1167,7 +1109,7 @@ likely to elicit a hint.
 
 We incorporated the model for hint requests, (\ref{eq:rasch}), into
 the larger principal stratification model, replacing $\eta$ for
-$\hcont$.
+$\bar{h}$.
 Then, the principal stratification estimand is
 \begin{equation*}
 \tau(r)=\EE[Y(1)-Y(0)|\eta(1)=r]
@@ -1230,10 +1172,10 @@ $\bm{x}_i$.
 
 We modeled students' posttest scores $Y$ as
 conditionally normal:
-\begin{multline}\label{eq:outcomeSubmodel}
- Y|\left(Z_i,\bm{x}_i,\bm{\theta},\eta(1)\right) \sim \\ \mathcal{N}\left(
+\begin{equation}\label{eq:outcomeSubmodel}
+ Y|\left(Z_i,\bm{x}_i,\bm{\theta},\eta(1)\right) \sim  \mathcal{N}\left(
 \beta^Y_{0b[i]}+\bm{x}_i^T\bm{\beta}^Y+a\eta(1)+Z_i\tau(\eta(1))+\epsilon^{Yt}_{t[i]}+\epsilon^{Ys}_{s[i]},\sigma^Y_{Z[i]}\right)
-\end{multline}
+\end{equation}
 where $\beta^Y_{0b[i]}$ is a fixed effect for $i$'s randomization block, $\bm{\beta}^Y$ are the
 covariate coefficients, and $\epsilon^{Yt}$, and
 $\epsilon^{Ys}$ are normally-distributed teacher and school random
@@ -1296,7 +1238,118 @@ which grows with $\eta(1)$.
 \label{fig:psResults}
 \end{figure}
 
-\subsection{Principal Stratification: Interpretation and Discussion}
+
+\section{Comparing Strategies}\label{sec:synthesis}
+The goals, assumptions, and processes of matching, mediation analysis,
+and principal stratification, when applied to implementation data from
+an EdTech RCT, each differ from each other, but also overlap in
+interesting ways.
+In the case discussed here, the observational study and mediation
+approaches appear to give the opposite conclusion from principal
+stratification.
+This section will compare and contrast the three methods in terms of
+ their necessary identification assumptions, their model fitting
+ mechanics, and interpretation of their results.
+
+The fundamental difference between the observational study and
+mediation approach, on the one hand, and principal stratification on
+the other, is in the role of $H$, the intermediate variable.
+An observational study or mediation analysis treats $H$ as a causal
+agent, an intervention or exposure that affects $Y$.
+In mediation analysis, it is also an (intermediate) outcome, affected
+by $Z$.
+The approach of principal stratification is quite nearly opposite:
+$H$ is not an exposure, that ``happens to'' subjects, but rather its
+potential value $H_T$ is a characteristic of the subjects.
+Observed $H$ reveals what was there all along.
+
+
+\subsection{Causal Identification}
+
+Observational studies, and mediation analyses that build on them,
+require ignorability assumptions such as Strong Ignorability or
+Matched Ignorability.
+These may be particularly problematic in our study, since students who
+are more likely to request hints are also more likely to struggle with
+the material, and hence score lower on the posttest.
+We addressed this concern in three ways: first, we focused our attention
+on the set of problems in the tutor in which students either requested
+a hint or made an error, second, with propensity score matching, and
+third with sensitivity analysis.
+None of these approaches is bulletproof---they each require further
+assumptions about how students request hints.
+Eliminating problems in which students showed no signs of struggling
+is likely to reduce the association between hint requests and
+underlying academic ability, but not eliminate it.
+For instance, stronger students may be better able to figure out a
+difficult problem without access to hints or error feedback than
+weaker students.
+Matching depends both on the adequacy of the observed covariates to
+capture baseline differences between $H=0$ and $H=1$ students, and the
+sensitivity analyses we performed assumed that any un-measured
+covariate would predict $H$ no better than pretest, or no better than
+a covariate half as important as pretest.
+These assumptions are impossible to verify from the data at hand;
+instead, they require a keen understanding of student practice within
+the tutor.
+
+Mediation analysis builds on the matching design, and also requires an
+ignorability assumption; it must
+additionally overcome the hurdle of the almost complete lack of
+overlap between hint request behavior in the control group (i.e. zero)
+and in the treatment group.
+Our approach of dichotomizing hint request behavior as $H$ provides a
+way forward, at the cost of ignoring information that could be gleaned
+from more continuous measures of hint requests.
+
+In contrast, no ignorabilty assumptions are necessary for principal
+stratification.
+That said, an assumption similar to ignorability may play an important
+role for interpretation.
+Further, principal stratification estimators require a model for $Y(0)$
+conditional on $\eta(1)$, which is unobserved.
+On the other hand, model misspecification is, in principle,
+detectable---an assumption of a particular family of models is not
+``untestable.''
+Still, the data will, in general, be unable to distinguish between certain
+alternative models for $Y(0)$ conditional on $\eta(1)$, that may in
+turn lead to qualitatively different conclusions.
+In practice, analysts make the untestable assumption that $Y(0)$ conditional on $\eta(1)$ is
+distributed similarly to $Y(1)$ conditional on $\eta(1)$.
+
+An additional contrast of note between matching-based studies and
+principal stratification relates to transparency.
+However complex the process of devising a match may be, the resulting
+design is simple and clear---subjects with $H=1$ are compared against
+matches with $H=0$.
+This transparency may help researchers assess the plausibility of the
+match, and diagnose potential problems with resulting estimates.
+Though PS does not depend on ignorability, it does depend on a highly
+intricate and parametric modeling structure.
+If any part of the model is sufficiently misspecified, the results may
+be wrong.
+Perhaps worse, \citet{feller2016principal} argued that even well-specified
+models can give severely biased estimates.
+Extensive model interrogation and checking is necessary for PS
+analysis, but the complexity of the PS model makes this process
+particularly difficult.
+\citet{aoas} gives some examples of potentially fruitful model
+checking procedures, which are also carried out in the online supplement.
+
+\subsection{Results and Interpretation}
+
+Our observational study found that hint requests have a negative effect: students who
+requested hints more often than the \Sexpr{round((1-mixProp)*100)}th
+percentile score lower on the posttest, after controlling for observed covariates---as
+far as we can tell, the optimal strategy is to never request a hint.
+However, this observed effect may be due to confounding.
+Mediation analysis essentially interprets this result in terms of the
+overall CTA1 treatment effect.
+Specifically, our analysis showed that CTA1 affected students'
+posttest scores in (at least) two opposite ways: by allowing hints, it
+lowered their posttest scores, but its other mechanisms increased
+their scores by an even greater amount.
+
 Like in the observational study and in mediation analysis, the
 principal stratification analysis found a negative correlation
 between hint requesting and posttest scores.
@@ -1330,58 +1383,75 @@ correct---that requesting hints lowers test scores---but that the PS
 results are also correct---students who request more hints tend to
 experience higher treatment effects, due to other mechanisms.
 
-On the other hand, the observational and mediational results may be
-due not to causation but to confounding.
-In contrast, PS does not depend on an ignorability assumption beyond
-what is guaranteed by randomization.
-Perhaps by recognizing $\eta(1)$ as hopelessly confounded and focusing
-attention elsewhere, PS is able to arrive at the more reliable
-conclusion that---whatever the mechanism may be---students who ask
-more hints benefit more from the software.
+\subsection{Choosing Between Methods}
 
-Though PS does not depend on ignorability, it does depend on a highly
-intricate and parametric modeling structure.
-If any part of the model is sufficiently misspecified, the results may
-be wrong.
-Perhaps worse, \citet{feller2016principal} argued that even well-specified
-models can give severely biased estimates.
-Extensive model interrogation and checking is necessary for PS
-analysis, but the complexity of the PS model makes this process
-particularly difficult.
-\citet{aoas} gives some examples of potentially fruitful model
-checking procedures.
+The previous discussion suggests three criteria for choosing between
+the three approaches we've discussed here.
+First is the question the researcher seeks to answer.
+In their most straightforward interpretations, principal stratification
+is a method for examining treatment effect heterogeneity, whereas
+mediation analysis is a method for assessing causal mechanisms.
+That said, PS may also shed light on potential causal mechanisms---if,
+indeed, treatment effects are higher for students who request more
+hints, then hints may play a role in the tutor's effectiveness.
 
-In contrast, the matching estimator in Section \ref{sec:observational}
-is highly transparent.
-Whatever intricacies went into formulating and fitting a propensity
-score model or matching procedure are inconsequential if they produce
-a convincing match.
-The validity of the matching estimate rests entirely on the quality of
-the match, which can be examined by checking covariate balance and
-other relatively simple metrics.
-The uncertainty in matching estimators due to possible confounding
-might be offset by the simplicity in modeling assumptions.
+A second criterion is the researcher's willingness to make
+ignorability assumptions.
+A researcher's confidence in her understanding of a data generating
+process and the quality of observed covariates can translate into
+confidence about the results of an observational study or mediation
+analysis.
+Conversely, researchers unwilling to consider untestable ignorability
+assumptions will find PS an attractive alternative.
 
-\section{Which Strategy is Best?}
+The final criterion is a researcher's comfort with complex statistical
+models.
+Researchers who are able and willing to experiment with a range of
+models for a dataset, and perhaps devise tests of model fit tailored
+to a specific problem, may be confident in the fit of a PS model.
+Researchers who prefer transparency and non-parametric or
+semi-parametric analysis may prefer matching studies.
 
-\begin{table}
-\begin{tabular}{p{1in}p{2in}p{2in}}
-& Observational Study/Mediation Analysis &Principal Stratification\\
-\hline
-Research question & Does $H$ help $Z$ affect $Y$? & Does $H$ help predict
-                                           treatment effect of $Z$ on $Y$?\\
-\hline
-Role of $H$ & Causal & Predictive\\
-\hline
-Untestable assumption & $H$ is unconfounded & Distribution of $Y$
-                                              given $H_T$ in control
-                                              group\\
-\hline
-Other difficulties & Discrete $H$ necessary for mediation (in our
-                     framework) & Model fitting can be opaque and
-                                  erratic\\
-\end{tabular}
-\end{table}
+Additional philosophical concerns come in to play as well.
+For instance, unlike observational studies and PS, mediation analysis
+depends on strictly counterfactual quantities, such as $\EE Y(0,H(1))$,
+that can never occur.
+Analogous quantities in PS, such as $\EE [Y(0)|H(1)]$ are
+unobservable, but nevertheless refer to averages of potential outcomes
+among actual experimental subjects.
+These concerns are important but beyond the scope of the current
+paper; for more discussion, see the citations in the introduction.
+
+% \begin{table}
+% \begin{tabular}{p{1in}p{1.5}p{2in}p{2in}}
+% & Observational Study&Mediation Analysis &Principal Stratification\\
+% \hline
+% Research question & How does $H$ affect $Y$& What is the role of $Z$'s
+%                                              effect on $H$ in its
+%                                              effect on $Y$? & Does
+%                                                               $Z$'s
+%                                                               effect
+%                                                               on $H$
+%                                                               predict its
+%                                                               effect
+%                                                               on $Y$?\\
+
+% \hline
+% Role of $H$ & Causal & Causal & Predictive\\
+% \hline
+% Data used & treatment group & indirect effect: treatment group; direct
+%                               effect: full dataset & full dataset\\
+% \hline
+% Untestable assumption &$H$ is unconfounded& $H$ is unconfounded & Distribution of $Y$
+%                                               given $H_T$ in control
+%                                               group\\
+% \hline
+% Other difficulties & Discrete $H$ necessary for mediation (in our
+%                      framework) & Model fitting can be opaque and
+%                                   erratic\\
+% \end{tabular}
+% \caption{Some contrasts between
+% \end{table}
 
 
 \section{Discussion: The Essential Role of Measurement}\label{sec:conclusion}
@@ -1402,7 +1472,7 @@ treatment effects, as opposed to the relationship between hints and
 outcomes.
 
 A second challenge is extrapolation in mediation analysis.
-In RCTs comparing computerized educational technology with traditional
+in RCTs comparing computerized educational technology with traditional
 pedagogy, members of the control group do not have computer log data
 or access to the mechanisms that the log data measures.
 This forms a serious barrier to mediation analysis.
@@ -1428,6 +1498,111 @@ could be brought to bear, defining new intermediate variables.
 
 \bibliographystyle{plainnat}
 \bibliography{ct}
+
+\newpage
+\appendix
+
+\section{Rasch Mixture Model of Hint Usage}
+
+To model hint requests with a mixture model, we modeled each hint
+request as in \eqref{eq:rasch}.
+Then, instead of modeling $\eta_i$ as normal, we assigned it a
+two-component normal mixture model:
+\begin{equation*}
+\eta\sim
+p_0\mathcal{N}(\mu_0,\sigma_0)+(1-p_0)\mathcal{N}(\mu_1,\sigma_1)
+\end{equation*}
+where we constrained $\mu_0<\mu_1$.
+
+\subsection{Stan Code}
+<<raschMixture,results='markup'>>=
+  raschMix <- readLines('R/raschMix.stan')
+  raschMix <- gsub('studEff','eta',raschMix)
+  raschMix <- gsub('secEff','delta',raschMix)
+cat(raschMix,sep="\n")
+@
+%\clearpage
+\section{Covariate Balance Before and After Matching}
+<<covariateBalanceTable,results='asis'>>=
+library(RItools)
+print(xtable(balMod,caption='Covariate balance (standardized differences and Z-scores) before and after the propensity score match.',label='tab:balance'),add.to.row=list(pos=list(-1),command='&\\multicolumn{3}{c}{Unmatched}&\\multicolumn{3}{c}{Matched}\\\\\n'))
+@
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.5\textwidth]{output/balancePlot.pdf}
+\caption{Covariate balance (standardized differences) before and after
+  the propensity score match.}
+\label{fig:balance}
+\end{figure}
+
+%\clearpage
+\section{Stan Code for PS Model}
+
+%\clearpage
+\subsection{Stan Code}
+<<psCode,results='markup',cache=FALSE>>=
+  pscode <- readLines('R/prinStratStan.stan')
+  pscode <- gsub('studEff','eta',pscode)
+  pscode <- gsub('secEff','delta',pscode)
+pscode <- gsub('grad','hint',pscode)
+cat(pscode,sep="\n")
+@
+
+%\clearpage
+\section{Diagnostic Plots for Principal Stratification}
+
+<<makeDiagnosticPlots,eval=FALSE>>=
+source('R/diagnosticPlots.r')
+@
+
+\subsection{Posterior Predictive Density Plots}
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.5\textwidth]{output/ppcYoverall.jpg}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.5\textwidth]{output/ppcYtrt.jpg}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.5\textwidth]{output/ppcYctl.jpg}
+\end{figure}
+
+%\clearpage
+\subsection{Residual Plots}
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.5\textwidth]{output/residPlotOverall.jpg}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.5\textwidth]{output/residPlotTrt.jpg}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.5\textwidth]{output/residPlotCtl.jpg}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.5\textwidth]{output/binnedplot.pdf}
+\caption{Binned residual plot for model of hint requests.}
+\end{figure}
+
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.5\textwidth]{output/qqPlots.pdf}
+\caption{Q-Q plots for outcomes and fitted values}
+\end{figure}
+
+
 
 \end{document}
 

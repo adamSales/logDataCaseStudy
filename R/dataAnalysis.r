@@ -159,12 +159,13 @@ dat1 <-
   mutate(ntot=n(),ntrt=sum(M),nctl=ntot-ntrt,eff=mean(Y[M])-mean(Y[!M]),winv=(1/nctl+1/ntrt))
 
 
+ate <- update(anova,weights=winv)
 atevcv <- vcovHC(ate)
 atet <- coeftest(ate,atevcv)[2,]
 ateci <- coefci(ate,'MTRUE',vcov.=atevcv)
 
 
-tot <- update(ancova,weights=ntrt*winv)
+tot <- update(anova,weights=ntrt*winv)
 totvcv <- vcovHC(tot)
 tott <- coeftest(tot,totvcv)[2,]
 totci <- coefci(tot,'MTRUE',vcov.=totvcv)
@@ -228,12 +229,14 @@ if(getOption('mc.cores')<6)  options(mc.cores = 6)
 
 functions <- currentCode()
 
+cat(ifelse(runFull,'running','loading'),'ps model',as.character(Sys.time()),'\n')
 ### NOT RUN
 if(runFull){
   psmod1 <- stan('R/prinStratStan.stan',data=sdat,chains=6,iter=6000)
   save(psmod1,sdat,functions,file='fitModels/hintPS.RData')
 } else load('fitModels/hintPS.RData')
 
+cat('extracting ps model',as.character(Sys.time()),'\n')
 draws <- rstan::extract(psmod1)
 
 cat('
