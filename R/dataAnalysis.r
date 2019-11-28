@@ -25,6 +25,7 @@ source('~/Box Sync/rcode/matchingFunctions.r')
 source('~/Box Sync/rcode/hhh.r')
 source('~/Box Sync/rcode/printXbal.r')
 
+load('~/Box Sync/CT/data/RANDstudyData/HSdata.RData') ## for "error"
 if(runFull) source('R/prelimStan.r') else load('data/hintsData.RData')
 
 ## for printing nice CIs

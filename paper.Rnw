@@ -503,19 +503,56 @@ approximately \Sexpr{round(agree*100)}\% of cases.
 
 \subsection{Data}\label{sec:data}
 
+\citep{pane2014effectiveness} estimated effects separately in middle
+schools and high schools in each the first two years of the RCT; the
+only statistically significant treatment effect was in the high school
+sample in the second year.
 Since our goal was to better understand the CTA1
 treatment effect, we focused our analysis on data from high school students in
 the second year of the CTA1 trial, for whom the treatment effect was
 most evident.
 
-We merged data from two sources: covariate, treatment and outcome data gathered by RAND, and computerized log data gathered by Carnegie Learning.
+We merged data from two sources: computerized log data gathered by
+Carnegie Learning, and covariate, treatment and outcome data gathered by RAND.
+
+The log data lists the problem name, section, and unit of
+each problem, the numbers of hints requested and errors committed, and time-stamps.
+Log data were missing for some students, either because the log files
+were not retrievable, or because of an imperfect ability to link log
+data to other student records.
+Further, log data for sections that were not part of the
+standard CTA1 Algebra I curriculum and problems worked by fewer than 100
+students were omitted from the
+dataset.
+
+To construct our analysis dataset, we first dropped treatment schools with log data missing
+for 90\% or more students.
+Prior to randomization, schools were stratified into pairs or triples
+based on baseline covariates, and randomized between treatment and
+control condition within these randomization blocks.
+When we dropped a treatment school from our analysis, we also dropped
+the control schools in its randomization block.
+Of the remaining \Sexpr{prettyNum(Nt,',')} students, \Sexpr{round(obsUse/Nt*100)}\% (\Sexpr{prettyNum(obsUse,',')}) had log
+data.
+Then, for the sake of simplicity, the treatment students without log data
+were dropped from the study.\footnote{Including these students in a
+  principal stratification model is straightforward \citep{aoas}; see
+  the online supplement for results from a model including them, which
+  were broadly similar to the results presented here. Including
+  subjects with missing log data in a mediation or observational study
+  design can be more problematic \citep[see, e.g.][]{li2017identifiability}.}
+
+All told, the main analysis included $n=$\Sexpr{prettyNum(Ntot,',')} students, \Sexpr{pn(NtFinal)} of whom were assigned to the CTA1 condition and \Sexpr{pn(Ntot-NtFinal)} of whom were assigned to control.
+The students were nested within \Sexpr{pn(nteacher)} teachers, in \Sexpr{pn(nschool)} schools across five states.
+
 Table \ref{tab:covariateBalance} describes the covariates we used, including
 missingness information, control and treatment means, and standardized
-differences \citep[c.f.][]{kalton1968standardization}.
+differences \citep[c.f.][]{kalton1968standardization} from the final
+analysis sample.
 We singly-imputed missing values with the Random Forest routine implemented
 by the \texttt{missForest} package in \texttt{R}
-\citep{missForest,rcite},  which estimated the ``out of box'' imputation
-errors also shown in Table \ref{tab:covariateBalance} as part of the random forest regression.
+\citep{missForest,rcite},  which estimated ``out of box'' imputation
+error rates as part of the random forest regression, also shown in Table \ref{tab:covariateBalance}.
 
 \begin{table}[ht]
 \centering
@@ -531,34 +568,6 @@ errors also shown in Table \ref{tab:covariateBalance} as part of the random fore
   Analysis done in \texttt{R} via \texttt{RItools} \citep{ritools}.}
 \label{tab:covariateBalance}
 \end{table}
-
-
-Over the course of the effectiveness study, Carnegie Learning gathered
-log data for each worked problem.
-The resulting dataset lists the problem name, section, and unit of
-each problem, the numbers of hints requested and errors committed, and time-stamps.
-Log data were missing for some students, either because the log files were not retrievable, or because of an imperfect ability to link log data to other student records.
-Treatment schools with mastery data missing
-for 90\% or more students were omitted from the analysis, along with
-their entire randomization block.
-Of the remaining \Sexpr{Nt} students, \Sexpr{round(obsUse/Nt*100)}\% (\Sexpr{prettyNum(obsUse,',')}) had log
-data.
-For the sake of simplicity, the treatment students without log data
-were dropped from the study.\footnote{Including these students in a
-  principal stratification model is straightforward \citep{aoas}; see
-  the online supplement for results from a model including them, which
-  were broadly similar to the results presented here. Including
-  subjects with missing log data in a mediation or observational study
-  design can be more problematic \citep[see, e.g.][]{li2017identifiability}.}
-Problem log data for sections that were not part of the
-standard CTA1 Algebra I curriculum and problems worked by fewer than 100
-students were omitted from the
-dataset.
-
-All told, the main analysis included $n=$\Sexpr{prettyNum(Ntot,',')} students, \Sexpr{pn(NtFinal)} of whom were assigned to the CTA1 condition and \Sexpr{pn(Ntot-NtFinal)} of whom were assigned to control.
-The students were nested within \Sexpr{pn(nteacher)} teachers, in \Sexpr{pn(nschool)} schools across five states.
-
-
 
 
 \section{An Observational Study Within an Experiment}\label{sec:observational}

@@ -1,6 +1,5 @@
 ## covariate means/balance
-
-covs2 <- covs[rownames(dat),] ### same as dat but with NAs
+covs2 <- covs[rownames(dat)[dat$field_id%in%x$field_id|dat$treatment==0],] ### same as dat but with NAs
 
 miss <- NULL
 varbs <- c('grade','esl','frl','race','sex','spec','xirt')
