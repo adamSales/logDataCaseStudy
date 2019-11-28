@@ -91,7 +91,7 @@ load('output/analysis.RData')
 \maketitle
 
 \section{Introduction}
-In the 2007--2008 and 2008--2009 school years, the RAND corporation
+From 2007 through 2010, the RAND corporation
 conducted one of the first effectiveness trials awarded through
 competitive grant programs sponsored by the US Department of
 Education's Institute of Education Sciences.  The randomized
@@ -101,9 +101,11 @@ Cognitive Tutor Algebra I (CTA1) curriculum, whose centerpiece is a
 computerized ``tutor'' that uses cognitive science principles to teach
 Algebra I \citep{anderson1985intelligent}.
 The study \citep{pane2014effectiveness} found no effects in its first year, but in
-the second year of implementation students in schools randomized to
+the second year of implementation students in high schools randomized to
 the CTA1 condition outperformed the control group on the posttest by a fifth of a
-standard deviation.
+standard deviation.\footnote{\citep{pane2014effectiveness} only
+  reports results from the first two years of implementation; the
+  third year included only middle schools, not high schools.}
 
 Over the course of the CTA1 study, the software administrators
 gathered computer log data for students in the treatment group.
@@ -132,8 +134,8 @@ all but one of which was published since 2001. We are aware of
 numerous other such RCTs planned or ongoing. The current case-study is
 about the use of hints in CTA1, but the huge variation in products
 under study, each with their own unique designs, opens a wide set of opportunities to understand how features of those
-products drive their effects. As one example, RAND is currently
-completing an efficacy study of a different algebra tutoring system,
+products drive their effects. As one example, RAND is recently
+completed an efficacy study of a different algebra tutoring system,
 ALEKS. When students begin working on a particular topic in ALEKS, the
 system first presents instructional material, followed by problem
 solving activities, and then, if students are unsuccessful at solving
@@ -151,7 +153,8 @@ This paper will illustrate three approaches to this type of research
 using log data from the CTA1 study---specifically, data on students' use
 of hints within the software.
 The first approach discards the control group, and analyzes
-hint-requesting in the treatment group as an observational study
+hint-requesting in the treatment group as an observational study,
+using a matching design
 \citep[c.f.][]{rosenbaum2002observational}. The
 second approach applies the framework of causal mediation analysis
 \citep{vanderweele2015explanation,hong2015causality,imai2011unpacking} to estimate the role of
@@ -159,7 +162,7 @@ hint-requesting in the overall CTA1 treatment effect. However, since
 students in the control group were unable to request hints, not all
 mediational estimands are identified, and estimation methods must be
 modified.
-Finally, we will conduct a principal stratification analysis
+Finally, we conduct a principal stratification analysis
 \citep{frangakis} to learn if students requesting different amounts of
 hints experienced different treatment effects.
 
@@ -172,13 +175,13 @@ stratification and mediation analysis
 derived formal equivalencies between parameters under certain
 conditions.
 Our contribution will build on this literature in two ways: first, by
-providing a detailed demonstration of matching, mediation analysis,
+providing a detailed demonstration and comparison of matching, mediation analysis,
 and principal stratification on the same dataset, and second by
 focusing on the applicability of these three methods in the specific
-context of studying implementation data from an EdTech randomized
-experiment.
+context of studying implementation data from an randomized
+experiment studying educational technology (EdTech).
 
-After a brief overview of the three causal approaches we will discuss,
+After a brief overview of the three causal approaches,
 the next section will provide background for the case-study,
 describing the CTA1 curriculum, the RAND study, and our focus on
 hints.
@@ -297,8 +300,8 @@ automated computer-based Cognitive Tutor
 \citep{anderson1995cognitive,pane2014effectiveness}.
 
 The computerized tutor was originally built to test the ACT and ACT-R
-theories of skill acquisition \citep{anderson2013architecture}.
-These are elaborate theories describing the necessary components of
+theories of cognition \citep{anderson2013architecture}.
+These are elaborate theories that describe, among other things, the necessary components of
 cognitive skills in, say, mathematics or computer programming, and the
 process of acquiring those skills.
 The Algebra I tutor guides students through a sequence of Algebra I
