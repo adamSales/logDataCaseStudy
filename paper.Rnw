@@ -309,72 +309,6 @@ problems nested in sections within units, and organized by the specific sets of 
 Students move through the curriculum as the tutor's internal learning
 model determines that they have mastered the requisite skills.
 
-As students work through specific problems, they receive two types
-of instruction from the tutor.
-When they err---that is, depart from one of the pre-specified correct
-solution paths for that problem---they receive an error message
-alerting them to their mistake and helping them return to the correct
-solution path.
-Students may also request help, in the form of hints, that are also
-tailored to the specific context and solution path they are on.
-
-\subsection{Data}\label{sec:data}
-
-Since our goal was to better understand the CTA1
-treatment effect, we focused our analysis on data from high school students in
-the second year of the CTA1 trial, for whom the treatment effect was
-most evident.
-
-We merged data from two sources: covariate, treatment and outcome data gathered by RAND, and computerized log data gathered by Carnegie Learning.
-Table \ref{tab:covariateBalance} describes the covariates we used, including
-missingness information, control and treatment means, and standardized
-differences \citep[c.f.][]{kalton1968standardization}.
-We singly-imputed missing values with the Random Forest routine implemented
-by the \texttt{missForest} package in \texttt{R}
-\citep{missForest,rcite},  which estimated the ``out of box'' imputation
-errors also shown in Table \ref{tab:covariateBalance} as part of the random forest regression.
-
-\begin{table}[ht]
-\centering
-\include{output/covariateTable}
-\caption{Missingness information, control (``BaU'' or ``Business as
-  Usual'') and treatment (``CTA1'') means, and balance for the
-  covariates included in this study, from the high school year two
-  stratum of CTA1 Effectiveness experiment. Imputation error is percent falsely classified for
-  categorical variables (Race/Ethnicity, Sex, and Special Education)
-  and standardized root mean squared error for Pretest, which is
-  continuous. %The overall p-value accounts for clustering at the
-  %school level and blocked random sampling.
-  Analysis done in \texttt{R} via \texttt{RItools} \citep{ritools}.}
-\label{tab:covariateBalance}
-\end{table}
-
-
-Over the course of the effectiveness study, Carnegie Learning gathered
-log data for each worked problem.
-The resulting dataset lists the problem name, section, and unit of
-each problem, the numbers of hints requested and errors committed, and time-stamps.
-Log data were missing for some students, either because the log files were not retrievable, or because of an imperfect ability to link log data to other student records.
-Treatment schools with mastery data missing
-for 90\% or more students were omitted from the analysis, along with
-their entire randomization block.
-Of the remaining \Sexpr{Nt} students, \Sexpr{round(obsUse/Nt*100)}\% (\Sexpr{prettyNum(obsUse,',')}) had log
-data.
-For the sake of simplicity, the treatment students without log data
-were dropped from the study.\footnote{Including these students in a
-  principal stratification model is straightforward \citep{aoas}; see
-  the online supplement for results from a model including them, which
-  were broadly similar to the results presented here. Including
-  subjects with missing log data in a mediation or observational study
-  design can be more problematic \citep[see, e.g.][]{li2017identifiability}.}
-Problem log data for sections that were not part of the
-standard CTA1 Algebra I curriculum and problems worked by fewer than 100
-students were omitted from the
-dataset.
-
-All told, the main analysis included $n=$\Sexpr{prettyNum(Ntot,',')} students, \Sexpr{pn(NtFinal)} of whom were assigned to the CTA1 condition and \Sexpr{pn(Ntot-NtFinal)} of whom were assigned to control.
-The students were nested within \Sexpr{pn(nteacher)} teachers, in \Sexpr{pn(nschool)} schools across five states.
-
 
 \subsection{The Role of Hints\footnote{This subsection draws heavily
   on comments from an anonymous reviewer.}}
@@ -383,8 +317,10 @@ problems on a computer.
 Each problem in the software is associated with a set of skills that
 the student must master, and a path (or set of paths) to solving the
 problem.
-As soon as a student errs in working through the problem, the
-software provides feedback tailored to the specific mistake, and
+As soon as a student errs in working through a problem---that is, departs from one of the
+solution paths---the
+software shows the student an error message.
+This feedback is tailored to the specific mistake, and
 designed to guide the student back to a correct solution path.
 Similarly, when a student gets stuck, and is unable to determine the
 next step in solving the problem, he or she can ask for a hint.
@@ -462,6 +398,7 @@ between students, but on average it is negative for the first two
 hints requested on a problem, but positive for the final hint.
 
 \subsection{Measuring Hint Usage in the CTA1 Data}
+\marginpar{make sure this makes sense before ``Data'' section}
 Unlike previous studies of hint usage, the CTA1 study was not designed
 to estimate the effect of hint usage; its purpose was to estimate the
 effect of CTA1 as a package, including the associated textbook and
@@ -564,6 +501,62 @@ This definition agreed with the model's classification in
 approximately \Sexpr{round(agree*100)}\% of cases.
 
 
+\subsection{Data}\label{sec:data}
+
+Since our goal was to better understand the CTA1
+treatment effect, we focused our analysis on data from high school students in
+the second year of the CTA1 trial, for whom the treatment effect was
+most evident.
+
+We merged data from two sources: covariate, treatment and outcome data gathered by RAND, and computerized log data gathered by Carnegie Learning.
+Table \ref{tab:covariateBalance} describes the covariates we used, including
+missingness information, control and treatment means, and standardized
+differences \citep[c.f.][]{kalton1968standardization}.
+We singly-imputed missing values with the Random Forest routine implemented
+by the \texttt{missForest} package in \texttt{R}
+\citep{missForest,rcite},  which estimated the ``out of box'' imputation
+errors also shown in Table \ref{tab:covariateBalance} as part of the random forest regression.
+
+\begin{table}[ht]
+\centering
+\include{output/covariateTable}
+\caption{Missingness information, control (``BaU'' or ``Business as
+  Usual'') and treatment (``CTA1'') means, and balance for the
+  covariates included in this study, from the high school year two
+  stratum of CTA1 Effectiveness experiment. Imputation error is percent falsely classified for
+  categorical variables (Race/Ethnicity, Sex, and Special Education)
+  and standardized root mean squared error for Pretest, which is
+  continuous. %The overall p-value accounts for clustering at the
+  %school level and blocked random sampling.
+  Analysis done in \texttt{R} via \texttt{RItools} \citep{ritools}.}
+\label{tab:covariateBalance}
+\end{table}
+
+
+Over the course of the effectiveness study, Carnegie Learning gathered
+log data for each worked problem.
+The resulting dataset lists the problem name, section, and unit of
+each problem, the numbers of hints requested and errors committed, and time-stamps.
+Log data were missing for some students, either because the log files were not retrievable, or because of an imperfect ability to link log data to other student records.
+Treatment schools with mastery data missing
+for 90\% or more students were omitted from the analysis, along with
+their entire randomization block.
+Of the remaining \Sexpr{Nt} students, \Sexpr{round(obsUse/Nt*100)}\% (\Sexpr{prettyNum(obsUse,',')}) had log
+data.
+For the sake of simplicity, the treatment students without log data
+were dropped from the study.\footnote{Including these students in a
+  principal stratification model is straightforward \citep{aoas}; see
+  the online supplement for results from a model including them, which
+  were broadly similar to the results presented here. Including
+  subjects with missing log data in a mediation or observational study
+  design can be more problematic \citep[see, e.g.][]{li2017identifiability}.}
+Problem log data for sections that were not part of the
+standard CTA1 Algebra I curriculum and problems worked by fewer than 100
+students were omitted from the
+dataset.
+
+All told, the main analysis included $n=$\Sexpr{prettyNum(Ntot,',')} students, \Sexpr{pn(NtFinal)} of whom were assigned to the CTA1 condition and \Sexpr{pn(Ntot-NtFinal)} of whom were assigned to control.
+The students were nested within \Sexpr{pn(nteacher)} teachers, in \Sexpr{pn(nschool)} schools across five states.
 
 
 
