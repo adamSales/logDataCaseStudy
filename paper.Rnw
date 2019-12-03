@@ -422,10 +422,10 @@ patterns of usage among different students.
 This sort of analysis is beyond the scope of the current study, which
 focuses on comparing and contrasting causal modeling approaches for
 these data.
-What is relevant for our purposes is that we may narrow down the type
+
+For the current purpose, we narrow down the type
 of hint data we model to align with our research focus and to avoid
 some modeling pitfalls.
-
 Since our posttest measured Algebra I skills, we only
 considered worked problems from the Algebra I curriculum.
 Next, although \citet{goldin2012learner} demonstrated the importance
