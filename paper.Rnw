@@ -528,10 +528,10 @@ drawn from a normal distribution with mean $\mu_0$ and standard
 deviation $\sigma_0$.
 
 Our main parameter of interest here is $p_0$, the proportion of
-students who are low-hint users.
+students who are low hint users.
 We estimated $p_0\approx$\Sexpr{prettyNum(round(1-mixProp,2))},
 classifying \Sexpr{round(mixProp*100)}\% of students as
-high-hint users, so we chose $c$ as the
+high hint users, so we chose $c$ as the
 \Sexpr{round((1-mixProp)*100)}th percentile of $\bar{h}$,
 approximately \Sexpr{sprintf('%.1f',quantile(hintAvgStud[['propHintStud']],1-mixProp))}.
 This definition agreed with the model's classification (based on
@@ -616,8 +616,10 @@ error rates as part of the random forest regression, also shown in Table \ref{ta
 \section{An Observational Study Within an Experiment}\label{sec:observational}
 
 How does requesting hints within CTA1 affect learning?
-More precisely, would students have achieved higher posttest scores
-had they requested hints more (or less) often?
+More precisely, would low hint users have achieved higher posttest scores
+had they requested hints more often?
+Would high hint users have achieved higher posttest scores had the
+requested hints less often?
 
 Let $Y_i$ represent subject $i$'s posttest score, and let $Z_i$ represent
 $i$'s treatment status (i.e. the CTA1 or control group).
@@ -756,24 +758,44 @@ respectively.
 The row labeled ANCOVA of Table \ref{tab:matchResults} gives the
 coefficient on $H$ from a regression of Y on $H$ along with indicators for matched set,
 racial categories, grade, ESL status, economic disadvantage, and sex,
-along with a natural spline with five degrees of freedom for pretest (the standard error
-and confidence interval using the ``HC3'' sandwich estimator,
-\citealt{sandwichPackage}).
+along with a natural spline with five degrees of freedom for pretest.
 This regression adjusts for imbalances in these covariates within
-matched sets \citep[c.f.][]{biasAdjust}; its estimate is similar to
-the others.
+matched sets \citep[c.f.][]{biasAdjust}.
+All three sets of standard errors
+and confidence intervals used the heteroskedasticity-robust ``HC3'' sandwich estimator,
+\citealt{sandwichPackage}.
+
+The three estimates all roughly agree that being a high hint user
+decreases posttest scores by nearly a quarter of a standard deviation.
+That is, requesting hints hurts posttest scores---teachers should
+recommend against students' requesting hints.
+
+The similarity of the three estimates boosts our confidence, if only
+slightly. The ``ATE'' and ``TOT'' estimates refer to different groups
+of students---ATE estimates an average effect for the entire treatment
+group, whereas TOT estimates an effect for high hint users. Had these
+been very different, we might wonder why the effect of hint requests
+varies so much between high and low hint users, and if that suggests
+selection bias.
+The fact that the additional covariate adjustment of the ANCOVA model
+made little difference in the effect estimate suggests that the
+propensity score match eliminated all or most of the confounding bias due to
+measured covariates; hence, additional adjustment was unnecessary.
 
 <<obsStudyEst,results='asis',echo=FALSE>>=
 
 
 matchTEtab <-
   cbind(
-    data.frame(Effect=c('ANOVA','ATE','TOT','ANCOVA')),
-    rbind(anovat,atet,tott,ancovat)[,c('Estimate','Std. Error')],
-    CI=vapply(list(anovaci,ateci,totci,ancovaci),printci,'a'),
+    data.frame(Effect=c('ATE','TOT','ANCOVA')),
+    rbind(atet,tott,ancovat)[,c('Estimate','Std. Error')],
+    CI=vapply(list(ateci,totci,ancovaci),printci,'a'),
     `$T_Z$`=0,
     `$\\rho^2$`=0
   )
+
+stopifnot(min(matchTEtab[,1])<0.2)
+stopfinot(max(matchTEtab[,1])>0.25)
 
 for(tt in c(ttt['xirt'],ttt['xirt']/2))
   matchTEtab <- add_case(matchTEtab,
@@ -816,12 +838,16 @@ print(xtable(matchTEtab,
 % \label{tab:matchResults}
 % \end{table}
 
-Matched ignorability is a very strong assumption, so these results
-should not be taken at face value---especially if weaker students ask for hints at
+None of these estimates addressed the possiblity of confounding from
+unmeasured covariates; instead, they relied on matched ignorability.
+This would be a particular concern if pretest scores do not completely
+capture students' mathematics ability, and if weaker students ask for hints at
 higher rates, and also score lower on the posttest.
-While adjusting for pre-test scores via matching and/or regression
-may account for some of that bias, pre-test may not capture all of the
-relevant pre-treatment information.
+Then, whatever aspects of student ability are not captures by the
+pretest, and correlate with both hint requests and posttest scores,
+would confound the estimates in the upper part of Table
+\ref{tab:matchResults}.
+
 To account for the possibility of unmeasured confounding, we conducted
 a sensitivity analysis following the method of \citet{hhh}.
 This method imagines a hypothetical missing covariate $U$ and estimates
@@ -836,11 +862,13 @@ accounting for the observed covariates in the model, and $T_Z$ is the
 t-statistic from an ordinary least squares regression of $H$ on $U$, along with the observed covariates.
 These sensitivity parameters may be benchmarked by estimating their
 counterparts when observed covariates are left out of the model.
+The first three rows of the table have both $\rho^2$ and $T_Z$ equal
+to zero, to reflect that they assume no unmeasured confounders.
 The row of Table \ref{tab:matchResults} labeled ``[Pretest]''
 imagines a $U$ that predicts $Y$ and $H$ to a similar extent as
 pretest.
 The resulting sensitivity interval is quite wide, including
-unbelievably large negative effects as well as substantial positive
+both large negative effects as well as substantial positive
 effects.
 A slightly less conservative sensitivity analysis, labeled
 ``[Pretest/2]'' allows $U$ to
@@ -952,13 +980,12 @@ That being the case, the data provide little to no information about
 the distribution of potential outcomes when the software is used
 but no hints are requested.
 
-Our solution was to dichotomize hint requests, as
-described above, essentially re-defining the causal question.
-\Sexpr{round((mixProp)*100)}\% of the treatment group and all of the control group has
-$H=0$---requesting hints at a rate less than the
-\Sexpr{round((1-mixProp)*100)}th percentile of the treatment group.
+Dichotomizing hint requests into $H$, instead of $\bar{h}$, re-defines
+the causal question.
 To make sense of the respective roles of $H$ and $\bar{h}$, the
-continuous measure on which it is based, we may imagine a process in
+continuous measure on which it is based (see Section
+\ref{sec:dichotomizingHintUsage}),
+we may imagine a process in
 which students are assigned $H$, and under that constraint choose a
 value for $\bar{h}$.
 In the control group all students are assigned $H=0$ and $\bar{h}=0$, but
