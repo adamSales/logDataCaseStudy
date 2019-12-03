@@ -989,7 +989,7 @@ we may imagine a process in
 which students are assigned $H$, and under that constraint choose a
 value for $\bar{h}$.
 In the control group all students are assigned $H=0$ and $\bar{h}=0$, but
-in the treatment group half of students have $H=1$ and half have
+in the treatment group \Sexpr{round((1-mixProp)*100)}\% of students have $H=1$ and \Sexpr{round((mixProp)*100)}\% have
 $H=0$, and $\bar{h}$ varies within those groups.
 That structure implies a ``treatment mediator interaction''
 where the effect of the mediator on the outcome varies by treatment
