@@ -424,14 +424,13 @@ focuses on comparing and contrasting causal modeling approaches for
 these data.
 
 For the current purpose, we narrow down the type
-of hint data we model to align with our research focus and to avoid
-some modeling pitfalls.
+of hint data we model to align with our research focus.
 Since our posttest measured Algebra I skills, we only
 considered worked problems from the Algebra I curriculum.
 Next, although \citet{goldin2012learner} demonstrated the importance
 of hint level, our focus is on the overall average effect of
 requesting any hints; therefore, the variable measuring a student's
-hint request on a problem was set one if the student requested any
+hint request on a problem was set to one if the student requested any
 hints on that problem, and zero otherwise.
 % (More mundanely, we do not have access to data
 % describing the number of hints available for every problem, which
@@ -485,20 +484,64 @@ requesting a hint.
 This class of problems is inherently interesting to our question;
 however, it is unidentified.
 
-The observational study and (especially) the mediation analysis we
-describe below require a dichotomous measurement of hint usage: is a
+\subsubsection{Dichotomizing Hint Usage}\label{sec:dichotomizingHintUsage}
+The observational study and mediation analysis below require a dichotomous measurement of hint usage: is a
 student a high or low hint user?
 To this end, we dichotomize $\bar{h}$ by comparing it to a cutoff value, so
 that $H_i=\indicator{\bar{h}_i>c}$, where $\indicator{x}=1$ if $x$ is true
 and 0 otherwise.
-To choose $c$, we fit a two-component modified Rasch mixture model
-\citep{rasch} to hint request data, described in an online appendix.
-The model classified approximately \Sexpr{round(mixProp*100)}\% of students as
+
+To choose $c$, we first fit a modified Rasch mixture model
+\citep{rasch} to hint request data.
+Specifically, we modeled the probability of a hint request in each problem
+$p$, worked by student $i$, as
+\begin{equation*}\label{eq:rasch}
+Pr(h_{ip})=logit^{-1}(\eta_i+\delta_{s[p]})
+\end{equation*}
+where $h_{ip}$ is the event that student $i$ requests a hint on
+problem $p$, $\eta_i$ is a student parameter, $\delta_{s[p]}$ is a
+section-level parameter for $s[p]$, the section that problem $p$ was
+drawn from, and $logit^{-1}(x)=\{1+exp(-x)\}^{-1}$ is the inverse logit
+function.
+Typically, the student parameter $\eta_i$ measures student ability;
+here, instead, it measures a student's proclivity to request a hint.
+The typical Rasch model includes a problem-level ``difficulty'' parameter, but in our
+dataset many problems were worked by very few students, so problem
+level parameters would be hard to estimate.
+Instead, we included the section-level parameter $\delta_{s[p]}$,
+which measures the extent to which students tend to request hints on
+problems in section $s$.
+This essentially assumes that all problems within each section are equally
+likely to elicit a hint.
+
+Then, in order to dichotomize hint request behavior, we modeled
+student effects $\eta$ as
+\begin{equation}\label{eq:mixture}
+\eta\sim
+p_0\mathcal{N}(\mu_0,\sigma_0)+(1-p_0)\mathcal{N}(\mu_1,\sigma_1)
+\end{equation}
+and constrained $\mu_0<\mu_1$.
+This mixture model clusters students into two categories: high hint
+users have $\eta$ drawn from a normal distribution with mean $\mu_1$
+and standard deviation $\sigma_1$, and low hint users have $\eta$
+drawn from a normal distribution with mean $\mu_0$ and standard
+deviation $\sigma_0$.
+
+Our main parameter of interest here is $p_0$, the proportion of
+students who are low-hint users.
+We estimated $p_0\approx$\Sexpr{prettyNum(round(1-mixProp,2))},
+classifying \Sexpr{round(mixProp*100)}\% of students as
 high-hint users, so we chose $c$ as the
 \Sexpr{round((1-mixProp)*100)}th percentile of $\bar{h}$,
 approximately \Sexpr{sprintf('%.1f',quantile(hintAvgStud[['propHintStud']],1-mixProp))}.
-This definition agreed with the model's classification in
+This definition agreed with the model's classification (based on
+$\eta$ as opposed to $\bar{h}$ in
 approximately \Sexpr{round(agree*100)}\% of cases.
+
+The Rasch model for hint useage \eqref{eq:rasch}, but not the mixture
+model \eqref{eq:mixture} will play an important role in the principal
+stratification analysis of Section \ref{sec:principalStratification}.
+
 
 
 \subsection{Data}\label{sec:data}
@@ -1091,30 +1134,27 @@ problems students worked---in particular, its extreme values belong to
 those students who barely used the tutor at all.
 Further, it does not account for varying difficulty of the tutor's
 problems.
-As an alternative, we fit a
-modified Rasch model \citep[e.g.][]{rasch},
-\begin{equation}\label{eq:rasch}
-Pr(h_{ip})=logit^{-1}(\eta_i+\delta_{s[p]})
-\end{equation}
-where $h_{ip}$ is the event that student $i$ requests a hint on
-problem $p$, $\eta_i$ is a student parameter, $\delta_{s[p]}$ is a
-section-level parameter for $s[p]$, the section that problem $p$ was
-drawn from, and $logit^{-1}(x)=\{1+exp(-x)\}^{-1}$ is the inverse logit
-function.
-Typically, the student parameter $\eta_i$ measures student ability;
-here, instead, it measures a student's proclivity to request a hint.
-The typical Rasch model includes a problem-level ``difficulty'' parameter, but in our
-dataset many problems were worked by very few students, so problem
-level parameters would be hard to estimate.
-Instead, we included the section-level parameter $\delta_{s[p]}$,
-which measures the extent to which students tend to request hints on
-problems in section $s$.
-This essentially assumes that all problems in each section are equally
-likely to elicit a hint.
+In section \ref{sec:dichotomizingHintUsage}, we showed that
+dichotomized $\bar{h}$ largely agrees with a dicotomized version of a
+more sophisticated measure of hint usage.
+However, when modeling hint usage continuously, the correspondence may
+not hold \citet[see][for a more complete discussion]{aoas}.
+
+For those reasons, we modeled hint usage at the problem level, with
+equation \eqref{eq:rasch}, but with two important differences.
+First, a conceptual difference: the $\eta$ in \eqref{eq:rasch} was
+replaced by $\eta (1)$, indicating that it is measuring
+\emph{potential} hint usage---the hint usage a student would exhibit
+were he or she assigned to the treatment condition.
+Whereas $\eta$ is only defined for students assigned to the treatment condition,
+$\eta(1)$ is defined for all the students in the study.
+Second, a modeling difference: since we are not dichotomizing $\eta(1)$
+in this analysis, we did not model it as a normal mixture, as in
+\eqref{eq:mixture}.
 
 We incorporated the model for hint requests, (\ref{eq:rasch}), into
-the larger principal stratification model, replacing $\eta$ for
-$\bar{h}$.
+the larger principal stratification model, replacing $\eta(1)$ for
+$\bar{h}(1)$.
 Then, the principal stratification estimand is
 \begin{equation*}
 \tau(r)=\EE[Y(1)-Y(0)|\eta(1)=r]
