@@ -1,114 +1,160 @@
-1.	The effectiveness trial was actually conducted over three academic years (two per 
-school): 2007-8, 2008-9, and 2009-10. Once you restrict to the high school study it is 
+1.	The effectiveness trial was actually conducted over three academic years (two per
+school): 2007-8, 2008-9, and 2009-10. Once you restrict to the high school study it is
 just the first two years.
-2.	RAND has now completed the efficacy study of ALEKS (although the results are not 
+
+2.	RAND has now completed the efficacy study of ALEKS (although the results are not
 published yet).
-3.	On page 2, in one paragraph you mention an observational study, then in the next you 
-mention a demonstration of matching. It might be good to elaborate the first to 
+
+3.	On page 2, in one paragraph you mention an observational study, then in the next you
+mention a demonstration of matching. It might be good to elaborate the first to
 mention that the observational study will use matching.
-4.	You might want to drop “will” in “Finally, we will conduct a principal stratification 
-analysis”
-5.	Bottom of p.2, do you want to say this is more than a demonstration, i.e., also a 
+
+4.	You might want to drop "will" in "Finally, we will conduct a principal stratification
+analysis"
+
+5.	Bottom of p.2, do you want to say this is more than a demonstration, i.e., also a
 comparison?
+
 6.	Define EdTech on first use.
-7.	Consider omitting “we will discuss” in “After a brief overview of the three causal 
-approaches we will discuss”
-8.	The definitions of H, Y, and Z are in the figure caption, but should you also introduce 
-those in the text (section 1.1)? These currently aren’t defined until section 3.
+
+7.	Consider omitting "we will discuss" in "After a brief overview of the three causal
+approaches we will discuss"
+
+8.	The definitions of H, Y, and Z are in the figure caption, but should you also introduce
+those in the text (section 1.1)? These currently aren't defined until section 3.
+
 9.	Saying ACT-R is a theory of skill acquisition may be incomplete. From act-
-r.psy.cmu.edu/about: “ACT-R is a cognitive architecture: a theory for simulating and 
-understanding human cognition.” It also models the use of skills, not just acquiring 
-them. Also, it seems sufficient to mention ACT-R (i.e., not ACT as well). 
-10.	Last paragraph in section 2.1 discusses solution paths, but this is only described later 
-in section 2.3. You might consider swapping the order of sections 2.2 and 2.3 and the 
-paragraph in section 2.1 may no longer be necessary or can be integrated into the new 
+r.psy.cmu.edu/about: "ACT-R is a cognitive architecture: a theory for simulating and
+understanding human cognition." It also models the use of skills, not just acquiring
+them. Also, it seems sufficient to mention ACT-R (i.e., not ACT as well).
+
+10.	Last paragraph in section 2.1 discusses solution paths, but this is only described later
+in section 2.3. You might consider swapping the order of sections 2.2 and 2.3 and the
+paragraph in section 2.1 may no longer be necessary or can be integrated into the new
 section 2.2. The old section 2.2 might even be better placed after 2.4.
-11.	In section 2.2, you mention restricting to year 2 of the high school study, but some 
-context is missing. The first paragraph of the paper mentions the effect emerged in 
-the second year but doesn’t talk about the HS/MS arms of the study.
-12.	Reword “estimated the "out of box" imputation errors also shown in Table 1 as part 
-of the random forest regression” to “estimated the "out of box" imputation errors as 
-part of the random forest regression, also shown in Table 1.”
-13.	Do you mean “log data” in “Treatment schools with mastery data missing…”?
-14.	Same sentence, does the reader need a little more context about pairing / 
+
+11.	In section 2.2, you mention restricting to year 2 of the high school study, but some
+context is missing. The first paragraph of the paper mentions the effect emerged in
+the second year but doesn't talk about the HS/MS arms of the study.
+
+12.	Reword "estimated the "out of box" imputation errors also shown in Table 1 as part
+of the random forest regression" to "estimated the "out of box" imputation errors as
+part of the random forest regression, also shown in Table 1."
+
+13.	Do you mean "log data" in "Treatment schools with mastery data missing..."?
+
+14.	Same sentence, does the reader need a little more context about pairing /
 randomization block?
-15.	Omit “problem” in “Problem log data for sections…”
+
+15.	Omit "problem" in "Problem log data for sections..."
+
 16.	Overall, the discussion of dropping data might be improved by cuing the reader up-
-front this was a multistep process, “first … then … … finally”. Was the restriction to 
-just the algebra curriculum actually done first? Otherwise it could introduce new 
-missingness that was supposed to be captured by the other steps. You also say there 
-are 2,091 before mentioning that step and 2,091 after. 
+front this was a multistep process, "first ... then ... ... finally". Was the restriction to
+just the algebra curriculum actually done first? Otherwise it could introduce new
+missingness that was supposed to be captured by the other steps. You also say there
+are 2,091 before mentioning that step and 2,091 after.
+
 17.	Does dropping what looks like a third of treatment students break the treatment-
 control balance achieved through randomization?
-18.	Top of page 8 you discuss the long-term nature of the study as an advantage. Another 
-advantage may be that effects are measured on a standardized assessment versus 
-progress within the tutor. 
-19.	Consider omitting “may” in “What is relevant for our purposes is that we may narrow 
-down…” or rephrasing this whole sentence and making it the lead-in sentence to the 
-next paragraph. “For the current purpose, we narrow down…”
-20.	Same paragraph, add “to” before “one” in “problem was set one if” 
-21.	Discussion on page 9 about the Rasch model is problematic because much of the 
-foundational discussion about the mixture model doesn’t appear until page 17. It may 
-be better to do all the setup of H and ? in one place, including text on pages 9, 14, 
-and 17. Also, it is not clear how the Rasch model classifies 30% of students as high 
+
+18.	Top of page 8 you discuss the long-term nature of the study as an advantage. Another
+advantage may be that effects are measured on a standardized assessment versus
+progress within the tutor. AS: prev paragraph discusses posttest
+
+19.	Consider omitting "may" in "What is relevant for our purposes is that we may narrow
+down..." or rephrasing this whole sentence and making it the lead-in sentence to the
+next paragraph. "For the current purpose, we narrow down..."
+
+20.	Same paragraph, add "to" before "one" in "problem was set one if"
+
+
+21.	Discussion on page 9 about the Rasch model is problematic because much of the
+foundational discussion about the mixture model doesn't appear until page 17. It may
+be better to do all the setup of H and ? in one place, including text on pages 9, 14,
+and 17. Also, it is not clear how the Rasch model classifies 30% of students as high
 users of hints. Can you explain how occurs?
-22.	Should this question be restated to reflect the dichotomization of H? “More precisely, 
-would students have achieved higher posttest scores had they requested hints more (or 
-less) often?”
-23.	Text says table 2 has three estimates but it actually has four. Before diving into the 
-weaknesses of the analysis, it would be helpful to summarize the results, and clarify 
-what these different estimates are telling us (or the rationale for doing this multiple 
-way). Also, please clarify whether the HC3 standard errors were estimated for all of 
-the models. Omit zeros for Tz and p2 where they are not applicable. Not sure you 
+
+
+22.	Should this question be restated to reflect the dichotomization of H? "More precisely,
+would students have achieved higher posttest scores had they requested hints more (or
+less) often?"
+
+
+23.	Text says table 2 has three estimates but it actually has four. Before diving into the
+weaknesses of the analysis, it would be helpful to summarize the results, and clarify
+what these different estimates are telling us (or the rationale for doing this multiple
+way). Also, please clarify whether the HC3 standard errors were estimated for all of
+the models. Omit zeros for Tz and p2 where they are not applicable. Not sure you
 should say that -.47 is unbelievable.
-24.	Shouldn’t it be 70% in, “30% of the treatment group and all of the control group has 
-H = 0”. 
-25.	Two sentences later you talk about groups with half the treatment students, but should 
+
+
+24.	Shouldn't it be 70% in, "30% of the treatment group and all of the control group has
+H = 0".
+
+25.	Two sentences later you talk about groups with half the treatment students, but should
 those portions be 70 and 30 percent?
-26.	Can you look at p. 15 for opportunities to clarify? I had trouble following and 
-wondered if there were mistakes. For example, presence or absence of expected value 
-symbols doesn’t always seem consistent, and I wondered if the equation “Yi(1,H(0)) 
-= Yi” would be clearer with Yi(0) or Yi(Z = 0) on the rhs. In the ratio of sums at the 
-bottom half of the two-condition equation, I think you want the mean control group 
-outcome in the same match set, but I do not see how the 1-Hj accomplishes that. 
+
+26.	Can you look at p. 15 for opportunities to clarify? I had trouble following and
+wondered if there were mistakes. For example, presence or absence of expected value
+symbols doesn't always seem consistent, and I wondered if the equation "Yi(1,H(0))
+= Yi" would be clearer with Yi(0) or Yi(Z = 0) on the rhs. In the ratio of sums at the
+bottom half of the two-condition equation, I think you want the mean control group
+outcome in the same match set, but I do not see how the 1-Hj accomplishes that.
 Should it be 1-Zi in the numerator and denominator?
-27.	Extra word: “TOT is the the…”
-28.	I am unsure of why you say “excessive” in “This analysis suggests that the 
-availability of excessive hints actually lowers the treatment”. And the next sentence 
+
+27.	Extra word: "TOT is the the..."
+
+28.	I am unsure of why you say "excessive" in "This analysis suggests that the
+availability of excessive hints actually lowers the treatment". And the next sentence
 sounds like a conclusive statement rather than something suggested by this analysis.
-29.	Missing word in “unlike indirect effects, includes a”
-30.	It might be helpful to summarize the mediation direct and indirect effect estimates in 
+
+29.	Missing word in "unlike indirect effects, includes a"
+
+30.	It might be helpful to summarize the mediation direct and indirect effect estimates in
 a table.
-31.	Consider omitting “larger” in “We incorporated the model for hint requests, (1), into 
-the larger principal stratification model”. 
-32.	Are the M’s in equation 3 the dimensions of the vectors? Why do you use U in the 
-immediately following text? And should you pick a different superscript than Y in 
+
+31.	Consider omitting "larger" in "We incorporated the model for hint requests, (1), into
+the larger principal stratification model".
+
+32.	Are the M's in equation 3 the dimensions of the vectors? Why do you use U in the
+immediately following text? And should you pick a different superscript than Y in
 equation 4 to distinguish it from the outcome?
-33.	Should you just talk about a half-as-important covariate here, since that is the only 
-one sensitivity test that excluded zero, and is a stronger assumption? “would predict 
-H no better than pretest, or no better than a covariate half as important as pretest. 
-These assumptions”
-34.	I don’t understand this point, “instead, they require a keen understanding of student 
-practice within the tutor.”
-35.	Was “the almost complete lack of overlap between hint request behavior in the 
-control group (i.e. zero) and in the treatment group” driven by the data restrictions we 
-imposed for this study? If so, maybe add, “in our analytic dataset”.
-36.	Take a look at the second paragraph on page 22. It is hard to tell if you are supporting 
-the second sentence with subsequent text. And maybe you can state what you’re 
+
+33.	Should you just talk about a half-as-important covariate here, since that is the only
+one sensitivity test that excluded zero, and is a stronger assumption? "would predict
+H no better than pretest, or no better than a covariate half as important as pretest.
+These assumptions"
+
+34.	I don't understand this point, "instead, they require a keen understanding of student
+practice within the tutor."
+
+35.	Was "the almost complete lack of overlap between hint request behavior in the
+control group (i.e. zero) and in the treatment group" driven by the data restrictions we
+imposed for this study? If so, maybe add, "in our analytic dataset".
+
+36.	Take a look at the second paragraph on page 22. It is hard to tell if you are supporting
+the second sentence with subsequent text. And maybe you can state what you're
 saying about testing assumptions more clearly.
-37.	In section 6.2, I wonder if “found” is the right word versus “suggested”. Also, maybe 
-state the two mediation results a little differently since hints wouldn’t be there unless 
-the rest of CTA1 was present. Thus I would say that the analysis suggests its positive 
-effects was partially offset by allowing hints. Finally, do the first two analyses really 
-address the question of allowing hints versus (perhaps) allowing more than a certain 
-amount. And, if so, could there be benefits of hint utilization less than c, but that 
+
+37.	In section 6.2, I wonder if "found" is the right word versus "suggested". Also, maybe
+state the two mediation results a little differently since hints wouldn't be there unless
+the rest of CTA1 was present. Thus I would say that the analysis suggests its positive
+effects was partially offset by allowing hints. Finally, do the first two analyses really
+address the question of allowing hints versus (perhaps) allowing more than a certain
+amount. And, if so, could there be benefits of hint utilization less than c, but that
 using hints beyond a certain threshold amount then detracts.
-38.	First paragraph page 23, consider moving last sentence to be second sentence, or 
+
+38.	First paragraph page 23, consider moving last sentence to be second sentence, or
 move the intervening sentence to the next paragraph.
-39.	Maybe modify “may be confident in the fit of a PS model.” to “more confident”
-40.	Consider changing “new computerized data” to “new dataset logged by online 
-learning systems”
-41.	What does “it” mean in “principal stratification includes it in the model”. Maybe say, 
-“In contrast, principal stratification models the relationship…”
-42.	It may not be clear what you mean by “instead of a simple proportion” 
+
+39.	Maybe modify "may be confident in the fit of a PS model." to "more confident"
+
+40.	Consider changing "new computerized data" to "new dataset logged by online
+learning systems"
+
+41.	What does "it" mean in "principal stratification includes it in the model". Maybe say,
+"In contrast, principal stratification models the relationship..."
+
+42.	It may not be clear what you mean by "instead of a simple proportion"
+
 43.	I did not review the appendix.
