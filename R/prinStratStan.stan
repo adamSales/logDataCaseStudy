@@ -65,7 +65,8 @@ model{
   useEff[i]=a1*studEff[i];
   trtEff[i]=b0+b1*studEff[i];
   muU[i]=teacherEffU[teacher[i]]+schoolEffU[school[i]];
-  muY[i]=teacherEffY[teacher[i]]+schoolEffY[school[i]]+pairEffect[pair[i]]+useEff[i]+Z[i]*trtEff[i];
+  muY[i]=teacherEffY[teacher[i]]+schoolEffY[school[i]]+
+         pairEffect[pair[i]]+useEff[i]+Z[i]*trtEff[i];
   sigYI[i]=sigY[Z[i]+1];
  }
 
@@ -95,6 +96,8 @@ generated quantities{
 
 // gradRep=bernoulli_logit_rng(linPred);
  for(i in 1:nstud)
-  Yrep[i] = normal_rng(teacherEffY[teacher[i]]+schoolEffY[school[i]]+pairEffect[pair[i]]+a1*studEff[i]+Z[i]*(b0+b1*studEff[i])+X[i,]*betaY,sigY[Z[i]+1]);
+  Yrep[i] = normal_rng(teacherEffY[teacher[i]]+schoolEffY[school[i]]+
+            pairEffect[pair[i]]+a1*studEff[i]+Z[i]*(b0+b1*studEff[i])+
+	    X[i,]*betaY,sigY[Z[i]+1]);
 }
 
