@@ -719,13 +719,15 @@ with $H=0$.
 The p-value from an omnibus covariate balance test
 \citep{covBal} is \Sexpr{prettyNum(round(balMod[['overall']]['matched','p.value'],2))}.
 
-Let $m_i$ be a categorical variable denoting the matched set that $i$
+\subsection{Estimating the Effects of $H$ on Posttest Scores}
+
+Let $M_i$ be a categorical variable denoting the matched set that $i$
 belongs to.
 Then we may re-state the ignorability condition with reference to this
 match \citep[c.f.][]{rebar}:
 \begin{ass}{Matched Ignorability}
 \begin{equation*}
- \{Y(H=1),Y(H=0)\}\independent H |m
+ \{Y(H=1),Y(H=0)\}\independent H |M
 \end{equation*}
 \end{ass}
 % Matched ignorability formalizes a ``latent experiment'' design: by
@@ -735,22 +737,58 @@ match \citep[c.f.][]{rebar}:
 Under matched ignorability, the mean of the outcomes between $H=1$ and
 $H=0$ students within each match is unbiased for the average treatment
 effect for students in that match.
-The (weighted) mean of those estimated treatment effects estimates the
-overall treatment effect in the sample.
+In other words, if $\tau_m=\overline{Y(H=1)}-\overline{Y(H=0)}$ is the
+average effect in match $m$, then
+$\hat{\tau}_m=\bar{Y}_{M=m,H=1}-\bar{Y}_{M=m,H=0}$ is an unbiased
+estimate of $\tau_m$, where $\bar{Y}_{M=m,H=h}$ is the average
+observed outcome for subjects in match $m$ with hint level
+$h\in\{0,1\}$.
 
-% The classic approach to estimating effects from blocked randomization
-% designs is a fixed-effects regression \citep{fisher1926arrangement},
-% regressing outcomes on an indicator for treatment assignment and a set
-% of indicators for matched sets.
-% The results from this analysis are displayed on the row labeled
-% ``ANCOVA'' in Table \ref{tab:matchResults}, with ``HC3'' standard
-% errors and 95\% confidence intervals.
-% They suggest that a greater-than-median proclivity to request hints
-% \emph{hurts} student learning by a large amount, roughly equal to the
-% entire treatment effect of CTA1 estimated in
-% \citet{pane2014effectiveness}.
-Table \ref{tab:matchResults} gives three treatment effect estimates
-under matched ignorability.
+Weighted means of those estimated treatment effects, of the form
+\begin{equation}\label{eq:tauWeightedMean}
+\hat{\tau}_w=\sum_m w_m\hat{\tau}_m/\sum_m w_m
+\end{equation}
+estimate aggregate
+treatment effects in the sample.
+To estimate the average effect of $H$ for all subjects, set $w_m=
+n_{1m}+n_{0m}$, where $n_{1m}$ and $n_{0m}$ are the number of
+$H=1$ and $H=0$ subjects in match $m$, respectively.
+Alternatively, setting $w_m=n_{1m}$ estimates the average effect of
+$H$ on those subjects for whom $H=1$---the ``treatment on the
+treated,'' or TOT, effect.
+Weights $w_m=(1/n_{1m}+1/n_{0m})^{-1}$, the harmonic mean  are
+``precision weights'' \citep[c.f.][]{schochet2015statistical}; the
+estimate using these weights is equal to the coefficient on $H$ from
+an ordinary least squares (OLS) regression of $Y$ on $H$ and a set of dummy
+variables for $M$.
+Under standard OLS assumptions, precision weights minimize the
+standard error of the weighted mean estimator.
+
+% Effect estimates may be improved by combining matching with regression
+% adjustment
+% \citep[e.g.]{rubin2000combining,rosenbaum2002covariance,ho:etal:2007}.
+% Regression can improve matching estimators both by correcting for
+% violations of Matched Ignorability due to observed covariate
+% imbalances within matched sets (hence reducing the estimate's bias),
+% and by explaining a portion of the variance in $Y$ and hence reducing
+% the estimate's standard error.
+% Here we use the regression adjustment method described in
+% \citet{hansen2009b}, which takes place in three steps: (1) regressing posttest scores for students with
+% $H=0$ on indicators for racial categories, grade, ESL status, economic disadvantage, and sex,
+% and with a natural spline with five degrees of freedom for pretest,
+% yielding a vector of coefficient estimates $\bm{\hat{\beta}}$;
+% (2) computing residuals $e_i=Y_i-\bm{\hat{\beta}}^T\bm{\tilde{x}}_i$,
+% where $\tilde{x}_i$ is the vector of covariates for subject $i$,
+% for every unit $i$ in the sample; and (3) estimating effects in
+% equation \eqref{eq:tauWeightedMean} with
+% $\hat{tau}_m=\bar{e}_{M=m,H=1}-\bar{e}_{M=m,H=0}$, that is, with $e$
+% in place of $Y$.
+
+
+Table \ref{tab:matchResults} gives four treatment effect estimates
+using these methods.
+The first row gives the result using precision-weights without
+regression adjustment. estimating an effect of $H$
 The rows labeled ATE and TOT weight the matched sets to
 estimate the average effect of $H$ over the entire treatment
 group and over those members of the treatment group with $H=1$,
@@ -766,7 +804,7 @@ and confidence intervals used the heteroskedasticity-robust ``HC3'' sandwich est
 \citealt{sandwichPackage}.
 
 The three estimates all roughly agree that being a high hint user
-decreases posttest scores by nearly a quarter of a standard deviation.
+decreases posttest scores by roughly a fifth of a standard deviation.
 That is, requesting hints hurts posttest scores---teachers should
 recommend against students' requesting hints.
 
@@ -787,15 +825,23 @@ measured covariates; hence, additional adjustment was unnecessary.
 
 matchTEtab <-
   cbind(
-    data.frame(Effect=c('ATE','TOT','ANCOVA')),
-    rbind(atet,tott,ancovat)[,c('Estimate','Std. Error')],
-    CI=vapply(list(ateci,totci,ancovaci),printci,'a'),
-    `$T_Z$`=0,
-    `$\\rho^2$`=0
+    tibble(
+      Weights=c('Precision','Precision','ATE','TOT'),
+      Regression=c('No','Yes','Yes','Yes')
+    ),
+    map_dfr(
+      effects[c('prec_eff','prec_adj','ate_adj','tot_adj')],
+      ~tibble(
+        Estimate=unname(.$coefficients),
+        "Std. Error"=unname(.$std.error),
+        CI=printci(c(.$conf.low,.$conf.high)))
+     ),
+      `$T_Z$`=NA,
+    `$\\rho^2$`=NA
   )
 
-stopifnot(min(matchTEtab[,1])<0.2)
-stopfinot(max(matchTEtab[,1])>0.25)
+stopifnot(max(matchTEtab[,'Estimate'])<0.25)
+stopifnot(min(matchTEtab[,'Estimate'])>0.15)
 
 for(tt in c(ttt['xirt'],ttt['xirt']/2))
   matchTEtab <- add_case(matchTEtab,
@@ -1080,7 +1126,7 @@ Recall that the TOT effect is the average effect of $H$ on treatment
 group subjects with $H=1$.
 Both estimate contrast outcomes between $H=0$ and $H=1$, and both use
 data from only the treatment group.
-TOT is the the average difference between the realized outcomes for students in
+TOT is the average difference between the realized outcomes for students in
 with $Z=1$ and $H=1$, and their counterfactual outcomes were $Z=1$ and $H=0$.
 That is,
 \begin{equation*}
@@ -1108,15 +1154,15 @@ Since $Pr(H=1)=$\Sexpr{round(1-mixProp,2)},
 $\hat{\Delta}=$\Sexpr{round(1-mixProp,2)}$TOT$.
 Estimated thusly, the indirect effect is negative: \Sexpr{round(tott[1]*(1-mixProp),2)}, with
 a standard error of \Sexpr{round(tott[2]*(1-mixProp),2)}.
-This analysis suggests that the availability of excessive hints
-actually \emph{lowers} the treatment effect.
-CTA1 works not because of hints, but despite them.
+This analysis suggests that the availability of hints
+actually \emph{lowers} the treatment effect, that CTA1 works not
+because of hints, but despite them.
 
 What would the effect be without hints?
 To answer that question, we estimate ``direct'' effects,
 $\Xi=\EE[\xi(1)]=\EE[Y(1,H(0))]-\EE[Y(0,H(0))]$.
 Like indirect effects, this expression includes the average potential
-outcome $\EE[Y(1,H(0))]$; unlike indirect effects, includes a term for
+outcome $\EE[Y(1,H(0))]$; unlike indirect effects, it includes a term for
 potential outcomes under the control condition.
 Since the main contrast of $\Xi$ is due to treatment assignment,
 construction of the estimator must account for the randomization
