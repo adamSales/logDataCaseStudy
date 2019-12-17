@@ -826,40 +826,45 @@ measured covariates; hence, additional adjustment was unnecessary.
 matchTEtab <-
   cbind(
     tibble(
-      Weights=c('Precision','Precision','ATE','TOT'),
-      Regression=c('No','Yes','Yes','Yes')
+      Weights=c('OLS','ATE','TOT'),
+#      Regression=c('No','Yes','Yes','Yes')
     ),
     map_dfr(
-      effects[c('prec_eff','prec_adj','ate_adj','tot_adj')],
+      c('prec_eff','ate_eff','tot_eff'),
       ~tibble(
-        Estimate=unname(.$coefficients),
-        "Std. Error"=unname(.$std.error),
-        CI=printci(c(.$conf.low,.$conf.high)))
-     ),
-      `$T_Z$`=NA,
-    `$\\rho^2$`=NA
+        Estimate=unname(effects[[.]]$coefficients),
+        "Std. Error"=unname(effects[[.]]$std.error),
+        CI=printci(with(effects[[.]],c(conf.low,conf.high))),
+        SI1=printci(sens[[.]][1,]),
+        SI2=printci(sens[[.]][2,])
+      )
+    )
   )
 
-stopifnot(max(matchTEtab[,'Estimate'])<0.25)
-stopifnot(min(matchTEtab[,'Estimate'])>0.15)
+##       `$T_Z$`=NA,
+##     `$\\rho^2$`=NA
+##   )
 
-for(tt in c(ttt['xirt'],ttt['xirt']/2))
-  matchTEtab <- add_case(matchTEtab,
-    Effect=ifelse(tt==ttt['xirt'],"[Pretest]","[Pretest/2]"),
-    Estimate=ancovat[1],
-    CI=printci(interval(tt,rrr['xirt'],b=ancovat[1], se=ancovat[2],df=ancova$df)),
-    `$\\rho^2$`=rrr['xirt'],
-    `$T_Z$`=tt)
+## stopifnot(max(matchTEtab[,'Estimate'])<0.25)
+## stopifnot(min(matchTEtab[,'Estimate'])>0.15)
 
-matchTEtab <- cbind(
-  ` `=c('\\multirow{4}{*}{Estimate}',rep('',3),'\\multirow{2}{*}{Sensitivity}',''),
-  matchTEtab
-)
+## for(tt in c(ttt['xirt'],ttt['xirt']/2))
+##   matchTEtab <- add_case(matchTEtab,
+##     Effect=ifelse(tt==ttt['xirt'],"[Pretest]","[Pretest/2]"),
+##     Estimate=ancovat[1],
+##     CI=printci(interval(tt,rrr['xirt'],b=ancovat[1], se=ancovat[2],df=ancova$df)),
+##     `$\\rho^2$`=rrr['xirt'],
+##     `$T_Z$`=tt)
 
-matchTEtab <- add_case(matchTEtab,` `='\\hline',.before=5)#,rep(NA,ncol(matchTEtab)-1)),matchTEtab[5:6,])
+## matchTEtab <- cbind(
+##   ` `=c('\\multirow{4}{*}{Estimate}',rep('',3),'\\multirow{2}{*}{Sensitivity}',''),
+##   matchTEtab
+## )
+
+## matchTEtab <- add_case(matchTEtab,` `='\\hline',.before=5)#,rep(NA,ncol(matchTEtab)-1)),matchTEtab[5:6,])
 
 print(xtable(matchTEtab,
-  align='rllrrrrr',
+  align='rrllccc',
   caption='Estimates with and without regression adjustment and sensitivity analysis of the effect of hint usage.',
   label='tab:matchResults'),
   include.rownames=FALSE,sanitize.text.function =function(x) x)

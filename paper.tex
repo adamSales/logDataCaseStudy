@@ -129,7 +129,7 @@
 \maketitle
 
 \section{Introduction}
-In the 2007--2008 and 2008--2009 school years, the RAND corporation
+From 2007 through 2010, the RAND corporation
 conducted one of the first effectiveness trials awarded through
 competitive grant programs sponsored by the US Department of
 Education's Institute of Education Sciences.  The randomized
@@ -139,9 +139,11 @@ Cognitive Tutor Algebra I (CTA1) curriculum, whose centerpiece is a
 computerized ``tutor'' that uses cognitive science principles to teach
 Algebra I \citep{anderson1985intelligent}.
 The study \citep{pane2014effectiveness} found no effects in its first year, but in
-the second year of implementation students in schools randomized to
+the second year of implementation students in high schools randomized to
 the CTA1 condition outperformed the control group on the posttest by a fifth of a
-standard deviation.
+standard deviation.\footnote{\citep{pane2014effectiveness} only
+  reports results from the first two years of implementation; the
+  third year included only middle schools, not high schools.}
 
 Over the course of the CTA1 study, the software administrators
 gathered computer log data for students in the treatment group.
@@ -170,8 +172,8 @@ all but one of which was published since 2001. We are aware of
 numerous other such RCTs planned or ongoing. The current case-study is
 about the use of hints in CTA1, but the huge variation in products
 under study, each with their own unique designs, opens a wide set of opportunities to understand how features of those
-products drive their effects. As one example, RAND is currently
-completing an efficacy study of a different algebra tutoring system,
+products drive their effects. As one example, RAND is recently
+completed an efficacy study of a different algebra tutoring system,
 ALEKS. When students begin working on a particular topic in ALEKS, the
 system first presents instructional material, followed by problem
 solving activities, and then, if students are unsuccessful at solving
@@ -189,7 +191,8 @@ This paper will illustrate three approaches to this type of research
 using log data from the CTA1 study---specifically, data on students' use
 of hints within the software.
 The first approach discards the control group, and analyzes
-hint-requesting in the treatment group as an observational study
+hint-requesting in the treatment group as an observational study,
+using a matching design
 \citep[c.f.][]{rosenbaum2002observational}. The
 second approach applies the framework of causal mediation analysis
 \citep{vanderweele2015explanation,hong2015causality,imai2011unpacking} to estimate the role of
@@ -197,7 +200,7 @@ hint-requesting in the overall CTA1 treatment effect. However, since
 students in the control group were unable to request hints, not all
 mediational estimands are identified, and estimation methods must be
 modified.
-Finally, we will conduct a principal stratification analysis
+Finally, we conduct a principal stratification analysis
 \citep{frangakis} to learn if students requesting different amounts of
 hints experienced different treatment effects.
 
@@ -210,13 +213,13 @@ stratification and mediation analysis
 derived formal equivalencies between parameters under certain
 conditions.
 Our contribution will build on this literature in two ways: first, by
-providing a detailed demonstration of matching, mediation analysis,
+providing a detailed demonstration and comparison of matching, mediation analysis,
 and principal stratification on the same dataset, and second by
 focusing on the applicability of these three methods in the specific
-context of studying implementation data from an EdTech randomized
-experiment.
+context of studying implementation data from an randomized
+experiment studying educational technology (EdTech).
 
-After a brief overview of the three causal approaches we will discuss,
+After a brief overview of the three causal approaches,
 the next section will provide background for the case-study,
 describing the CTA1 curriculum, the RAND study, and our focus on
 hints.
@@ -335,80 +338,14 @@ automated computer-based Cognitive Tutor
 \citep{anderson1995cognitive,pane2014effectiveness}.
 
 The computerized tutor was originally built to test the ACT and ACT-R
-theories of skill acquisition \citep{anderson2013architecture}.
-These are elaborate theories describing the necessary components of
+theories of cognition \citep{anderson2013architecture}.
+These are elaborate theories that describe, among other things, the necessary components of
 cognitive skills in, say, mathematics or computer programming, and the
 process of acquiring those skills.
 The Algebra I tutor guides students through a sequence of Algebra I
 problems nested in sections within units, and organized by the specific sets of skills they require.
 Students move through the curriculum as the tutor's internal learning
 model determines that they have mastered the requisite skills.
-
-As students work through specific problems, they receive two types
-of instruction from the tutor.
-When they err---that is, depart from one of the pre-specified correct
-solution paths for that problem---they receive an error message
-alerting them to their mistake and helping them return to the correct
-solution path.
-Students may also request help, in the form of hints, that are also
-tailored to the specific context and solution path they are on.
-
-\subsection{Data}\label{sec:data}
-
-Since our goal was to better understand the CTA1
-treatment effect, we focused our analysis on data from high school students in
-the second year of the CTA1 trial, for whom the treatment effect was
-most evident.
-
-We merged data from two sources: covariate, treatment and outcome data gathered by RAND, and computerized log data gathered by Carnegie Learning.
-Table \ref{tab:covariateBalance} describes the covariates we used, including
-missingness information, control and treatment means, and standardized
-differences \citep[c.f.][]{kalton1968standardization}.
-We singly-imputed missing values with the Random Forest routine implemented
-by the \texttt{missForest} package in \texttt{R}
-\citep{missForest,rcite},  which estimated the ``out of box'' imputation
-errors also shown in Table \ref{tab:covariateBalance} as part of the random forest regression.
-
-\begin{table}[ht]
-\centering
-\include{output/covariateTable}
-\caption{Missingness information, control (``BaU'' or ``Business as
-  Usual'') and treatment (``CTA1'') means, and balance for the
-  covariates included in this study, from the high school year two
-  stratum of CTA1 Effectiveness experiment. Imputation error is percent falsely classified for
-  categorical variables (Race/Ethnicity, Sex, and Special Education)
-  and standardized root mean squared error for Pretest, which is
-  continuous. %The overall p-value accounts for clustering at the
-  %school level and blocked random sampling.
-  Analysis done in \texttt{R} via \texttt{RItools} \citep{ritools}.}
-\label{tab:covariateBalance}
-\end{table}
-
-
-Over the course of the effectiveness study, Carnegie Learning gathered
-log data for each worked problem.
-The resulting dataset lists the problem name, section, and unit of
-each problem, the numbers of hints requested and errors committed, and time-stamps.
-Log data were missing for some students, either because the log files were not retrievable, or because of an imperfect ability to link log data to other student records.
-Treatment schools with mastery data missing
-for 90\% or more students were omitted from the analysis, along with
-their entire randomization block.
-Of the remaining 2390 students, 87\% (2,091) had log
-data.
-For the sake of simplicity, the treatment students without log data
-were dropped from the study.\footnote{Including these students in a
-  principal stratification model is straightforward \citep{aoas}; see
-  the online supplement for results from a model including them, which
-  were broadly similar to the results presented here. Including
-  subjects with missing log data in a mediation or observational study
-  design can be more problematic \citep[see, e.g.][]{li2017identifiability}.}
-Problem log data for sections that were not part of the
-standard CTA1 Algebra I curriculum and problems worked by fewer than 100
-students were omitted from the
-dataset.
-
-All told, the main analysis included $n=$5,009 students, 2,091 of whom were assigned to the CTA1 condition and 2,918 of whom were assigned to control.
-The students were nested within 116 teachers, in 43 schools across five states.
 
 
 \subsection{The Role of Hints\footnote{This subsection draws heavily
@@ -418,8 +355,10 @@ problems on a computer.
 Each problem in the software is associated with a set of skills that
 the student must master, and a path (or set of paths) to solving the
 problem.
-As soon as a student errs in working through the problem, the
-software provides feedback tailored to the specific mistake, and
+As soon as a student errs in working through a problem---that is, departs from one of the
+solution paths---the
+software shows the student an error message.
+This feedback is tailored to the specific mistake, and
 designed to guide the student back to a correct solution path.
 Similarly, when a student gets stuck, and is unable to determine the
 next step in solving the problem, he or she can ask for a hint.
@@ -497,6 +436,7 @@ between students, but on average it is negative for the first two
 hints requested on a problem, but positive for the final hint.
 
 \subsection{Measuring Hint Usage in the CTA1 Data}
+\marginpar{make sure this makes sense before ``Data'' section}
 Unlike previous studies of hint usage, the CTA1 study was not designed
 to estimate the effect of hint usage; its purpose was to estimate the
 effect of CTA1 as a package, including the associated textbook and
@@ -520,16 +460,15 @@ patterns of usage among different students.
 This sort of analysis is beyond the scope of the current study, which
 focuses on comparing and contrasting causal modeling approaches for
 these data.
-What is relevant for our purposes is that we may narrow down the type
-of hint data we model to align with our research focus and to avoid
-some modeling pitfalls.
 
+For the current purpose, we narrow down the type
+of hint data we model to align with our research focus.
 Since our posttest measured Algebra I skills, we only
 considered worked problems from the Algebra I curriculum.
 Next, although \citet{goldin2012learner} demonstrated the importance
 of hint level, our focus is on the overall average effect of
 requesting any hints; therefore, the variable measuring a student's
-hint request on a problem was set one if the student requested any
+hint request on a problem was set to one if the student requested any
 hints on that problem, and zero otherwise.
 % (More mundanely, we do not have access to data
 % describing the number of hints available for every problem, which
@@ -583,31 +522,142 @@ requesting a hint.
 This class of problems is inherently interesting to our question;
 however, it is unidentified.
 
-The observational study and (especially) the mediation analysis we
-describe below require a dichotomous measurement of hint usage: is a
+\subsubsection{Dichotomizing Hint Usage}\label{sec:dichotomizingHintUsage}
+The observational study and mediation analysis below require a dichotomous measurement of hint usage: is a
 student a high or low hint user?
 To this end, we dichotomize $\bar{h}$ by comparing it to a cutoff value, so
 that $H_i=\indicator{\bar{h}_i>c}$, where $\indicator{x}=1$ if $x$ is true
 and 0 otherwise.
-To choose $c$, we fit a two-component modified Rasch mixture model
-\citep{rasch} to hint request data, described in an online appendix.
-The model classified approximately 30\% of students as
-high-hint users, so we chose $c$ as the
+
+To choose $c$, we first fit a modified Rasch mixture model
+\citep{rasch} to hint request data.
+Specifically, we modeled the probability of a hint request in each problem
+$p$, worked by student $i$, as
+\begin{equation*}\label{eq:rasch}
+Pr(h_{ip})=logit^{-1}(\eta_i+\delta_{s[p]})
+\end{equation*}
+where $h_{ip}$ is the event that student $i$ requests a hint on
+problem $p$, $\eta_i$ is a student parameter, $\delta_{s[p]}$ is a
+section-level parameter for $s[p]$, the section that problem $p$ was
+drawn from, and $logit^{-1}(x)=\{1+exp(-x)\}^{-1}$ is the inverse logit
+function.
+Typically, the student parameter $\eta_i$ measures student ability;
+here, instead, it measures a student's proclivity to request a hint.
+The typical Rasch model includes a problem-level ``difficulty'' parameter, but in our
+dataset many problems were worked by very few students, so problem
+level parameters would be hard to estimate.
+Instead, we included the section-level parameter $\delta_{s[p]}$,
+which measures the extent to which students tend to request hints on
+problems in section $s$.
+This essentially assumes that all problems within each section are equally
+likely to elicit a hint.
+
+Then, in order to dichotomize hint request behavior, we modeled
+student effects $\eta$ as
+\begin{equation}\label{eq:mixture}
+\eta\sim
+p_0\mathcal{N}(\mu_0,\sigma_0)+(1-p_0)\mathcal{N}(\mu_1,\sigma_1)
+\end{equation}
+and constrained $\mu_0<\mu_1$.
+This mixture model clusters students into two categories: high hint
+users have $\eta$ drawn from a normal distribution with mean $\mu_1$
+and standard deviation $\sigma_1$, and low hint users have $\eta$
+drawn from a normal distribution with mean $\mu_0$ and standard
+deviation $\sigma_0$.
+
+Our main parameter of interest here is $p_0$, the proportion of
+students who are low hint users.
+We estimated $p_0\approx$0.7,
+classifying 30\% of students as
+high hint users, so we chose $c$ as the
 70th percentile of $\bar{h}$,
 approximately 0.6.
-This definition agreed with the model's classification in
+This definition agreed with the model's classification (based on
+$\eta$ as opposed to $\bar{h}$ in
 approximately 93\% of cases.
 
+The Rasch model for hint useage \eqref{eq:rasch}, but not the mixture
+model \eqref{eq:mixture} will play an important role in the principal
+stratification analysis of Section \ref{sec:principalStratification}.
 
 
 
+\subsection{Data}\label{sec:data}
+
+\citep{pane2014effectiveness} estimated effects separately in middle
+schools and high schools in each the first two years of the RCT; the
+only statistically significant treatment effect was in the high school
+sample in the second year.
+Since our goal was to better understand the CTA1
+treatment effect, we focused our analysis on data from high school students in
+the second year of the CTA1 trial, for whom the treatment effect was
+most evident.
+
+We merged data from two sources: computerized log data gathered by
+Carnegie Learning, and covariate, treatment and outcome data gathered by RAND.
+
+The log data lists the problem name, section, and unit of
+each problem, the numbers of hints requested and errors committed, and time-stamps.
+Log data were missing for some students, either because the log files
+were not retrievable, or because of an imperfect ability to link log
+data to other student records.
+Further, log data for sections that were not part of the
+standard CTA1 Algebra I curriculum and problems worked by fewer than 100
+students were omitted from the
+dataset.
+
+To construct our analysis dataset, we first dropped treatment schools with log data missing
+for 90\% or more students.
+Prior to randomization, schools were stratified into pairs or triples
+based on baseline covariates, and randomized between treatment and
+control condition within these randomization blocks.
+When we dropped a treatment school from our analysis, we also dropped
+the control schools in its randomization block.
+Of the remaining 2,390 students, 87\% (2,091) had log
+data.
+Then, for the sake of simplicity, the treatment students without log data
+were dropped from the study.\footnote{Including these students in a
+  principal stratification model is straightforward \citep{aoas}; see
+  the online supplement for results from a model including them, which
+  were broadly similar to the results presented here. Including
+  subjects with missing log data in a mediation or observational study
+  design can be more problematic \citep[see, e.g.][]{li2017identifiability}.}
+
+All told, the main analysis included $n=$5,009 students, 2,091 of whom were assigned to the CTA1 condition and 2,918 of whom were assigned to control.
+The students were nested within 116 teachers, in 43 schools across five states.
+
+Table \ref{tab:covariateBalance} describes the covariates we used, including
+missingness information, control and treatment means, and standardized
+differences \citep[c.f.][]{kalton1968standardization} from the final
+analysis sample.
+We singly-imputed missing values with the Random Forest routine implemented
+by the \texttt{missForest} package in \texttt{R}
+\citep{missForest,rcite},  which estimated ``out of box'' imputation
+error rates as part of the random forest regression, also shown in Table \ref{tab:covariateBalance}.
+
+\begin{table}[ht]
+\centering
+\include{output/covariateTable}
+\caption{Missingness information, control (``BaU'' or ``Business as
+  Usual'') and treatment (``CTA1'') means, and balance for the
+  covariates included in this study, from the high school year two
+  stratum of CTA1 Effectiveness experiment. Imputation error is percent falsely classified for
+  categorical variables (Race/Ethnicity, Sex, and Special Education)
+  and standardized root mean squared error for Pretest, which is
+  continuous. %The overall p-value accounts for clustering at the
+  %school level and blocked random sampling.
+  Analysis done in \texttt{R} via \texttt{RItools} \citep{ritools}.}
+\label{tab:covariateBalance}
+\end{table}
 
 
 \section{An Observational Study Within an Experiment}\label{sec:observational}
 
 How does requesting hints within CTA1 affect learning?
-More precisely, would students have achieved higher posttest scores
-had they requested hints more (or less) often?
+More precisely, would low hint users have achieved higher posttest scores
+had they requested hints more often?
+Would high hint users have achieved higher posttest scores had the
+requested hints less often?
 
 Let $Y_i$ represent subject $i$'s posttest score, and let $Z_i$ represent
 $i$'s treatment status (i.e. the CTA1 or control group).
@@ -707,13 +757,15 @@ with $H=0$.
 The p-value from an omnibus covariate balance test
 \citep{covBal} is 0.39.
 
-Let $m_i$ be a categorical variable denoting the matched set that $i$
+\subsection{Estimating the Effects of $H$ on Posttest Scores}
+
+Let $M_i$ be a categorical variable denoting the matched set that $i$
 belongs to.
 Then we may re-state the ignorability condition with reference to this
 match \citep[c.f.][]{rebar}:
 \begin{ass}{Matched Ignorability}
 \begin{equation*}
- \{Y(H=1),Y(H=0)\}\independent H |m
+ \{Y(H=1),Y(H=0)\}\independent H |M
 \end{equation*}
 \end{ass}
 % Matched ignorability formalizes a ``latent experiment'' design: by
@@ -723,22 +775,58 @@ match \citep[c.f.][]{rebar}:
 Under matched ignorability, the mean of the outcomes between $H=1$ and
 $H=0$ students within each match is unbiased for the average treatment
 effect for students in that match.
-The (weighted) mean of those estimated treatment effects estimates the
-overall treatment effect in the sample.
+In other words, if $\tau_m=\overline{Y(H=1)}-\overline{Y(H=0)}$ is the
+average effect in match $m$, then
+$\hat{\tau}_m=\bar{Y}_{M=m,H=1}-\bar{Y}_{M=m,H=0}$ is an unbiased
+estimate of $\tau_m$, where $\bar{Y}_{M=m,H=h}$ is the average
+observed outcome for subjects in match $m$ with hint level
+$h\in\{0,1\}$.
 
-% The classic approach to estimating effects from blocked randomization
-% designs is a fixed-effects regression \citep{fisher1926arrangement},
-% regressing outcomes on an indicator for treatment assignment and a set
-% of indicators for matched sets.
-% The results from this analysis are displayed on the row labeled
-% ``ANCOVA'' in Table \ref{tab:matchResults}, with ``HC3'' standard
-% errors and 95\% confidence intervals.
-% They suggest that a greater-than-median proclivity to request hints
-% \emph{hurts} student learning by a large amount, roughly equal to the
-% entire treatment effect of CTA1 estimated in
-% \citet{pane2014effectiveness}.
-Table \ref{tab:matchResults} gives three treatment effect estimates
-under matched ignorability.
+Weighted means of those estimated treatment effects, of the form
+\begin{equation}\label{eq:tauWeightedMean}
+\hat{\tau}_w=\sum_m w_m\hat{\tau}_m/\sum_m w_m
+\end{equation}
+estimate aggregate
+treatment effects in the sample.
+To estimate the average effect of $H$ for all subjects, set $w_m=
+n_{1m}+n_{0m}$, where $n_{1m}$ and $n_{0m}$ are the number of
+$H=1$ and $H=0$ subjects in match $m$, respectively.
+Alternatively, setting $w_m=n_{1m}$ estimates the average effect of
+$H$ on those subjects for whom $H=1$---the ``treatment on the
+treated,'' or TOT, effect.
+Weights $w_m=(1/n_{1m}+1/n_{0m})^{-1}$, the harmonic mean  are
+``precision weights'' \citep[c.f.][]{schochet2015statistical}; the
+estimate using these weights is equal to the coefficient on $H$ from
+an ordinary least squares (OLS) regression of $Y$ on $H$ and a set of dummy
+variables for $M$.
+Under standard OLS assumptions, precision weights minimize the
+standard error of the weighted mean estimator.
+
+% Effect estimates may be improved by combining matching with regression
+% adjustment
+% \citep[e.g.]{rubin2000combining,rosenbaum2002covariance,ho:etal:2007}.
+% Regression can improve matching estimators both by correcting for
+% violations of Matched Ignorability due to observed covariate
+% imbalances within matched sets (hence reducing the estimate's bias),
+% and by explaining a portion of the variance in $Y$ and hence reducing
+% the estimate's standard error.
+% Here we use the regression adjustment method described in
+% \citet{hansen2009b}, which takes place in three steps: (1) regressing posttest scores for students with
+% $H=0$ on indicators for racial categories, grade, ESL status, economic disadvantage, and sex,
+% and with a natural spline with five degrees of freedom for pretest,
+% yielding a vector of coefficient estimates $\bm{\hat{\beta}}$;
+% (2) computing residuals $e_i=Y_i-\bm{\hat{\beta}}^T\bm{\tilde{x}}_i$,
+% where $\tilde{x}_i$ is the vector of covariates for subject $i$,
+% for every unit $i$ in the sample; and (3) estimating effects in
+% equation \eqref{eq:tauWeightedMean} with
+% $\hat{tau}_m=\bar{e}_{M=m,H=1}-\bar{e}_{M=m,H=0}$, that is, with $e$
+% in place of $Y$.
+
+
+Table \ref{tab:matchResults} gives four treatment effect estimates
+using these methods.
+The first row gives the result using precision-weights without
+regression adjustment. estimating an effect of $H$
 The rows labeled ATE and TOT weight the matched sets to
 estimate the average effect of $H$ over the entire treatment
 group and over those members of the treatment group with $H=1$,
@@ -746,28 +834,41 @@ respectively.
 The row labeled ANCOVA of Table \ref{tab:matchResults} gives the
 coefficient on $H$ from a regression of Y on $H$ along with indicators for matched set,
 racial categories, grade, ESL status, economic disadvantage, and sex,
-along with a natural spline with five degrees of freedom for pretest (the standard error
-and confidence interval using the ``HC3'' sandwich estimator,
-\citealt{sandwichPackage}).
+along with a natural spline with five degrees of freedom for pretest.
 This regression adjusts for imbalances in these covariates within
-matched sets \citep[c.f.][]{biasAdjust}; its estimate is similar to
-the others.
+matched sets \citep[c.f.][]{biasAdjust}.
+All three sets of standard errors
+and confidence intervals used the heteroskedasticity-robust ``HC3'' sandwich estimator,
+\citealt{sandwichPackage}.
+
+The three estimates all roughly agree that being a high hint user
+decreases posttest scores by roughly a fifth of a standard deviation.
+That is, requesting hints hurts posttest scores---teachers should
+recommend against students' requesting hints.
+
+The similarity of the three estimates boosts our confidence, if only
+slightly. The ``ATE'' and ``TOT'' estimates refer to different groups
+of students---ATE estimates an average effect for the entire treatment
+group, whereas TOT estimates an effect for high hint users. Had these
+been very different, we might wonder why the effect of hint requests
+varies so much between high and low hint users, and if that suggests
+selection bias.
+The fact that the additional covariate adjustment of the ANCOVA model
+made little difference in the effect estimate suggests that the
+propensity score match eliminated all or most of the confounding bias due to
+measured covariates; hence, additional adjustment was unnecessary.
 
 % latex table generated in R 3.4.4 by xtable 1.8-2 package
-% Mon Oct 28 20:04:28 2019
+% Tue Dec 17 17:28:44 2019
 \begin{table}[ht]
 \centering
-\begin{tabular}{llrrrrr}
+\begin{tabular}{rllccc}
   \hline
-  & Effect & Estimate & Std. Error & CI & $T_Z$ & $\rho^2$ \\ 
+Weights & Estimate & Std. Error & CI & SI1 & SI2 \\ 
   \hline
-\multirow{4}{*}{Estimate} & ANOVA & -0.18 & 0.05 & [-0.27,-0.08] & 0.00 & 0.00 \\ 
-   & ATE & -0.21 & 0.05 & [-0.32,-0.11] & 0.00 & 0.00 \\ 
-   & TOT & -0.18 & 0.06 & [-0.30,-0.07] & 0.00 & 0.00 \\ 
-   & ANCOVA & -0.19 & 0.05 & [-0.29,-0.10] & 0.00 & 0.00 \\ 
-  \hline &  &  &  &  &  &  \\ 
-  \multirow{2}{*}{Sensitivity} & [Pretest] & -0.19 &  & [-0.47,0.09] & -9.86 & 0.18 \\ 
-   & [Pretest/2] & -0.19 &  & [-0.37,-0.01] & -4.93 & 0.18 \\ 
+OLS & -0.18 & 0.04 & [-0.25,-0.10] & [-0.41,0.06] & [-0.31,-0.04] \\ 
+  ATE & -0.12 & 0.05 & [-0.23,-0.02] & [-0.45,0.20] & [-0.31,0.06] \\ 
+  TOT & -0.14 & 0.06 & [-0.25,-0.03] & [-0.47,0.19] & [-0.33,0.05] \\ 
    \hline
 \end{tabular}
 \caption{Estimates with and without regression adjustment and sensitivity analysis of the effect of hint usage.} 
@@ -794,12 +895,16 @@ the others.
 % \label{tab:matchResults}
 % \end{table}
 
-Matched ignorability is a very strong assumption, so these results
-should not be taken at face value---especially if weaker students ask for hints at
+None of these estimates addressed the possiblity of confounding from
+unmeasured covariates; instead, they relied on matched ignorability.
+This would be a particular concern if pretest scores do not completely
+capture students' mathematics ability, and if weaker students ask for hints at
 higher rates, and also score lower on the posttest.
-While adjusting for pre-test scores via matching and/or regression
-may account for some of that bias, pre-test may not capture all of the
-relevant pre-treatment information.
+Then, whatever aspects of student ability are not captures by the
+pretest, and correlate with both hint requests and posttest scores,
+would confound the estimates in the upper part of Table
+\ref{tab:matchResults}.
+
 To account for the possibility of unmeasured confounding, we conducted
 a sensitivity analysis following the method of \citet{hhh}.
 This method imagines a hypothetical missing covariate $U$ and estimates
@@ -814,11 +919,13 @@ accounting for the observed covariates in the model, and $T_Z$ is the
 t-statistic from an ordinary least squares regression of $H$ on $U$, along with the observed covariates.
 These sensitivity parameters may be benchmarked by estimating their
 counterparts when observed covariates are left out of the model.
+The first three rows of the table have both $\rho^2$ and $T_Z$ equal
+to zero, to reflect that they assume no unmeasured confounders.
 The row of Table \ref{tab:matchResults} labeled ``[Pretest]''
 imagines a $U$ that predicts $Y$ and $H$ to a similar extent as
 pretest.
 The resulting sensitivity interval is quite wide, including
-unbelievably large negative effects as well as substantial positive
+both large negative effects as well as substantial positive
 effects.
 A slightly less conservative sensitivity analysis, labeled
 ``[Pretest/2]'' allows $U$ to
@@ -930,17 +1037,16 @@ That being the case, the data provide little to no information about
 the distribution of potential outcomes when the software is used
 but no hints are requested.
 
-Our solution was to dichotomize hint requests, as
-described above, essentially re-defining the causal question.
-30\% of the treatment group and all of the control group has
-$H=0$---requesting hints at a rate less than the
-70th percentile of the treatment group.
+Dichotomizing hint requests into $H$, instead of $\bar{h}$, re-defines
+the causal question.
 To make sense of the respective roles of $H$ and $\bar{h}$, the
-continuous measure on which it is based, we may imagine a process in
+continuous measure on which it is based (see Section
+\ref{sec:dichotomizingHintUsage}),
+we may imagine a process in
 which students are assigned $H$, and under that constraint choose a
 value for $\bar{h}$.
 In the control group all students are assigned $H=0$ and $\bar{h}=0$, but
-in the treatment group half of students have $H=1$ and half have
+in the treatment group 70\% of students have $H=1$ and 30\% have
 $H=0$, and $\bar{h}$ varies within those groups.
 That structure implies a ``treatment mediator interaction''
 where the effect of the mediator on the outcome varies by treatment
@@ -956,47 +1062,65 @@ individual level, as $\delta(1)_i$ and $\xi(0)_i$.
 However, as in the usual causal inference case, individual effects are
 not identified without strong assumptions, and the target of
 estimation is instead taken to be super-population average effects,
-$\EE[\delta(1)]$ and $\EE[\xi(0)]$. Our approach to estimating these
+$\Delta\equiv\EE[\delta(1)]$ and $\Xi\equiv\EE[\xi(0)]$. Our approach to estimating these
 is to estimate the means of each of the component potential outcomes,
 $\EE Y(1,H(1))$, $\EE Y(1,H(0))$, and $\EE Y(0,H(0))$.
 The first and last of these, $\EE Y(1,H(1))=\EE Y(Z=1)$ and $\EE
-Y(0,H(0))=Y(Z=0)$ are non-parametrically identified due to the
+Y(0,H(0))=\EE Y(Z=0)$ are non-parametrically identified due to the
 randomization of treatment assignment.
 
 On the other hand, randomization alone does not identify the strictly counterfactual
 potential outcome $\EE Y(1,H(0))$.
 In a typical mediation analysis of an RCT, identification of the
-distribution of $H(0)$ in the population would derive from
-randomization, along with an observation of $H$ in the control group.
-In contrast, in the CTA1 study, $H(0)$ is not observed but is
-determined by the experimental design: since the CTA1 software was
-unavailable to the control group, $H(0)=0$ for all experimental
-participants.
-Therefore, $Y(1,H(0))\equiv Y(1,0)$.
-For treated subjects $i$ for whom $H_i=0$, then, $Y_i(1,H(0))=Y_i$,
-the observed outcome is equal to the counterfactual outcome.
-For these subjects, there is no indirect effect.
+distribution of $H(0)$ may be estimated based on the observed
+distribution of $H$ in the control group, due to randomization.
+In contrast, in the CTA1 study, $H$ is not observed in the control
+group.
+However, $H(0)$ was determined by the experimental design: since the
+CTA1 software was unavailable to the control group, $H(0)=0$ for all
+experimental participants, and $Y(1,H(0))\equiv Y(1,0)$.
+
+For treated subjects $i$ for whom $H_i=0$, then, treatment assignment
+did not affect $H$---$H_i(0)=H_i(1)=0$.
+In other words, for these subjects,
+\begin{equation*}
+Y_i(1,H(0))=Y_i(1,0)=Y_i(1,H(1))=Y_i
+\end{equation*}
+Therefore, when $Z_i=1$ and $H_i=0$,
+$\delta_i(1)=Y_i(1,H(1))-Y_i(1,H(0))=0$---there is no
+indirect effect.
 
 Treated subjects with $H=1$ present more of a challenge.
 To estimate indirect effects for these subjects, we may rely on the
 same causal setup as in the observational approach:
 matched ignorability and the matching design of section
 \ref{sec:observational}.
-If $Y_i(1,H(0))$ is independent of $Z_i$ within matched sets, then we
-may estimate counterfactual potential outcomes for $H=1$ subjects
-using the observed outcomes of their matches with $H=0$.
+Each member of the treatment group with $H=1$ is matched to other
+treatment-group subjects with $H=0$.
+Matched ignorability states that within these matched sets, $Y(1,0)$
+is independent of $H$.
+Therefore, if subject $i$ is matched to subject $j$, $H_i=1$, and
+$H_j=0$, we may estimate $Y_i(1,0)$ based on the observed
+$Y_j=Y_j(1,0)$.
+When $i$, with $H_i=1$, is matched to several subjects with $H=0$,
+$Y_i(1,0)$ is estimated with the average of their observed outcomes.
+
 Specifically, let
-\begin{equation*}
-\hat{Y}_i(1,H(0))=\begin{cases}
+\begin{equation}\label{eq:estY10}
+\hat{Y}_i(1,0)=\begin{cases}
  Y_i & H_i=0\\[3ex]
 \frac{\displaystyle\sum_{j:M_j=M_i}
   Y_j(1-H_j)}{\displaystyle\sum_{j:M_j=M_i} 1-H_j} & H_i=1
 \end{cases}
-\end{equation*}
+\end{equation}
 For treated subjects with $H=1$, the estimated $\hat{Y}(1,0)$ is the
 average outcome of their matched pairs with $H=0$.
-Then, the average indirect effect in the treatment group can be
-estimated as:
+
+Now, for each member $i$ of the treatment group we have observed
+$Y_i(1,H(1))=Y_i$, and estimated or inferred
+$\hat{Y}_i(1,H(0))=\hat{Y}_i(1,0)$ from \eqref{eq:estY10}.
+Then, we can estimate $\Delta$, the average indirect effect in the
+treatment group, by averaging over the treatment group:
 \begin{equation*}
  \hat{\Delta}\equiv\widehat{\EE[\delta(0)|Z=1]}=\frac{1}{n_T}\displaystyle\sum_{i:Z_i=1} Y_i-\hat{Y}_i(1,H(0))
 \end{equation*}
@@ -1013,42 +1137,43 @@ Recall that the TOT effect is the average effect of $H$ on treatment
 group subjects with $H=1$.
 Both estimate contrast outcomes between $H=0$ and $H=1$, and both use
 data from only the treatment group.
-TOT is the the difference between the average outcome for students in
-the treatment group with $H=1$, and the average outcome under the
-counterfactual scenario in which they all had $H=0$.
+TOT is the average difference between the realized outcomes for students in
+with $Z=1$ and $H=1$, and their counterfactual outcomes were $Z=1$ and $H=0$.
 That is,
 \begin{equation*}
-TOT=\EE[Y(1,1)|Z=1,H=1]-\EE[Y(1,0)|Z=1,H=1]
+TOT=\EE[Y(1,1)-Y(1,0)|Z=1,H=1]
 \end{equation*}
+
 $\hat{\Delta}$ estimates the difference between the average outcome
 for students in the entire treatment group, and the average outcome
 for the treatment group were $H=0$ for all students.
 That is
 \begin{equation*}
-\Delta=\EE[Y(1)|Z=1]-\EE[Y(1,0)|Z=1]
+\Delta=\EE[Y(1,H(1))-Y(1,0)|Z=1]
 \end{equation*}
-This can be re-written (omitting conditioning on $Z$):
+This can be re-written:
 \begin{align*}
 \begin{split}
-\Delta&=\EE[Y(1,1)|H=1]Pr(H=1)+\EE[Y(1,0)|H=0]Pr(H=0)\\
-&\qquad -\EE[Y(1,0)|H=1]Pr(H=1)-\EE[Y(1,0)|H=0]Pr(H=0)
+\Delta&=\EE[Y(1,1)-Y(1,0)|Z=1,H=1]Pr(H=1)\\
+&\qquad +\EE[Y(1,0)-Y(1,0)|Z=1,H=0]Pr(H=0)
 \end{split}
 \\[2ex]
-&=(\EE[Y(1,1)|H=1]-\EE[Y(1,0)|H=1])Pr(H=1)
+&=\EE[Y(1,1)-Y(1,0)|Z=1,H=1]Pr(H=1)
+&=Pr(H=1)TOT
 \end{align*}
 Since $Pr(H=1)=$0.7,
 $\hat{\Delta}=$0.7$TOT$.
 Estimated thusly, the indirect effect is negative: -0.1, with
 a standard error of 0.04.
-This analysis suggests that the availability of excessive hints
-actually \emph{lowers} the treatment effect.
-CTA1 works not because of hints, but despite them.
+This analysis suggests that the availability of hints
+actually \emph{lowers} the treatment effect, that CTA1 works not
+because of hints, but despite them.
 
 What would the effect be without hints?
 To answer that question, we estimate ``direct'' effects,
 $\Xi=\EE[\xi(1)]=\EE[Y(1,H(0))]-\EE[Y(0,H(0))]$.
 Like indirect effects, this expression includes the average potential
-outcome $\EE[Y(1,H(0))]$; unlike indirect effects, includes a term for
+outcome $\EE[Y(1,H(0))]$; unlike indirect effects, it includes a term for
 potential outcomes under the control condition.
 Since the main contrast of $\Xi$ is due to treatment assignment,
 construction of the estimator must account for the randomization
@@ -1112,30 +1237,27 @@ problems students worked---in particular, its extreme values belong to
 those students who barely used the tutor at all.
 Further, it does not account for varying difficulty of the tutor's
 problems.
-As an alternative, we fit a
-modified Rasch model \citep[e.g.][]{rasch},
-\begin{equation}\label{eq:rasch}
-Pr(h_{ip})=logit^{-1}(\eta_i+\delta_{s[p]})
-\end{equation}
-where $h_{ip}$ is the event that student $i$ requests a hint on
-problem $p$, $\eta_i$ is a student parameter, $\delta_{s[p]}$ is a
-section-level parameter for $s[p]$, the section that problem $p$ was
-drawn from, and $logit^{-1}(x)=\{1+exp(-x)\}^{-1}$ is the inverse logit
-function.
-Typically, the student parameter $\eta_i$ measures student ability;
-here, instead, it measures a student's proclivity to request a hint.
-The typical Rasch model includes a problem-level ``difficulty'' parameter, but in our
-dataset many problems were worked by very few students, so problem
-level parameters would be hard to estimate.
-Instead, we included the section-level parameter $\delta_{s[p]}$,
-which measures the extent to which students tend to request hints on
-problems in section $s$.
-This essentially assumes that all problems in each section are equally
-likely to elicit a hint.
+In section \ref{sec:dichotomizingHintUsage}, we showed that
+dichotomized $\bar{h}$ largely agrees with a dicotomized version of a
+more sophisticated measure of hint usage.
+However, when modeling hint usage continuously, the correspondence may
+not hold \citet[see][for a more complete discussion]{aoas}.
+
+For those reasons, we modeled hint usage at the problem level, with
+equation \eqref{eq:rasch}, but with two important differences.
+First, a conceptual difference: the $\eta$ in \eqref{eq:rasch} was
+replaced by $\eta (1)$, indicating that it is measuring
+\emph{potential} hint usage---the hint usage a student would exhibit
+were he or she assigned to the treatment condition.
+Whereas $\eta$ is only defined for students assigned to the treatment condition,
+$\eta(1)$ is defined for all the students in the study.
+Second, a modeling difference: since we are not dichotomizing $\eta(1)$
+in this analysis, we did not model it as a normal mixture, as in
+\eqref{eq:mixture}.
 
 We incorporated the model for hint requests, (\ref{eq:rasch}), into
-the larger principal stratification model, replacing $\eta$ for
-$\bar{h}$.
+the larger principal stratification model, replacing $\eta(1)$ for
+$\bar{h}(1)$.
 Then, the principal stratification estimand is
 \begin{equation*}
 \tau(r)=\EE[Y(1)-Y(0)|\eta(1)=r]
