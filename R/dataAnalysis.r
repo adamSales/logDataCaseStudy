@@ -8,6 +8,7 @@ library(mgcv)
 library(tidyverse)
 library(rstan)
 library(lme4)
+library(estimatr)
 traceplot <- rstan::traceplot
 select <- dplyr::select
 options(stringsAsFactors=FALSE)
@@ -31,6 +32,12 @@ if(runFull) source('R/prelimStan.r') else load('data/hintsData.RData')
 ## for printing nice CIs
 printci <- function(ci) paste0('[',paste(sprintf('%.2f',ci),collapse=','),']')
 
+### I don't know why this is necessary...
+map_dfr <- function(.x, .f, ...){
+  out <- map(.x,.f,...)
+  as.data.frame(do.call('rbind',out))
+}
+
 citopm <- function(ci) paste(sprintf('%.2f',c(median(ci),(ci[2]-ci[1])/2)),collapse='$\\pm$')
 
 ## usage data availability
@@ -48,7 +55,7 @@ nschool <- sdat$nschool
 
 source('R/covariateTable.r')
 
-source('R/evaluateSmooths.r')
+#source('R/evaluateSmooths.r')
 
 overallHintInfo <-
   xOrig%>%
@@ -93,10 +100,12 @@ hintAvgStud%>%
   geom_point()+
   facet_wrap(~xaxis,scales="free_x")
 
-
+runFull <- FALSE
 ### rasch mixture model?
 ##NOT RUN
 if(runFull) source('R/raschMixture.r') else load('output/raschMixOutput.RData')
+
+runFull <- TRUE
 
 mixProp <- round(mean(hintAvgStud$classProb),1)
 
@@ -113,9 +122,6 @@ cat('
 ### propensity score matching
 ##########################################################################################
 ',as.character(Sys.time()),'\n')
-##NOT RUN
-## this is a record of stuff I tried w/ matching
-## source('R/matching.r')
 
 if(runFull){
   psmod3.2 <- ## stan_
@@ -144,35 +150,35 @@ cat('
 ',as.character(Sys.time()),'\n')
 
 anova <- lm(Y~M+match,data=dat1)
-anovavcv <- vcovHC(anova)
+anovavcv <- vcovHC(anova,'HC2')
 anovat <- coeftest(anova,anovavcv)[2,]
 anovaci <- coefci(anova,'MTRUE',vcov.=anovavcv)
 
 summary(ancova <- lm(Y~M+splines::ns(xirt,5)+race+grade+esl+frl+sex+match,data=dat1))$coef[1:5,]
-ancovavcv <- vcovHC(ancova)
+ancovavcv <- vcovHC(ancova,'HC2')
 ancovat <- coeftest(ancova,ancovavcv)[2,]
 ancovaci <- coefci(ancova,'MTRUE',vcov.=ancovavcv)
 
-### ATE and TOT weights
-dat1 <-
+
+### ben's method
+olsC <- update(ancova,.~.-M-match,subset=!M)
+yhat <- predict(olsC,dat1)
+dat1$e <- dat1$Y-yhat
+
+effWithWeights <-
   dat1%>%
   group_by(match)%>%
-  mutate(ntot=n(),ntrt=sum(M),nctl=ntot-ntrt,eff=mean(Y[M])-mean(Y[!M]),winv=(1/nctl+1/ntrt))
+  summarize(eff=mean(Y[M])-mean(Y[!M]),adj=mean(e[M])-mean(e[!M]),n=n(),ntrt=sum(M),nctl=n-ntrt,prec=1/(1/ntrt+1/nctl))
 
-
-ate <- update(anova,weights=winv)
-atevcv <- vcovHC(ate)
-atet <- coeftest(ate,atevcv)[2,]
-ateci <- coefci(ate,'MTRUE',vcov.=atevcv)
-
-
-tot <- update(anova,weights=ntrt*winv)
-totvcv <- vcovHC(tot)
-tott <- coeftest(tot,totvcv)[2,]
-totci <- coefci(tot,'MTRUE',vcov.=totvcv)
-
-
-
+effects <- list()
+for(est in c('ate','tot','prec'))
+  for(ca in c('eff','adj'))
+    effects[[paste0(est,'_',ca)]] <-
+      lm_robust(
+        as.formula(paste(ca,'~1')),
+        effWithWeights,
+        weights=if(est=='ate') n else if(est=='tot') ntrt else prec
+      )[c('coefficients', 'std.error','p.value', 'conf.low', 'conf.high')]
 
 
 ### sensitivity analysis
@@ -184,7 +190,11 @@ rrr <- rhos(dat1$Y,X=X)
 X$M <- dat1$M
 ttt <- Tz(X=X,treatment='M')
 
-
+sens <- map(effects,
+  ~rbind(
+    interval(ttt['xirt'],rrr['xirt'],b=.$coefficients,se=.$std.error,df=Inf),
+    interval(ttt['xirt']/2,rrr['xirt']/2,b=.$coefficients,se=.$std.error,df=Inf))
+)
 
 
 cat('
@@ -217,7 +227,7 @@ dir2.1ci <- coefci(dir2.1,'treatment',vcov.=dir2.1vcv)
 
 
 
-
+runFull <- FALSE
 
 cat('
 ############################
