@@ -1,3 +1,4 @@
+library(splines)
 library(gridExtra)
 library(optmatch)
 library(RItools)
