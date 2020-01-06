@@ -1155,13 +1155,13 @@ This can be re-written:
 &\qquad +\EE[Y(1,0)-Y(1,0)|Z=1,H=0]Pr(H=0)
 \end{split}
 \\[2ex]
-&=\EE[Y(1,1)-Y(1,0)|Z=1,H=1]Pr(H=1)
+&=\EE[Y(1,1)-Y(1,0)|Z=1,H=1]Pr(H=1)\\
 &=Pr(H=1)TOT
 \end{align*}
-Since $Pr(H=1)=$\Sexpr{round(1-mixProp,2)},
-$\hat{\Delta}=$\Sexpr{round(1-mixProp,2)}$TOT$.
-Estimated thusly, the indirect effect is negative: \Sexpr{round(tott[1]*(1-mixProp),2)}, with
-a standard error of \Sexpr{round(tott[2]*(1-mixProp),2)}.
+Since $Pr(H=1)=$\Sexpr{round(mixProp,2)},
+$\hat{\Delta}=$\Sexpr{round(mixProp,2)}$TOT$.
+Estimated thusly, the indirect effect is negative: \Sexpr{round(effects[['tot_eff']][['coefficients']]*(mixProp),2)}, with
+a standard error of \Sexpr{round(tott[2]*(mixProp),2)}.
 This analysis suggests that the availability of hints
 actually \emph{lowers} the treatment effect, that CTA1 works not
 because of hints, but despite them.
@@ -1253,7 +1253,7 @@ in this analysis, we did not model it as a normal mixture, as in
 \eqref{eq:mixture}.
 
 We incorporated the model for hint requests, (\ref{eq:rasch}), into
-the larger principal stratification model, replacing $\eta(1)$ for
+the principal stratification model, replacing $\eta(1)$ for
 $\bar{h}(1)$.
 Then, the principal stratification estimand is
 \begin{equation*}
@@ -1303,13 +1303,13 @@ In the next level, $\eta(1)$ is modeled as a function of baseline
 covariates $\bm{x}$:
 \begin{equation}\label{eq:rasch2}
 \eta(1)|\left(\bm{x}_i,\bm{\theta}\right) \sim
-\mathcal{N}\left(\bm{x_i}\bm{\beta}^M+\epsilon^{Mt}_{t[i]}+\epsilon^{Ms}_{s[i]},
-\sigma^M\right)
+\mathcal{N}\left(\bm{x_i}\bm{\beta}+\epsilon^{tch}_{t[i]}+\epsilon^{scl}_{s[i]},
+\sigma\right)
 \end{equation}
-where $\bm{\beta}^U$ is a vector of coefficients.
+where $\bm{\beta}$ is a vector of coefficients.
 Since students were nested within teachers, who were nested within
-schools, we included normally-distributed school ($\epsilon_{Us}$) and
-teacher ($\epsilon_{Ut}$) random intercepts.
+schools, we included normally-distributed school ($\epsilon^{scl}$) and
+teacher ($\epsilon^{tch}$) random intercepts.
 The covariates in the model, $\bm{x}_i$, were detailed in Table
 \ref{tab:covariateBalance}; preliminary model checking suggested
 including a quadratic term for pretest, which was added as a column of
@@ -1319,13 +1319,13 @@ We modeled students' posttest scores $Y$ as
 conditionally normal:
 \begin{equation}\label{eq:outcomeSubmodel}
  Y|\left(Z_i,\bm{x}_i,\bm{\theta},\eta(1)\right) \sim  \mathcal{N}\left(
-\beta^Y_{0b[i]}+\bm{x}_i^T\bm{\beta}^Y+a\eta(1)+Z_i\tau(\eta(1))+\epsilon^{Yt}_{t[i]}+\epsilon^{Ys}_{s[i]},\sigma^Y_{Z[i]}\right)
+\gamma_{0b[i]}+\bm{x}_i^T\bm{\gamma}+a\eta(1)+Z_i\tau(\eta(1))+\zeta^{tch}_{t[i]}+\zeta^{scl}_{s[i]},\omega_{Z[i]}\right)
 \end{equation}
-where $\beta^Y_{0b[i]}$ is a fixed effect for $i$'s randomization block, $\bm{\beta}^Y$ are the
-covariate coefficients, and $\epsilon^{Yt}$, and
-$\epsilon^{Ys}$ are normally-distributed teacher and school random
+where $\bamma_{0b[i]}$ is a fixed effect for $i$'s randomization block, $\bm{\gamma}$ are the
+covariate coefficients, and $\zeta^{tch}$, and
+$\zeta^{scl}$ are normally-distributed teacher and school random
 intercepts.
-The residual variance $\sigma^Y$ varies with treatment assignment $Z$;
+The residual variance $\omega$ varies with treatment assignment $Z$;
 this captures measurement error in $Y$, treatment effect heterogeneity
 that is not linearly related to
 $\eta(1)$, and other between-student variation in $Y$ that is not predicted by
@@ -1435,7 +1435,7 @@ sensitivity analyses we performed assumed that any un-measured
 covariate would predict $H$ no better than pretest, or no better than
 a covariate half as important as pretest.
 These assumptions are impossible to verify from the data at hand;
-instead, they require a keen understanding of student practice within
+instead, judging their plausibility requires a keen understanding of student practice within
 the tutor.
 
 Mediation analysis builds on the matching design, and also requires an
@@ -1449,10 +1449,16 @@ from more continuous measures of hint requests.
 
 In contrast, no ignorabilty assumptions are necessary for principal
 stratification.
-That said, an assumption similar to ignorability may play an important
-role for interpretation.
-Further, principal stratification estimators require a model for $Y(0)$
+% That said, an assumption similar to ignorability may play an important
+% role for interpretation.
+However, principal stratification estimators require modeling
+assumptions---specifically, it requires a model for $Y(0)$
 conditional on $\eta(1)$, which is unobserved.
+This modeling assumption is testable, but only to an extent.
+Model misspecification checks can compare a fitted model to observed
+data, but
+
+Certain departures from this assumption are detectable,
 On the other hand, model misspecification is, in principle,
 detectable---an assumption of a particular family of models is not
 ``untestable.''
@@ -1483,7 +1489,7 @@ checking procedures, which are also carried out in the online supplement.
 
 \subsection{Results and Interpretation}
 
-Our observational study found that hint requests have a negative effect: students who
+Our observational study suggested that hint requests have a negative effect: students who
 requested hints more often than the \Sexpr{round((1-mixProp)*100)}th
 percentile score lower on the posttest, after controlling for observed covariates---as
 far as we can tell, the optimal strategy is to never request a hint.
