@@ -1280,8 +1280,8 @@ $p(\bm{\theta})$, posterior inference for $\bm{\theta}$ proceeds based
 on the following structure:
 \begin{align*}
 p(\bm{\theta}|\bm{Y},\bm{Z},&\bm{X},\{\bm{h}_i\}_{i:Z_i=1})\propto\\
-p(\bm{\theta})&\displaystyle\prod_{i: Z_i=1}\int p(Y|\bm{x}_i,Z=1,\bm{\theta},\eta(1))p(\bm{h}_{i}|\eta(1)(1),\bm{\theta})p(\eta(1)|\bm{x}_i,\bm{\theta})d\eta(1)\\
-\times&\displaystyle\prod_{i:Z_i=0} \int p(\yci|\bm{x}_i,\bm{\theta},\eta(1))p(\eta(1)|\bm{x}_i,\bm{\theta})d\eta(1).\numberthis\label{eq:posteriorEta}
+p(\bm{\theta})&\displaystyle\prod_{i: Z_i=1}\int p(Y_i|\bm{x}_i,Z=1,\bm{\theta},\eta(1))p(\bm{h}_{i}|\eta(1),\bm{\theta})p(\eta(1)|\bm{x}_i,\bm{\theta})d\eta(1)\\
+\times&\displaystyle\prod_{i:Z_i=0} \int p(Y_i|\bm{x}_i,Z=0,\bm{\theta},\eta(1))p(\eta(1)|\bm{x}_i,\bm{\theta})d\eta(1).\numberthis\label{eq:posteriorEta}
 \end{align*}
 where $\bm{h}_i$ is the vector of hint request data for subject $i$,
 ranging over all challenging problems.
@@ -1334,7 +1334,7 @@ the mean model.
 Finally, we modeled treatment effects
 $\tau(\eta(1))$ as linear:
 \begin{equation}\label{eq:tauModel}
-\EE[Y_{T}-Y_{C}|\eta(1)]=\tau({\eta(1)})=b_0+b_1\eta(1)
+\EE[Y(1)-Y(0)|\eta(1)]=\tau({\eta(1)})=b_0+b_1\eta(1)
 \end{equation}
 While more complex models for $\tau(\eta(1))$ are theoretically
 possible (for instance, \citet{jin2008principal} uses a quadratic
@@ -1452,21 +1452,22 @@ stratification.
 % That said, an assumption similar to ignorability may play an important
 % role for interpretation.
 However, principal stratification estimators require modeling
-assumptions---specifically, it requires a model for $Y(0)$
-conditional on $\eta(1)$, which is unobserved.
-This modeling assumption is testable, but only to an extent.
-Model misspecification checks can compare a fitted model to observed
-data, but
-
-Certain departures from this assumption are detectable,
-On the other hand, model misspecification is, in principle,
-detectable---an assumption of a particular family of models is not
-``untestable.''
-Still, the data will, in general, be unable to distinguish between certain
-alternative models for $Y(0)$ conditional on $\eta(1)$, that may in
-turn lead to qualitatively different conclusions.
-In practice, analysts make the untestable assumption that $Y(0)$ conditional on $\eta(1)$ is
-distributed similarly to $Y(1)$ conditional on $\eta(1)$.
+assumptions---most problematically, $p(Y|\bm{x},Z=0,\bm{\theta},\eta(1))$ of
+\eqref{eq:posteriorEta}, the model for $Y(0)$
+conditional on $\eta(1)$, $\bm{x}$, and paramters $\bm{\theta}$.
+While any model specification can, and should, be checked against
+observed data, this process can only narrow space of acceptible
+models, it cannot be used to determine the correct form of
+$p(Y|\bm{x},Z=0,\bm{\theta},\eta(1))$.
+This is because $Y(0)$ and $\eta(1)$ are never observed simultaneously.
+Therefore, it is possible for an analyst to misspecify $p(Y|\bm{x},Z=0,\bm{\theta},\eta(1))$, such that principal effect estimates are
+severely biased, without being able to detect the model
+misspecification with the data.
+That is, the data will typically be unable to distinguish between
+alternative $p(Y|\bm{x},Z=0,\bm{\theta},\eta(1))$ models that lead to
+qualitatively different conclusions.
+In practice, analysts make the untestable assumption that $p(Y|\bm{x},Z=0,\bm{\theta},\eta(1))$ is
+of the same form as $p(Y|\bm{x},Z=1,\bm{\theta},\eta(1))$.
 
 An additional contrast of note between matching-based studies and
 principal stratification relates to transparency.
