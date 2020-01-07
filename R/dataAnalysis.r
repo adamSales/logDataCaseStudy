@@ -150,30 +150,37 @@ cat('
 ##########################################################################################
 ',as.character(Sys.time()),'\n')
 
-anova <- lm(Y~M+match,data=dat1)
-anovavcv <- vcovHC(anova,'HC2')
-anovat <- coeftest(anova,anovavcv)[2,]
-anovaci <- coefci(anova,'MTRUE',vcov.=anovavcv)
+## anova <- lm(Y~M+match,data=dat1)
+## anovavcv <- vcovHC(anova,'HC2')
+## anovat <- coeftest(anova,anovavcv)[2,]
+## anovaci <- coefci(anova,'MTRUE',vcov.=anovavcv)
 
-summary(ancova <- lm(Y~M+splines::ns(xirt,5)+race+grade+esl+frl+sex+match,data=dat1))$coef[1:5,]
-ancovavcv <- vcovHC(ancova,'HC2')
-ancovat <- coeftest(ancova,ancovavcv)[2,]
-ancovaci <- coefci(ancova,'MTRUE',vcov.=ancovavcv)
+## summary(ancova <- lm(Y~M+splines::ns(xirt,5)+race+grade+esl+frl+sex+match,data=dat1))$coef[1:5,]
+## ancovavcv <- vcovHC(ancova,'HC2')
+## ancovat <- coeftest(ancova,ancovavcv)[2,]
+## ancovaci <- coefci(ancova,'MTRUE',vcov.=ancovavcv)
 
 
-### ben's method
-olsC <- update(ancova,.~.-M-match,subset=!M)
-yhat <- predict(olsC,dat1)
-dat1$e <- dat1$Y-yhat
+## ### ben's method
+## olsC <- update(ancova,.~.-M-match,subset=!M)
+## yhat <- predict(olsC,dat1)
+## dat1$e <- dat1$Y-yhat
 
 effWithWeights <-
   dat1%>%
   group_by(match)%>%
-  summarize(eff=mean(Y[M])-mean(Y[!M]),adj=mean(e[M])-mean(e[!M]),n=n(),ntrt=sum(M),nctl=n-ntrt,prec=1/(1/ntrt+1/nctl))
+  summarize(
+    eff=mean(Y[M])-mean(Y[!M]),
+    #adj=mean(e[M])-mean(e[!M]),
+    n=n(),
+    ntrt=sum(M),
+    nctl=n-ntrt,
+    prec=1/(1/ntrt+1/nctl)
+  )
 
 effects <- list()
 for(est in c('ate','tot','prec'))
-  for(ca in c('eff','adj'))
+  #for(ca in c('eff','adj'))
     effects[[paste0(est,'_',ca)]] <-
       lm_robust(
         as.formula(paste(ca,'~1')),
@@ -188,13 +195,25 @@ X <- X[,-grep('xirt',names(X))]
 X$xirt <- dat1$xirt
 rrr <- rhos(dat1$Y,X=X)
 
-X$M <- dat1$M
-ttt <- Tz(X=X,treatment='M')
+X2 <- X
+X2$M <- dat1$M
+ttt <- Tz(X=X2,treatment='M')
+
+multipliers <- map2_dbl(rrr,ttt,~MEmult(abs(.y),.x,Inf,1.96))
+
+raceAnova <- anova(lm(M~.,data=X2),lm(M~.-raceBlackMulti-raceHispAIAN,data=X2))
+
+m1 <- lm(dat1$Y~as.matrix(X))
+m2 <- lm(dat1$Y~as.matrix(select(X,-raceBlackMulti,-raceHispAIAN)))
+r1 <- summary(m1)$r.squared
+r2 <- summary(m2)$r.squared
+raceR <- ((1-r2)-(1-r1))/(1-r2)
 
 sens <- map(effects,
   ~rbind(
-    interval(ttt['xirt'],rrr['xirt'],b=.$coefficients,se=.$std.error,df=Inf),
-    interval(ttt['xirt']/2,rrr['xirt']/2,b=.$coefficients,se=.$std.error,df=Inf))
+    pre=interval(ttt['xirt'],rrr['xirt'],b=.$coefficients,se=.$std.error,df=Inf),
+      #interval(ttt['xirt']/2,rrr['xirt']/2,b=.$coefficients,se=.$std.error,df=Inf),
+      race=interval(sqrt(raceAnova$F)[2],raceR,b=.$coefficients,se=.$std.error,df=Inf))
 )
 
 
