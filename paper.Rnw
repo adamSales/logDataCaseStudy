@@ -255,7 +255,8 @@ discussed in \citet{rosenbaum2002observational},
 The conceptual and methodological issues we will discuss extend to
 other covariate control methods as well.
 
-Next, as represented in Figure (b), we will conduct a mediation analysis, estimating natural
+Next, as represented in Figure (b), we will conduct a mediation
+analysis, estimating natural
 indirect effects of CTA1 treatment assignment $Z$, as mediated by
 $H$. That is, we will estimate the component of $Z$'s effect on $Y$ that comes about
 due to $Z$'s effect on $H$---path (1)---and $H$'s effect on $Y$, path
@@ -470,7 +471,8 @@ Then, let
 \end{equation*}
 measure hint frequency.
 
-This measure is inversely related to the ratio of the percentage (of all
+This measure is inversely related to the ratio of the percentage (of
+all
 problems) a student makes an error without having requested a hint,
 to the percentage of problems a student requests a hint.%
 \footnote{Technically, if $h$ is the event that a student requests
@@ -824,7 +826,7 @@ matchTEtab <-
         "Std. Error"=unname(effects[[.]]$std.error),
         CI=printci(with(effects[[.]],c(conf.low,conf.high))),
        `[Pretest]`=printci(sens[[.]][1,]),
-        `[Pretest]/2`=printci(sens[[.]][2,])
+        `[Ethnicity]`=printci(sens[[.]][2,])
       )
     )
   )
@@ -859,7 +861,7 @@ addtorow <- list(
 
 print(xtable(matchTEtab,
   align='rrllccc',
-  caption='Estimates with and without regression adjustment and sensitivity analysis of the effect of hint usage.',
+  caption='Estimates and sensitivity analysis of the effect of hint usage.',
   label='tab:matchResults'),
   include.rownames=FALSE,sanitize.text.function =function(x) x,add.to.row=addtorow,include.colnames=FALSE)
 @
@@ -907,27 +909,28 @@ accounting for the observed covariates in the model, and $T_Z$ is the
 t-statistic from an ordinary least squares regression of $H$ on $U$, along with the observed covariates.
 These sensitivity parameters may be benchmarked by estimating their
 counterparts when observed covariates are left out of the model.
-The first three rows of the table have both $\rho^2$ and $T_Z$ equal
-to zero, to reflect that they assume no unmeasured confounders.
-The row of Table \ref{tab:matchResults} labeled ``[Pretest]''
-imagines a $U$ that predicts $Y$ and $H$ to a similar extent as
-pretest.
+
+The last two columns of table \ref{tab:matchResults} give sensitivity intervals for each of the three weighted average treatment effects.
+The column of Table \ref{tab:matchResults} labeled ``[Pretest]''
+accounts for the possible omission of a covariate $U$ that, at most, predicts $Y$ and $H$ as well as do pretest scores.
 The resulting sensitivity intervals are quite wide, including
 both large negative effects as well as substantial positive
 effects.
-A slightly less conservative sensitivity analysis, labeled
-``[Pretest]/2'' allows $U$ to
-predict $H$ and $Y$ half as well as pretest scores.
-These sensitivity intervals are wide, but the interval corresponding
+In fact, pretest is the most important of our observed covariates; it is the observed covariate whose omission would cause the most bias.
+This is unsurprising, since pretests are generally considered to be the most important covariate to measure, and studies that include pretest measures often reproduce experimental estimates \citep[e.g.][]{cook2008three,cook2009bias}.
+Therefore, a sensitivity analysis considering an omitted covariate as important as pretest scores may be too pessimistic. 
+Instead,
+the final column of Table \ref{tab:matchResults} gives sensitivity intervals for the omission of a covariate that, at most, predicts $Y$ and $H$ as well as ethnicity dummy variables, the second most important of our observed covariates.
+These sensitivity intervals are also wide, but the interval corresponding
 to OLS weights is entirely negative.
 
-The conclusion is that the omission of a confounder half as important as pretest
-scores cannot explain the estimated OLS-weighted ATE.
+The conclusion is that the omission of a confounder as important as ethicity indicators
+cannot explain the estimated OLS-weighted ATE.
 Allowing for the possible omission of such a covariate, we infer that requesting a
 large number of hints hurts students' posttest scores.
 The size of the effect may be as small as
-\Sexpr{abs(round(sens[['prec_eff']][2,2]*100))}\% of a standard deviation
-or as large as \Sexpr{abs(round(sens[['prec_eff']][1,2]*100))}\% of a standard deviation.
+\Sexpr{abs(round(sens[['prec_eff']][2,'race']*100))}\% of a standard deviation
+or as large as \Sexpr{abs(round(sens[['prec_eff']][1,'race']*100))}\% of a standard deviation.
 
 \section{Mediation Analysis}\label{sec:mediation}
 The goal of causal mediation analysis is to decompose a treatment
@@ -1432,8 +1435,7 @@ weaker students.
 Matching depends both on the adequacy of the observed covariates to
 capture baseline differences between $H=0$ and $H=1$ students, and the
 sensitivity analyses we performed assumed that any un-measured
-covariate would predict $H$ no better than pretest, or no better than
-a covariate half as important as pretest.
+covariate would predict $H$ and $Y$ no better than pretest or ethnicity indicators, respectively.
 These assumptions are impossible to verify from the data at hand;
 instead, judging their plausibility requires a keen understanding of student practice within
 the tutor.
@@ -1492,9 +1494,10 @@ checking procedures, which are also carried out in the online supplement.
 
 Our observational study suggested that hint requests have a negative effect: students who
 requested hints more often than the \Sexpr{round((1-mixProp)*100)}th
-percentile score lower on the posttest, after controlling for observed covariates---as
-far as we can tell, the optimal strategy is to never request a hint.
-However, this observed effect may be due to confounding.
+percentile score lower on the posttest, after controlling for observed
+covariates.
+As far as we can tell, the optimal strategy is to request few, if any, hints.
+This observed effect may be explained by due to confounding.
 Mediation analysis essentially interprets this result in terms of the
 overall CTA1 treatment effect.
 Specifically, our analysis showed that CTA1 affected students'
