@@ -79,9 +79,6 @@ library(english)
 
 @
 
-<<runStuff,include=FALSE,eval=FALSE>>=
-source('R/dataAnalysis.r')
-@
 
 <<loadStuff,cache=TRUE>>=
 load('output/analysis.RData')
@@ -540,7 +537,7 @@ This definition agreed with the model's classification (based on
 $\eta$ as opposed to $\bar{h}$ in
 approximately \Sexpr{round(agree*100)}\% of cases.
 
-The Rasch model for hint useage \eqref{eq:rasch}, but not the mixture
+The Rasch model for hint usage \eqref{eq:rasch}, but not the mixture
 model \eqref{eq:mixture} will play an important role in the principal
 stratification analysis of Section \ref{sec:principalStratification}.
 
@@ -825,8 +822,8 @@ matchTEtab <-
         Estimate=unname(effects[[.]]$coefficients),
         "Std. Error"=unname(effects[[.]]$std.error),
         CI=printci(with(effects[[.]],c(conf.low,conf.high))),
-       `[Pretest]`=printci(sens[[.]][1,]),
-        `[Ethnicity]`=printci(sens[[.]][2,])
+       `[Pretest]`=printci(sens[[.]]['pre',]),
+        `[Ethnicity]`=printci(sens[[.]]['race',])
       )
     )
   )
@@ -885,7 +882,7 @@ print(xtable(matchTEtab,
 % \label{tab:matchResults}
 % \end{table}
 
-None of these estimates addressed the possiblity of confounding from
+None of these estimates addressed the possibility of confounding from
 unmeasured covariates; instead, they relied on matched ignorability.
 This would be a particular concern if pretest scores do not completely
 capture students' mathematics ability, and if weaker students ask for hints at
@@ -924,13 +921,13 @@ the final column of Table \ref{tab:matchResults} gives sensitivity intervals for
 These sensitivity intervals are also wide, but the interval corresponding
 to OLS weights is entirely negative.
 
-The conclusion is that the omission of a confounder as important as ethicity indicators
+The conclusion is that the omission of a confounder as important as ethnicity indicators
 cannot explain the estimated OLS-weighted ATE.
 Allowing for the possible omission of such a covariate, we infer that requesting a
 large number of hints hurts students' posttest scores.
 The size of the effect may be as small as
-\Sexpr{abs(round(sens[['prec_eff']][2,'race']*100))}\% of a standard deviation
-or as large as \Sexpr{abs(round(sens[['prec_eff']][1,'race']*100))}\% of a standard deviation.
+\Sexpr{min(abs(round(sens[['prec_eff']]['race',]*100)))}\% of a standard deviation
+or as large as \Sexpr{max(abs(round(sens[['prec_eff']]['race',]*100)))}\% of a standard deviation.
 
 \section{Mediation Analysis}\label{sec:mediation}
 The goal of causal mediation analysis is to decompose a treatment
@@ -1164,7 +1161,7 @@ This can be re-written:
 Since $Pr(H=1)=$\Sexpr{round(mixProp,2)},
 $\hat{\Delta}=$\Sexpr{round(mixProp,2)}$TOT$.
 Estimated thusly, the indirect effect is negative: \Sexpr{round(effects[['tot_eff']][['coefficients']]*(mixProp),2)}, with
-a standard error of \Sexpr{round(tott[2]*(mixProp),2)}.
+a standard error of \Sexpr{round(effects$tot_eff$std.error*(mixProp),2)}.
 This analysis suggests that the availability of hints
 actually \emph{lowers} the treatment effect, that CTA1 works not
 because of hints, but despite them.
@@ -1238,7 +1235,7 @@ those students who barely used the tutor at all.
 Further, it does not account for varying difficulty of the tutor's
 problems.
 In section \ref{sec:dichotomizingHintUsage}, we showed that
-dichotomized $\bar{h}$ largely agrees with a dicotomized version of a
+dichotomized $\bar{h}$ largely agrees with a dichotomized version of a
 more sophisticated measure of hint usage.
 However, when modeling hint usage continuously, the correspondence may
 not hold \citet[see][for a more complete discussion]{aoas}.
@@ -1456,9 +1453,9 @@ stratification.
 However, principal stratification estimators require modeling
 assumptions---most problematically, $p(Y|\bm{x},Z=0,\bm{\theta},\eta(1))$ of
 \eqref{eq:posteriorEta}, the model for $Y(0)$
-conditional on $\eta(1)$, $\bm{x}$, and paramters $\bm{\theta}$.
+conditional on $\eta(1)$, $\bm{x}$, and parameters $\bm{\theta}$.
 While any model specification can, and should, be checked against
-observed data, this process can only narrow space of acceptible
+observed data, this process can only narrow space of acceptable
 models, it cannot be used to determine the correct form of
 $p(Y|\bm{x},Z=0,\bm{\theta},\eta(1))$.
 This is because $Y(0)$ and $\eta(1)$ are never observed simultaneously.
@@ -1497,8 +1494,10 @@ requested hints more often than the \Sexpr{round((1-mixProp)*100)}th
 percentile score lower on the posttest, after controlling for observed
 covariates.
 As far as we can tell, the optimal strategy is to request few, if any, hints.
-This observed effect may be explained by due to confounding.
-Mediation analysis essentially interprets this result in terms of the
+While our estimate is subject to bias from an omitted confounder, the omitted variable must be a relatively strong predictor of hint usage and of posttest scores in order to explain the observed relationship.
+An omitted confounder that is as important as pretest could explain the relationship, but an omitted confounder as important as ethnicity---our second most important covariate---could not (so long as we estimate an OLS-weighted average effect). 
+
+Mediation analysis essentially interprets the observational study result in terms of the
 overall CTA1 treatment effect.
 Specifically, our analysis showed that CTA1 affected students'
 posttest scores in (at least) two opposite ways: by allowing hints, it
@@ -1508,14 +1507,11 @@ their scores by an even greater amount.
 Like in the observational study and in mediation analysis, the
 principal stratification analysis found a negative correlation
 between hint requesting and posttest scores.
-Unlike those two methods, PS understands $\eta(1)$ as a
-student-specific baseline characteristic---albeit one that only
-manifests in the treatment group.
 Students who request more hints need more help, and thus score lower
 on the posttest.
-On the other hand, the PS analysis suggests that it's these students
-who also receive more help---perhaps due to CTA1 hints, or other
-features of the curriculum---and hence benefit more from CTA1.
+Fortunately, the PS analysis also suggests that these students
+receive more help----that is, they benefit more from CTA1---than do their peers who request fewer hints.
+However, it is unclear whether their larger treatment effects are due to their higher rate of hint requests, or to some other correlated factor.
 
 Can these results be reconciled with the results from the previous two
 sections?
@@ -1563,7 +1559,7 @@ The final criterion is a researcher's comfort with complex statistical
 models.
 Researchers who are able and willing to experiment with a range of
 models for a dataset, and perhaps devise tests of model fit tailored
-to a specific problem, may be confident in the fit of a PS model.
+to a specific problem, may be more confident in the fit of a PS model.
 Researchers who prefer transparency and non-parametric or
 semi-parametric analysis may prefer matching studies.
 
@@ -1609,43 +1605,30 @@ paper; for more discussion, see the citations in the introduction.
 % \end{table}
 
 
-\section{Discussion: The Essential Role of Measurement}\label{sec:conclusion}
+\section{Discussion: Causal Inference and Measurement}\label{sec:conclusion}
 This case study has focused on three approaches to causal modeling of
 hint requests during an RCT of the Cognitive Tutor program.
 We hope we have demonstrated some of the potential and some of the
-challenges that new computerized data bring to these old problems.
+challenges that new datasets logged by online
+learning systems bring to these old problems.
 
-In the hints case study, the observational study and mediation
-analysis differ from principal stratification in their approach to
-potential confounding of the statistical relationship between hint
-requests and posttest scores.
-Matching-based estimators attempt to adjust for confounding,
-and sensitivity analysis accounts for confounding.
-In contrast, principal stratification includes it in the model,
-estimating the relationship between (potential) hint usage and
-treatment effects, as opposed to the relationship between hints and
-outcomes.
+Measurement of students' hint request rates played a central role in all three approaches we considered.
+The results were largely driven by three measurement decisions.
+First, our decision to consider only worked Cognitive Tutor problems on which students either requested a hint or made an error (or both) reduced the relationship between hint requests and student algebra I ability.
+Second, our decision to dichotomize hint request rates in the observational study and mediation analysis allowed us to use of a traditional matching estimator and to identify mediational estimands.
+Third, our decision to use a Rasch model to measure hint usage in the PS analysis accounted for differences between students in both the number and difficulty of worked CT problems.
 
-A second challenge is extrapolation in mediation analysis.
-in RCTs comparing computerized educational technology with traditional
-pedagogy, members of the control group do not have computer log data
-or access to the mechanisms that the log data measures.
-This forms a serious barrier to mediation analysis.
-However, by dichotomizing the mediator and matching, we were able to
-re-define the causal question in such a way as to make it (possibly) answerable.
+While questions of measurement has always been important in causal inference, analysis of EdTech log data brings them to the fore.
+Log datasets from technology products are large, multivariate, and complex, so careful thought is necessary in order to measure implementation constructs of interest. 
 
-Lurking behind all three cases is the equally important issue of
-measurement.
-This issue arose in our case study in our decision to use an IRT model
-to measure hint usage, instead of a simple proportion.
-Doing so is an important step in the right direction, of thinking
-carefully about measurement issues and using as much available data as
-possible.
-The Rasch model also opens the door to a host of exciting
-possibilities in causal models of log data.
-Specifically, other model-based dimension reduction or cluster analysis techniques
-could be brought to bear, defining new intermediate variables.
+Even if they are motivated by methodological concerns, decisions about measurement are inherently also decisions about causal questions---estimates using different measurements answer different questions. 
+Just as researchers must choose a causal approach, such as matching, mediation, or principal stratification, they must choose a measurement approach as well.
+As our case study demonstrated, these two decisions are deeply intertwined.
 
+The size, dimension, and complexity of EdTech log data suggests some exciting opportunities for innovative combinations of measurement and causal approaches.
+We demonstrated the inclusion of an IRT model in principal stratification; this suggests the possibility of including other measurement models into causal estimators.
+Multivariate measurement models that incorporate not only hint requests, but other usage measures such as time spent, actions taken, and errors could yield deep insights about how students use EdTech products and how different usage patterns correspond to different effects.
+The development of these causal models will require simultaneous consideration of causal inference and measurement. 
 
 % \section*{Acknowledgments}
 % This material is based upon work supported by the National Science Foundation under Grant Number 1420374. Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.

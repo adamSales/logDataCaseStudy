@@ -180,7 +180,7 @@ effWithWeights <-
 
 effects <- list()
 for(est in c('ate','tot','prec'))
-  #for(ca in c('eff','adj'))
+  for(ca in c('eff'))#,'adj'))
     effects[[paste0(est,'_',ca)]] <-
       lm_robust(
         as.formula(paste(ca,'~1')),

@@ -1,6 +1,6 @@
 \documentclass{article}\usepackage[]{graphicx}\usepackage[]{color}
-%% maxwidth is the original width if it is less than linewidth
-%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+% maxwidth is the original width if it is less than linewidth
+% otherwise use linewidth (to make sure the graphics do not exceed the margin)
 \makeatletter
 \def\maxwidth{ %
   \ifdim\Gin@nat@width>\linewidth
@@ -293,7 +293,8 @@ discussed in \citet{rosenbaum2002observational},
 The conceptual and methodological issues we will discuss extend to
 other covariate control methods as well.
 
-Next, as represented in Figure (b), we will conduct a mediation analysis, estimating natural
+Next, as represented in Figure (b), we will conduct a mediation
+analysis, estimating natural
 indirect effects of CTA1 treatment assignment $Z$, as mediated by
 $H$. That is, we will estimate the component of $Z$'s effect on $Y$ that comes about
 due to $Z$'s effect on $H$---path (1)---and $H$'s effect on $Y$, path
@@ -508,7 +509,8 @@ Then, let
 \end{equation*}
 measure hint frequency.
 
-This measure is inversely related to the ratio of the percentage (of all
+This measure is inversely related to the ratio of the percentage (of
+all
 problems) a student makes an error without having requested a hint,
 to the percentage of problems a student requests a hint.%
 \footnote{Technically, if $h$ is the event that a student requests
@@ -576,7 +578,7 @@ This definition agreed with the model's classification (based on
 $\eta$ as opposed to $\bar{h}$ in
 approximately 93\% of cases.
 
-The Rasch model for hint useage \eqref{eq:rasch}, but not the mixture
+The Rasch model for hint usage \eqref{eq:rasch}, but not the mixture
 model \eqref{eq:mixture} will play an important role in the principal
 stratification analysis of Section \ref{sec:principalStratification}.
 
@@ -794,8 +796,8 @@ $H=1$ and $H=0$ subjects in match $m$, respectively.
 Alternatively, setting $w_m=n_{1m}$ estimates the average effect of
 $H$ on those subjects for whom $H=1$---the ``treatment on the
 treated,'' or TOT, effect.
-Weights $w_m=(1/n_{1m}+1/n_{0m})^{-1}$, the harmonic mean  are
-``precision weights'' \citep[c.f.][]{schochet2015statistical}; the
+Weights $w_m=(1/n_{1m}+1/n_{0m})^{-1}$, the harmonic mean  are ``OLS'' or
+``precision'' \citep[c.f.][]{schochet2015statistical}; the
 estimate using these weights is equal to the coefficient on $H$ from
 an ordinary least squares (OLS) regression of $Y$ on $H$ and a set of dummy
 variables for $M$.
@@ -823,24 +825,12 @@ standard error of the weighted mean estimator.
 % in place of $Y$.
 
 
-Table \ref{tab:matchResults} gives four treatment effect estimates
-using these methods.
-The first row gives the result using precision-weights without
-regression adjustment. estimating an effect of $H$
-The rows labeled ATE and TOT weight the matched sets to
-estimate the average effect of $H$ over the entire treatment
-group and over those members of the treatment group with $H=1$,
-respectively.
-The row labeled ANCOVA of Table \ref{tab:matchResults} gives the
-coefficient on $H$ from a regression of Y on $H$ along with indicators for matched set,
-racial categories, grade, ESL status, economic disadvantage, and sex,
-along with a natural spline with five degrees of freedom for pretest.
-This regression adjusts for imbalances in these covariates within
-matched sets \citep[c.f.][]{biasAdjust}.
+Table \ref{tab:matchResults} gives treatment effect estimates,
+standard errors, and confidence intervals under these three weighting
+schemes.
 All three sets of standard errors
 and confidence intervals used the heteroskedasticity-robust ``HC3'' sandwich estimator,
 \citealt{sandwichPackage}.
-
 The three estimates all roughly agree that being a high hint user
 decreases posttest scores by roughly a fifth of a standard deviation.
 That is, requesting hints hurts posttest scores---teachers should
@@ -853,26 +843,26 @@ group, whereas TOT estimates an effect for high hint users. Had these
 been very different, we might wonder why the effect of hint requests
 varies so much between high and low hint users, and if that suggests
 selection bias.
-The fact that the additional covariate adjustment of the ANCOVA model
-made little difference in the effect estimate suggests that the
-propensity score match eliminated all or most of the confounding bias due to
-measured covariates; hence, additional adjustment was unnecessary.
+% The fact that the additional covariate adjustment of the ANCOVA model
+% made little difference in the effect estimate suggests that the
+% propensity score match eliminated all or most of the confounding bias due to
+% measured covariates; hence, additional adjustment was unnecessary.
 
-% latex table generated in R 3.4.4 by xtable 1.8-2 package
-% Mon Jan 06 15:38:16 2020
+% latex table generated in R 3.6.2 by xtable 1.8-4 package
+% Tue Jan  7 14:23:39 2020
 \begin{table}[ht]
 \centering
 \begin{tabular}{rllccc}
   \hline
   &&&&\multicolumn{2}{c}{Sensitivity Intervals}\\
- Weights&Estimate&Std. Error&CI&[pretest]&[pretest]/2 \\
+ Weights&Estimate&Std. Error&CI&[Pretest]&[Ethnicity] \\
  \hline
-OLS & -0.18 & 0.04 & [-0.25,-0.10] & [-0.41,0.06] & [-0.31,-0.04] \\
-  ATE & -0.12 & 0.05 & [-0.23,-0.02] & [-0.45,0.20] & [-0.31,0.06] \\
-  TOT & -0.14 & 0.06 & [-0.25,-0.03] & [-0.47,0.19] & [-0.33,0.05] \\
+OLS & -0.18 & 0.04 & [-0.25,-0.10] & [-0.41,0.06] & [-0.30,-0.05] \\ 
+  ATE & -0.12 & 0.05 & [-0.23,-0.02] & [-0.45,0.20] & [-0.29,0.04] \\ 
+  TOT & -0.14 & 0.06 & [-0.25,-0.03] & [-0.47,0.19] & [-0.31,0.03] \\ 
    \hline
 \end{tabular}
-\caption{Estimates with and without regression adjustment and sensitivity analysis of the effect of hint usage.}
+\caption{Estimates and sensitivity analysis of the effect of hint usage.} 
 \label{tab:matchResults}
 \end{table}
 
@@ -896,7 +886,7 @@ OLS & -0.18 & 0.04 & [-0.25,-0.10] & [-0.41,0.06] & [-0.31,-0.04] \\
 % \label{tab:matchResults}
 % \end{table}
 
-None of these estimates addressed the possiblity of confounding from
+None of these estimates addressed the possibility of confounding from
 unmeasured covariates; instead, they relied on matched ignorability.
 This would be a particular concern if pretest scores do not completely
 capture students' mathematics ability, and if weaker students ask for hints at
@@ -920,18 +910,28 @@ accounting for the observed covariates in the model, and $T_Z$ is the
 t-statistic from an ordinary least squares regression of $H$ on $U$, along with the observed covariates.
 These sensitivity parameters may be benchmarked by estimating their
 counterparts when observed covariates are left out of the model.
-The first three rows of the table have both $\rho^2$ and $T_Z$ equal
-to zero, to reflect that they assume no unmeasured confounders.
-The row of Table \ref{tab:matchResults} labeled ``[Pretest]''
-imagines a $U$ that predicts $Y$ and $H$ to a similar extent as
-pretest.
-The resulting sensitivity interval is quite wide, including
+
+The last two columns of table \ref{tab:matchResults} give sensitivity intervals for each of the three weighted average treatment effects.
+The column of Table \ref{tab:matchResults} labeled ``[Pretest]''
+accounts for the possible omission of a covariate $U$ that, at most, predicts $Y$ and $H$ as well as do pretest scores.
+The resulting sensitivity intervals are quite wide, including
 both large negative effects as well as substantial positive
 effects.
-A slightly less conservative sensitivity analysis, labeled
-``[Pretest/2]'' allows $U$ to
-predict $H$ and $\rho$ half as well as pretest scores.
-This sensitivity interval is wide, but entirely negative.
+In fact, pretest is the most important of our observed covariates; it is the observed covariate whose omission would cause the most bias.
+This is unsurprising, since pretests are generally considered to be the most important covariate to measure, and studies that include pretest measures often reproduce experimental estimates \citep[e.g.][]{cook2008three,cook2009bias}.
+Therefore, a sensitivity analysis considering an omitted covariate as important as pretest scores may be too pessimistic. 
+Instead,
+the final column of Table \ref{tab:matchResults} gives sensitivity intervals for the omission of a covariate that, at most, predicts $Y$ and $H$ as well as ethnicity dummy variables, the second most important of our observed covariates.
+These sensitivity intervals are also wide, but the interval corresponding
+to OLS weights is entirely negative.
+
+The conclusion is that the omission of a confounder as important as ethnicity indicators
+cannot explain the estimated OLS-weighted ATE.
+Allowing for the possible omission of such a covariate, we infer that requesting a
+large number of hints hurts students' posttest scores.
+The size of the effect may be as small as
+5\% of a standard deviation
+or as large as 30\% of a standard deviation.
 
 \section{Mediation Analysis}\label{sec:mediation}
 The goal of causal mediation analysis is to decompose a treatment
@@ -1159,13 +1159,13 @@ This can be re-written:
 &\qquad +\EE[Y(1,0)-Y(1,0)|Z=1,H=0]Pr(H=0)
 \end{split}
 \\[2ex]
-&=\EE[Y(1,1)-Y(1,0)|Z=1,H=1]Pr(H=1)
+&=\EE[Y(1,1)-Y(1,0)|Z=1,H=1]Pr(H=1)\\
 &=Pr(H=1)TOT
 \end{align*}
-Since $Pr(H=1)=$0.7,
-$\hat{\Delta}=$0.7$TOT$.
-Estimated thusly, the indirect effect is negative: -0.1, with
-a standard error of 0.04.
+Since $Pr(H=1)=$0.3,
+$\hat{\Delta}=$0.3$TOT$.
+Estimated thusly, the indirect effect is negative: -0.04, with
+a standard error of 0.02.
 This analysis suggests that the availability of hints
 actually \emph{lowers} the treatment effect, that CTA1 works not
 because of hints, but despite them.
@@ -1239,7 +1239,7 @@ those students who barely used the tutor at all.
 Further, it does not account for varying difficulty of the tutor's
 problems.
 In section \ref{sec:dichotomizingHintUsage}, we showed that
-dichotomized $\bar{h}$ largely agrees with a dicotomized version of a
+dichotomized $\bar{h}$ largely agrees with a dichotomized version of a
 more sophisticated measure of hint usage.
 However, when modeling hint usage continuously, the correspondence may
 not hold \citet[see][for a more complete discussion]{aoas}.
@@ -1257,7 +1257,7 @@ in this analysis, we did not model it as a normal mixture, as in
 \eqref{eq:mixture}.
 
 We incorporated the model for hint requests, (\ref{eq:rasch}), into
-the larger principal stratification model, replacing $\eta(1)$ for
+the principal stratification model, replacing $\eta(1)$ for
 $\bar{h}(1)$.
 Then, the principal stratification estimand is
 \begin{equation*}
@@ -1284,8 +1284,8 @@ $p(\bm{\theta})$, posterior inference for $\bm{\theta}$ proceeds based
 on the following structure:
 \begin{align*}
 p(\bm{\theta}|\bm{Y},\bm{Z},&\bm{X},\{\bm{h}_i\}_{i:Z_i=1})\propto\\
-p(\bm{\theta})&\displaystyle\prod_{i: Z_i=1}\int p(Y|\bm{x}_i,Z=1,\bm{\theta},\eta(1))p(\bm{h}_{i}|\eta(1)(1),\bm{\theta})p(\eta(1)|\bm{x}_i,\bm{\theta})d\eta(1)\\
-\times&\displaystyle\prod_{i:Z_i=0} \int p(\yci|\bm{x}_i,\bm{\theta},\eta(1))p(\eta(1)|\bm{x}_i,\bm{\theta})d\eta(1).\numberthis\label{eq:posteriorEta}
+p(\bm{\theta})&\displaystyle\prod_{i: Z_i=1}\int p(Y_i|\bm{x}_i,Z=1,\bm{\theta},\eta(1))p(\bm{h}_{i}|\eta(1),\bm{\theta})p(\eta(1)|\bm{x}_i,\bm{\theta})d\eta(1)\\
+\times&\displaystyle\prod_{i:Z_i=0} \int p(Y_i|\bm{x}_i,Z=0,\bm{\theta},\eta(1))p(\eta(1)|\bm{x}_i,\bm{\theta})d\eta(1).\numberthis\label{eq:posteriorEta}
 \end{align*}
 where $\bm{h}_i$ is the vector of hint request data for subject $i$,
 ranging over all challenging problems.
@@ -1307,13 +1307,13 @@ In the next level, $\eta(1)$ is modeled as a function of baseline
 covariates $\bm{x}$:
 \begin{equation}\label{eq:rasch2}
 \eta(1)|\left(\bm{x}_i,\bm{\theta}\right) \sim
-\mathcal{N}\left(\bm{x_i}\bm{\beta}^M+\epsilon^{Mt}_{t[i]}+\epsilon^{Ms}_{s[i]},
-\sigma^M\right)
+\mathcal{N}\left(\bm{x_i}\bm{\beta}+\epsilon^{tch}_{t[i]}+\epsilon^{scl}_{s[i]},
+\sigma\right)
 \end{equation}
-where $\bm{\beta}^U$ is a vector of coefficients.
+where $\bm{\beta}$ is a vector of coefficients.
 Since students were nested within teachers, who were nested within
-schools, we included normally-distributed school ($\epsilon_{Us}$) and
-teacher ($\epsilon_{Ut}$) random intercepts.
+schools, we included normally-distributed school ($\epsilon^{scl}$) and
+teacher ($\epsilon^{tch}$) random intercepts.
 The covariates in the model, $\bm{x}_i$, were detailed in Table
 \ref{tab:covariateBalance}; preliminary model checking suggested
 including a quadratic term for pretest, which was added as a column of
@@ -1323,13 +1323,13 @@ We modeled students' posttest scores $Y$ as
 conditionally normal:
 \begin{equation}\label{eq:outcomeSubmodel}
  Y|\left(Z_i,\bm{x}_i,\bm{\theta},\eta(1)\right) \sim  \mathcal{N}\left(
-\beta^Y_{0b[i]}+\bm{x}_i^T\bm{\beta}^Y+a\eta(1)+Z_i\tau(\eta(1))+\epsilon^{Yt}_{t[i]}+\epsilon^{Ys}_{s[i]},\sigma^Y_{Z[i]}\right)
+\gamma_{0b[i]}+\bm{x}_i^T\bm{\gamma}+a\eta(1)+Z_i\tau(\eta(1))+\zeta^{tch}_{t[i]}+\zeta^{scl}_{s[i]},\omega_{Z[i]}\right)
 \end{equation}
-where $\beta^Y_{0b[i]}$ is a fixed effect for $i$'s randomization block, $\bm{\beta}^Y$ are the
-covariate coefficients, and $\epsilon^{Yt}$, and
-$\epsilon^{Ys}$ are normally-distributed teacher and school random
+where $\bamma_{0b[i]}$ is a fixed effect for $i$'s randomization block, $\bm{\gamma}$ are the
+covariate coefficients, and $\zeta^{tch}$, and
+$\zeta^{scl}$ are normally-distributed teacher and school random
 intercepts.
-The residual variance $\sigma^Y$ varies with treatment assignment $Z$;
+The residual variance $\omega$ varies with treatment assignment $Z$;
 this captures measurement error in $Y$, treatment effect heterogeneity
 that is not linearly related to
 $\eta(1)$, and other between-student variation in $Y$ that is not predicted by
@@ -1338,7 +1338,7 @@ the mean model.
 Finally, we modeled treatment effects
 $\tau(\eta(1))$ as linear:
 \begin{equation}\label{eq:tauModel}
-\EE[Y_{T}-Y_{C}|\eta(1)]=\tau({\eta(1)})=b_0+b_1\eta(1)
+\EE[Y(1)-Y(0)|\eta(1)]=\tau({\eta(1)})=b_0+b_1\eta(1)
 \end{equation}
 While more complex models for $\tau(\eta(1))$ are theoretically
 possible (for instance, \citet{jin2008principal} uses a quadratic
@@ -1436,10 +1436,9 @@ weaker students.
 Matching depends both on the adequacy of the observed covariates to
 capture baseline differences between $H=0$ and $H=1$ students, and the
 sensitivity analyses we performed assumed that any un-measured
-covariate would predict $H$ no better than pretest, or no better than
-a covariate half as important as pretest.
+covariate would predict $H$ and $Y$ no better than pretest or ethnicity indicators, respectively.
 These assumptions are impossible to verify from the data at hand;
-instead, they require a keen understanding of student practice within
+instead, judging their plausibility requires a keen understanding of student practice within
 the tutor.
 
 Mediation analysis builds on the matching design, and also requires an
@@ -1453,18 +1452,25 @@ from more continuous measures of hint requests.
 
 In contrast, no ignorabilty assumptions are necessary for principal
 stratification.
-That said, an assumption similar to ignorability may play an important
-role for interpretation.
-Further, principal stratification estimators require a model for $Y(0)$
-conditional on $\eta(1)$, which is unobserved.
-On the other hand, model misspecification is, in principle,
-detectable---an assumption of a particular family of models is not
-``untestable.''
-Still, the data will, in general, be unable to distinguish between certain
-alternative models for $Y(0)$ conditional on $\eta(1)$, that may in
-turn lead to qualitatively different conclusions.
-In practice, analysts make the untestable assumption that $Y(0)$ conditional on $\eta(1)$ is
-distributed similarly to $Y(1)$ conditional on $\eta(1)$.
+% That said, an assumption similar to ignorability may play an important
+% role for interpretation.
+However, principal stratification estimators require modeling
+assumptions---most problematically, $p(Y|\bm{x},Z=0,\bm{\theta},\eta(1))$ of
+\eqref{eq:posteriorEta}, the model for $Y(0)$
+conditional on $\eta(1)$, $\bm{x}$, and parameters $\bm{\theta}$.
+While any model specification can, and should, be checked against
+observed data, this process can only narrow space of acceptable
+models, it cannot be used to determine the correct form of
+$p(Y|\bm{x},Z=0,\bm{\theta},\eta(1))$.
+This is because $Y(0)$ and $\eta(1)$ are never observed simultaneously.
+Therefore, it is possible for an analyst to misspecify $p(Y|\bm{x},Z=0,\bm{\theta},\eta(1))$, such that principal effect estimates are
+severely biased, without being able to detect the model
+misspecification with the data.
+That is, the data will typically be unable to distinguish between
+alternative $p(Y|\bm{x},Z=0,\bm{\theta},\eta(1))$ models that lead to
+qualitatively different conclusions.
+In practice, analysts make the untestable assumption that $p(Y|\bm{x},Z=0,\bm{\theta},\eta(1))$ is
+of the same form as $p(Y|\bm{x},Z=1,\bm{\theta},\eta(1))$.
 
 An additional contrast of note between matching-based studies and
 principal stratification relates to transparency.
@@ -1487,12 +1493,15 @@ checking procedures, which are also carried out in the online supplement.
 
 \subsection{Results and Interpretation}
 
-Our observational study found that hint requests have a negative effect: students who
+Our observational study suggested that hint requests have a negative effect: students who
 requested hints more often than the 70th
-percentile score lower on the posttest, after controlling for observed covariates---as
-far as we can tell, the optimal strategy is to never request a hint.
-However, this observed effect may be due to confounding.
-Mediation analysis essentially interprets this result in terms of the
+percentile score lower on the posttest, after controlling for observed
+covariates.
+As far as we can tell, the optimal strategy is to request few, if any, hints.
+While our estimate is subject to bias from an omitted confounder, the omitted variable must be a relatively strong predictor of hint usage and of posttest scores in order to explain the observed relationship.
+An omitted confounder that is as important as pretest could explain the relationship, but an omitted confounder as important as ethnicity---our second most important covariate---could not (so long as we estimate an OLS-weighted average effect). 
+
+Mediation analysis essentially interprets the observational study result in terms of the
 overall CTA1 treatment effect.
 Specifically, our analysis showed that CTA1 affected students'
 posttest scores in (at least) two opposite ways: by allowing hints, it
@@ -1502,14 +1511,11 @@ their scores by an even greater amount.
 Like in the observational study and in mediation analysis, the
 principal stratification analysis found a negative correlation
 between hint requesting and posttest scores.
-Unlike those two methods, PS understands $\eta(1)$ as a
-student-specific baseline characteristic---albeit one that only
-manifests in the treatment group.
 Students who request more hints need more help, and thus score lower
 on the posttest.
-On the other hand, the PS analysis suggests that it's these students
-who also receive more help---perhaps due to CTA1 hints, or other
-features of the curriculum---and hence benefit more from CTA1.
+Fortunately, the PS analysis also suggests that these students
+receive more help----that is, they benefit more from CTA1---than do their peers who request fewer hints.
+However, it is unclear whether their larger treatment effects are due to their higher rate of hint requests, or to some other correlated factor.
 
 Can these results be reconciled with the results from the previous two
 sections?
@@ -1557,7 +1563,7 @@ The final criterion is a researcher's comfort with complex statistical
 models.
 Researchers who are able and willing to experiment with a range of
 models for a dataset, and perhaps devise tests of model fit tailored
-to a specific problem, may be confident in the fit of a PS model.
+to a specific problem, may be more confident in the fit of a PS model.
 Researchers who prefer transparency and non-parametric or
 semi-parametric analysis may prefer matching studies.
 
@@ -1603,43 +1609,30 @@ paper; for more discussion, see the citations in the introduction.
 % \end{table}
 
 
-\section{Discussion: The Essential Role of Measurement}\label{sec:conclusion}
+\section{Discussion: Causal Inference and Measurement}\label{sec:conclusion}
 This case study has focused on three approaches to causal modeling of
 hint requests during an RCT of the Cognitive Tutor program.
 We hope we have demonstrated some of the potential and some of the
-challenges that new computerized data bring to these old problems.
+challenges that new datasets logged by online
+learning systems bring to these old problems.
 
-In the hints case study, the observational study and mediation
-analysis differ from principal stratification in their approach to
-potential confounding of the statistical relationship between hint
-requests and posttest scores.
-Matching-based estimators attempt to adjust for confounding,
-and sensitivity analysis accounts for confounding.
-In contrast, principal stratification includes it in the model,
-estimating the relationship between (potential) hint usage and
-treatment effects, as opposed to the relationship between hints and
-outcomes.
+Measurement of students' hint request rates played a central role in all three approaches we considered.
+The results were largely driven by three measurement decisions.
+First, our decision to consider only worked Cognitive Tutor problems on which students either requested a hint or made an error (or both) reduced the relationship between hint requests and student algebra I ability.
+Second, our decision to dichotomize hint request rates in the observational study and mediation analysis allowed us to use of a traditional matching estimator and to identify mediational estimands.
+Third, our decision to use a Rasch model to measure hint usage in the PS analysis accounted for differences between students in both the number and difficulty of worked CT problems.
 
-A second challenge is extrapolation in mediation analysis.
-in RCTs comparing computerized educational technology with traditional
-pedagogy, members of the control group do not have computer log data
-or access to the mechanisms that the log data measures.
-This forms a serious barrier to mediation analysis.
-However, by dichotomizing the mediator and matching, we were able to
-re-define the causal question in such a way as to make it (possibly) answerable.
+While questions of measurement has always been important in causal inference, analysis of EdTech log data brings them to the fore.
+Log datasets from technology products are large, multivariate, and complex, so careful thought is necessary in order to measure implementation constructs of interest. 
 
-Lurking behind all three cases is the equally important issue of
-measurement.
-This issue arose in our case study in our decision to use an IRT model
-to measure hint usage, instead of a simple proportion.
-Doing so is an important step in the right direction, of thinking
-carefully about measurement issues and using as much available data as
-possible.
-The Rasch model also opens the door to a host of exciting
-possibilities in causal models of log data.
-Specifically, other model-based dimension reduction or cluster analysis techniques
-could be brought to bear, defining new intermediate variables.
+Even if they are motivated by methodological concerns, decisions about measurement are inherently also decisions about causal questions---estimates using different measurements answer different questions. 
+Just as researchers must choose a causal approach, such as matching, mediation, or principal stratification, they must choose a measurement approach as well.
+As our case study demonstrated, these two decisions are deeply intertwined.
 
+The size, dimension, and complexity of EdTech log data suggests some exciting opportunities for innovative combinations of measurement and causal approaches.
+We demonstrated the inclusion of an IRT model in principal stratification; this suggests the possibility of including other measurement models into causal estimators.
+Multivariate measurement models that incorporate not only hint requests, but other usage measures such as time spent, actions taken, and errors could yield deep insights about how students use EdTech products and how different usage patterns correspond to different effects.
+The development of these causal models will require simultaneous consideration of causal inference and measurement. 
 
 % \section*{Acknowledgments}
 % This material is based upon work supported by the National Science Foundation under Grant Number 1420374. Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.
@@ -1672,26 +1665,26 @@ where we constrained $\mu_0<\mu_1$.
 ##  int<lower=1> N; // total number of obs (long format)
 ##  int<lower=1> nstud; // # students
 ##  int<lower=1> nsec; // # sections (problems nested in sections)
-##
+## 
 ## // indices
 ##  int<lower=1,upper=nstud> studentM[N]; //for each obs, which student?
 ##  int<lower=1,upper=nsec> section[N]; // for each obs, which section?
-##
+## 
 ## // data data
 ##  int<lower=0,upper=1> hint[N]; // for each obs, was a hint requested?
-##
+## 
 ## }
 ## parameters{
-##
+## 
 ##  vector[nstud] eta; // ability parameter
 ##  real<lower=0,upper=1> p1; // mixing proportion
 ##  //ordered[2] mu;             // locations of mixture components
 ##  real<upper=0> mu0; //location of mixture component 0
 ##  vector<lower=0>[2] sigma;  // scales of mixture components
-##
+## 
 ##  real delta[nsec]; // section difficulty parameter
 ##  //real<lower=0> sigSec; // scale of difficulty parameters
-##
+## 
 ## }
 ## transformed parameters{
 ##  real<lower=0> mu1; // location of mixture component 1
@@ -1701,65 +1694,65 @@ where we constrained $\mu_0<\mu_1$.
 ##  // logs of mixing proportions to save time
 ##  real log_p1=log(p1);
 ##  real log_p0=log(1-p1);
-##
+## 
 ## // linear predictor for logit model
 ##  real linPred[N];
-##
+## 
 ## // priors
 ##  sigma ~ lognormal(0, 2);
 ##  mu0 ~ normal(0, 2);
 ## // sigSec ~ lognormal(0,2);
 ##  p1~ beta(2,2); // I'd rather the groups have similar sizes
-##
+## 
 ## // model for section difficulty parameters
 ##  delta~normal(0,3);//sigSec);
-##
+## 
 ## // Rasch model for hint requests
 ##  for(i in 1:N)
 ##   linPred[i]= eta[studentM[i]]-delta[section[i]];
-##
+## 
 ##  hint~bernoulli_logit(linPred);
-##
-##
+## 
+## 
 ## // mixture model for ability parameters
 ##  for(n in 1:nstud)
 ##   target += log_sum_exp(log_p0+normal_lpdf(eta[n]|mu0,sigma[1]),
 ## 			log_p1+normal_lpdf(eta[n]|mu1,sigma[2]));
-##
+## 
 ## }
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
 %\clearpage
 \section{Covariate Balance Before and After Matching}
-% latex table generated in R 3.4.4 by xtable 1.8-2 package
-% Tue Oct 29 14:14:20 2019
+% latex table generated in R 3.6.2 by xtable 1.8-4 package
+% Tue Jan  7 14:23:39 2020
 \begin{table}[ht]
 \centering
 \begin{tabular}{lrrrrrr}
   &\multicolumn{3}{c}{Unmatched}&\multicolumn{3}{c}{Matched}\\
  \hline
- & std.diff & z &  & std.diff & z &  \\
+ & std.diff & z &  & std.diff & z &  \\ 
   \hline
-grade9 & -0.34 & -7.05 & *** & 0.03 & 0.44 &     \\
-  gradehigher & 0.34 & 7.05 & *** & -0.03 & -0.44 &     \\
-  raceWhiteAsian & -0.64 & -12.83 & *** & 0.03 & 0.75 &     \\
-  raceBlackMulti & 0.23 & 4.71 & *** & 0.01 & 0.24 &     \\
-  raceHispAIAN & 0.51 & 10.35 & *** & -0.05 & -0.98 &     \\
-  xirt & -0.52 & -10.54 & *** & 0.09 & 1.82 & .   \\
-  spectypical & -0.16 & -3.32 & *** & 0.03 & 0.48 &     \\
-  specspeced & 0.34 & 7.07 & *** & -0.10 & -1.44 &     \\
-  specgifted & -0.14 & -3.03 & **  & 0.06 & 1.16 &     \\
-  esl0 & -0.37 & -7.70 & *** & 0.04 & 0.63 &     \\
-  esl1 & 0.37 & 7.70 & *** & -0.04 & -0.63 &     \\
-  stateCT & 0.58 & 11.81 & *** & -0.00 & 0.00 &     \\
-  stateKY & -0.36 & -7.51 & *** & -0.00 & 0.00 &     \\
-  stateLA & -0.08 & -1.68 & .   & -0.00 & 0.00 &     \\
-  stateMI & -0.36 & -7.51 & *** & 0.00 & 0.00 &     \\
-  stateTX & 0.43 & 8.77 & *** & 0.00 & 0.00 &     \\
+grade9 & -0.34 & -7.05 & *** & 0.03 & 0.44 &     \\ 
+  gradehigher & 0.34 & 7.05 & *** & -0.03 & -0.44 &     \\ 
+  raceWhiteAsian & -0.64 & -12.83 & *** & 0.03 & 0.75 &     \\ 
+  raceBlackMulti & 0.23 & 4.71 & *** & 0.01 & 0.24 &     \\ 
+  raceHispAIAN & 0.51 & 10.35 & *** & -0.05 & -0.98 &     \\ 
+  xirt & -0.52 & -10.54 & *** & 0.09 & 1.82 & .   \\ 
+  spectypical & -0.16 & -3.32 & *** & 0.03 & 0.48 &     \\ 
+  specspeced & 0.34 & 7.07 & *** & -0.10 & -1.44 &     \\ 
+  specgifted & -0.14 & -3.03 & **  & 0.06 & 1.16 &     \\ 
+  esl0 & -0.37 & -7.70 & *** & 0.04 & 0.63 &     \\ 
+  esl1 & 0.37 & 7.70 & *** & -0.04 & -0.63 &     \\ 
+  stateCT & 0.58 & 11.81 & *** & -0.00 & 0.00 &     \\ 
+  stateKY & -0.36 & -7.51 & *** & -0.00 & 0.00 &     \\ 
+  stateLA & -0.08 & -1.68 & .   & -0.00 & 0.00 &     \\ 
+  stateMI & -0.36 & -7.51 & *** & 0.00 & 0.00 &     \\ 
+  stateTX & 0.43 & 8.77 & *** & 0.00 & 0.00 &     \\ 
    \hline
 \end{tabular}
-\caption{Covariate balance (standardized differences and Z-scores) before and after the propensity score match.}
+\caption{Covariate balance (standardized differences and Z-scores) before and after the propensity score match.} 
 \label{tab:balance}
 \end{table}
 
@@ -1789,39 +1782,39 @@ grade9 & -0.34 & -7.05 & *** & 0.03 & 0.44 &     \\
 ##  int<lower=1> nsec;
 ##  int<lower=1> nschool;
 ##  int<lower=1> npair;
-##
+## 
 ## // indices
 ##  int<lower=1,upper=nteacher> teacher[nstud];
 ##  int<lower=1,upper=npair> pair[nstud];
 ##  int<lower=1,upper=nschool> school[nstud];
 ##  int<lower=1,upper=nstud> studentM[nsecWorked];
 ##  int<lower=1,upper=nsec> section[nsecWorked];
-##
+## 
 ## // data data
 ##  int<lower=0,upper=1> hint[nsecWorked];
 ##  matrix[nstud,ncov] X;
 ##  int<lower=0,upper=1> Z[nstud];
 ##  real Y[nstud];
-##
+## 
 ## }
 ## parameters{
-##
+## 
 ##  vector[nstud] eta;
-##
+## 
 ##  vector[ncov] betaU;
 ##  vector[ncov] betaY;
-##
+## 
 ##  real a1;
 ##  real b0;
 ##  real b1;
-##
+## 
 ##  real teacherEffY[nteacher];
 ##  real teacherEffU[nteacher];
 ##  real pairEffect[npair];
 ##  real schoolEffU[nschool];
 ##  real schoolEffY[nschool];
 ##  real delta[nsec];
-##
+## 
 ##  real<lower=0> sigTchY;
 ##  real<lower=0> sigSclY;
 ##  real<lower=0> sigY[2];
@@ -1829,7 +1822,7 @@ grade9 & -0.34 & -7.05 & *** & 0.03 & 0.44 &     \\
 ##  real<lower=0> sigSclU;
 ##  real<lower=0> sigU;
 ## }
-##
+## 
 ## model{
 ##  real linPred[nsecWorked];
 ##  vector[nstud] muY;
@@ -1837,12 +1830,12 @@ grade9 & -0.34 & -7.05 & *** & 0.03 & 0.44 &     \\
 ##  real useEff[nstud];
 ##  real trtEff[nstud];
 ##  real sigYI[nstud];
-##
-##
+## 
+## 
 ## // hint model
 ##  for(i in 1:nsecWorked)
 ##   linPred[i]= delta[section[i]]+eta[studentM[i]];
-##
+## 
 ##  for(i in 1:nstud){
 ##   useEff[i]=a1*eta[i];
 ##   trtEff[i]=b0+b1*eta[i];
@@ -1851,31 +1844,31 @@ grade9 & -0.34 & -7.05 & *** & 0.03 & 0.44 &     \\
 ##          pairEffect[pair[i]]+useEff[i]+Z[i]*trtEff[i];
 ##   sigYI[i]=sigY[Z[i]+1];
 ##  }
-##
+## 
 ##  //priors
 ##  betaY~normal(0,2);
 ##  betaU~normal(0,2);
 ##  pairEffect~normal(0,2);
-##
+## 
 ##  a1~normal(0,1);
 ##  b0~normal(0,1);
 ##  b1~normal(0,1);
-##
-##
+## 
+## 
 ##  schoolEffY~normal(0,sigSclY);
 ##  schoolEffU~normal(0,sigSclU);
 ##  teacherEffU~normal(0,sigTchU);
 ##  teacherEffY~normal(0,sigTchY);
-##
+## 
 ##  hint~bernoulli_logit(linPred);
-##
+## 
 ##  eta~normal(muU+X*betaU,sigU);
 ##  Y~normal(muY+X*betaY,sigYI);
 ## }
 ## generated quantities{
 ## // int<lower=0,upper=1> hintRep[nsecWorked];
 ##  real Yrep[nstud];
-##
+## 
 ## // hintRep=bernoulli_logit_rng(linPred);
 ##  for(i in 1:nstud)
 ##   Yrep[i] = normal_rng(teacherEffY[teacher[i]]+schoolEffY[school[i]]+
