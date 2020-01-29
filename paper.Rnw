@@ -100,9 +100,7 @@ Algebra I \citep{anderson1985intelligent}.
 The study \citep{pane2014effectiveness} found no effects in its first year, but in
 the second year of implementation students in high schools randomized to
 the CTA1 condition outperformed the control group on the posttest by a fifth of a
-standard deviation.\footnote{\citep{pane2014effectiveness} only
-  reports results from the first two years of implementation; the
-  third year included only middle schools, not high schools.}
+standard deviation.
 
 Over the course of the CTA1 study, the software administrators
 gathered computer log data for students in the treatment group.
@@ -396,7 +394,7 @@ between students, but on average it is negative for the first two
 hints requested on a problem, but positive for the final hint.
 
 \subsection{Measuring Hint Usage in the CTA1 Data}
-\marginpar{make sure this makes sense before ``Data'' section}
+%\marginpar{make sure this makes sense before ``Data'' section}
 Unlike previous studies of hint usage, the CTA1 study was not designed
 to estimate the effect of hint usage; its purpose was to estimate the
 effect of CTA1 as a package, including the associated textbook and
@@ -915,7 +913,7 @@ both large negative effects as well as substantial positive
 effects.
 In fact, pretest is the most important of our observed covariates; it is the observed covariate whose omission would cause the most bias.
 This is unsurprising, since pretests are generally considered to be the most important covariate to measure, and studies that include pretest measures often reproduce experimental estimates \citep[e.g.][]{cook2008three,cook2009bias}.
-Therefore, a sensitivity analysis considering an omitted covariate as important as pretest scores may be too pessimistic. 
+Therefore, a sensitivity analysis considering an omitted covariate as important as pretest scores may be too pessimistic.
 Instead,
 the final column of Table \ref{tab:matchResults} gives sensitivity intervals for the omission of a covariate that, at most, predicts $Y$ and $H$ as well as ethnicity dummy variables, the second most important of our observed covariates.
 These sensitivity intervals are also wide, but the interval corresponding
@@ -1321,7 +1319,7 @@ conditionally normal:
  Y|\left(Z_i,\bm{x}_i,\bm{\theta},\eta(1)\right) \sim  \mathcal{N}\left(
 \gamma_{0b[i]}+\bm{x}_i^T\bm{\gamma}+a\eta(1)+Z_i\tau(\eta(1))+\zeta^{tch}_{t[i]}+\zeta^{scl}_{s[i]},\omega_{Z[i]}\right)
 \end{equation}
-where $\bamma_{0b[i]}$ is a fixed effect for $i$'s randomization block, $\bm{\gamma}$ are the
+where $\gamma_{0b[i]}$ is a fixed effect for $i$'s randomization block, $\bm{\gamma}$ are the
 covariate coefficients, and $\zeta^{tch}$, and
 $\zeta^{scl}$ are normally-distributed teacher and school random
 intercepts.
@@ -1495,7 +1493,7 @@ percentile score lower on the posttest, after controlling for observed
 covariates.
 As far as we can tell, the optimal strategy is to request few, if any, hints.
 While our estimate is subject to bias from an omitted confounder, the omitted variable must be a relatively strong predictor of hint usage and of posttest scores in order to explain the observed relationship.
-An omitted confounder that is as important as pretest could explain the relationship, but an omitted confounder as important as ethnicity---our second most important covariate---could not (so long as we estimate an OLS-weighted average effect). 
+An omitted confounder that is as important as pretest could explain the relationship, but an omitted confounder as important as ethnicity---our second most important covariate---could not (so long as we estimate an OLS-weighted average effect).
 
 Mediation analysis essentially interprets the observational study result in terms of the
 overall CTA1 treatment effect.
@@ -1619,16 +1617,16 @@ Second, our decision to dichotomize hint request rates in the observational stud
 Third, our decision to use a Rasch model to measure hint usage in the PS analysis accounted for differences between students in both the number and difficulty of worked CT problems.
 
 While questions of measurement has always been important in causal inference, analysis of EdTech log data brings them to the fore.
-Log datasets from technology products are large, multivariate, and complex, so careful thought is necessary in order to measure implementation constructs of interest. 
+Log datasets from technology products are large, multivariate, and complex, so careful thought is necessary in order to measure implementation constructs of interest.
 
-Even if they are motivated by methodological concerns, decisions about measurement are inherently also decisions about causal questions---estimates using different measurements answer different questions. 
+Even if they are motivated by methodological concerns, decisions about measurement are inherently also decisions about causal questions---estimates using different measurements answer different questions.
 Just as researchers must choose a causal approach, such as matching, mediation, or principal stratification, they must choose a measurement approach as well.
 As our case study demonstrated, these two decisions are deeply intertwined.
 
 The size, dimension, and complexity of EdTech log data suggests some exciting opportunities for innovative combinations of measurement and causal approaches.
 We demonstrated the inclusion of an IRT model in principal stratification; this suggests the possibility of including other measurement models into causal estimators.
 Multivariate measurement models that incorporate not only hint requests, but other usage measures such as time spent, actions taken, and errors could yield deep insights about how students use EdTech products and how different usage patterns correspond to different effects.
-The development of these causal models will require simultaneous consideration of causal inference and measurement. 
+The development of these causal models will require simultaneous consideration of causal inference and measurement.
 
 % \section*{Acknowledgments}
 % This material is based upon work supported by the National Science Foundation under Grant Number 1420374. Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.
