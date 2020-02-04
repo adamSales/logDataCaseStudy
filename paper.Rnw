@@ -311,11 +311,14 @@ model determines that they have mastered the requisite skills.
 Students using the Cognitive Tutor Algebra software work algebra
 problems on a computer.
 Each problem in the software is associated with a set of skills that
-the student must master, and a path (or set of paths) to solving the
-problem.
+the student must master in order to solve the problem.
+The software also specifies a ``solution path'' for each problem---a sequence
+of actions (such as ``multiply both sides of the equation by 3'')
+students must take in order to solve the problem.
+If there is more than one way to solve a problem, the software specifies
+multiple correct solution paths students may follow.
 As soon as a student errs in working through a problem---that is, departs from one of the
-solution paths---the
-software shows the student an error message.
+solution paths---the software shows the student an error message.
 This feedback is tailored to the specific mistake, and
 designed to guide the student back to a correct solution path.
 Similarly, when a student gets stuck, and is unable to determine the
@@ -379,7 +382,7 @@ immediate error messages were available, and one which did not provide
 feedback. Students in the feedback condition showed larger gains on a
 posttest, though it is unclear whether these gains were due to hints
 or error feedback.
-On the other hand, \citet{beck2008does} and \citet{goldin2012learner}, did not randomize hint
+\citet{beck2008does} and \citet{goldin2012learner}, did not randomize hint
 availability, but instead used statistical models to control for
 observed confounding.
 Both papers used students' subsequent performance within the tutor to
@@ -389,7 +392,7 @@ analytical methods to control for confounding.
 \citet{goldin2012learner} investigated two sources of heterogeneity in
 the effect of a hint request: by student and by the ``level'' of the
 hint (the first, second, or final hint available for a given problem).
-They found that, indeed, the effect of asking for a hint varies
+They found that the effect of asking for a hint varies
 between students, but on average it is negative for the first two
 hints requested on a problem, but positive for the final hint.
 
@@ -491,11 +494,12 @@ and 0 otherwise.
 To choose $c$, we first fit a modified Rasch mixture model
 \citep{rasch} to hint request data.
 Specifically, we modeled the probability of a hint request in each problem
-$p$, worked by student $i$, as
-\begin{equation*}\label{eq:rasch}
+$p$, worked by student $i$, in which $i$ requested a hint and/or
+committed an error, as 
+\begin{equation}\label{eq:rasch}
 Pr(h_{ip})=logit^{-1}(\eta_i+\delta_{s[p]})
-\end{equation*}
-where $h_{ip}$ is the event that student $i$ requests a hint on
+\end{equation} 
+where $h_{ip}$ is the event that student $i$ requests a hint on 
 problem $p$, $\eta_i$ is a student parameter, $\delta_{s[p]}$ is a
 section-level parameter for $s[p]$, the section that problem $p$ was
 drawn from, and $logit^{-1}(x)=\{1+exp(-x)\}^{-1}$ is the inverse logit
@@ -509,7 +513,7 @@ Instead, we included the section-level parameter $\delta_{s[p]}$,
 which measures the extent to which students tend to request hints on
 problems in section $s$.
 This essentially assumes that all problems within each section are equally
-likely to elicit a hint.
+likely to elicit a hint request.
 
 Then, in order to dichotomize hint request behavior, we modeled
 student effects $\eta$ as
