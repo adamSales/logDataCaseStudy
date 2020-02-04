@@ -104,13 +104,12 @@ standard deviation.
 
 Over the course of the CTA1 study, the software administrators
 gathered computer log data for students in the treatment group.
-They assembled a dataset that records which problems each student
+They assembled a dataset that recorded which problems each student
 worked, along with timestamps, the numbers of hints requested, and the
 number of errors committed for each problem.
-Log data from experiments like this present an unprecedented
-opportunity for education researchers:
-to use the fine-grained and rich data to
-help understand how, why, and when educational technology works.
+This log data is fine-grained and rich;
+education researchers could use it, and datasets like it,
+to gain insight into how, why, and when educational technology works.
 
 Along the same lines, log data presents a challenge, since it differs in
 structure and size from the type of data commonly encountered in
@@ -126,9 +125,11 @@ As educational technology booms, so do RCTs in the mold of the RAND
 CTA1 study. A recent systematic review \citep{escueta2017education} cites 29
 published reports of RCTs of ``computer assisted learning'' programs,
 all but one of which was published since 2001. We are aware of
-numerous other such RCTs planned or ongoing. The current case-study is
+numerous other such RCTs planned or ongoing. 
+These RCTs produce log data automatically, as a bi-product.
+The current case-study is
 about the use of hints in CTA1, but the huge variation in products
-under study, each with their own unique designs, opens a wide set of opportunities to understand how features of those
+under study, each with its own unique design, opens a wide set of opportunities to understand how features of those
 products drive their effects. As one example, RAND is recently
 completed an efficacy study of a different algebra tutoring system,
 ALEKS. When students begin working on a particular topic in ALEKS, the
@@ -138,11 +139,10 @@ the problems, more instructional material. Some students diligently
 read the initial instructional material while others skip it and dive
 directly into problem solving. Is skipping the material a productive
 strategy for students in terms of learning algebra, or should ALEKS be
-redesigned to prevent such skipping? Researchers should not stop at
-estimating overall average treatment effects, but make use of the
-wealth of log data that these RCTs produce automatically, as a
-bi-product. Our hope is that this paper can serve as a starting point
-for researchers interested in mining this rich resource.
+redesigned to prevent such skipping? %Researchers should not stop at
+%estimating overall average treatment effects, but 
+Our hope is that this paper can serve as a starting point
+for researchers interested in mining the rich resource of log data.
 
 This paper will illustrate three approaches to this type of research
 using log data from the CTA1 study---specifically, data on students' use
@@ -237,7 +237,7 @@ Figure \ref{mediationFig} is a schematic representation of the three
 approaches to causal modeling of log data that we will discuss in this
 paper.
 First, an observational study to estimate the effect of hint usage $H$
-on posttest scores $Y$, is represented by figure (a).
+on posttest scores $Y$, is represented by panel (a).
 This approach, which we will discuss in Section
 \ref{sec:observational}, discards the control group from the RCT and
 uses techniques from observational studies to determine if and how requesting
@@ -250,13 +250,13 @@ discussed in \citet{rosenbaum2002observational},
 The conceptual and methodological issues we will discuss extend to
 other covariate control methods as well.
 
-Next, as represented in Figure (b), we will conduct a mediation
+Next, as represented in panel (b), we will conduct a mediation
 analysis, estimating natural
 indirect effects of CTA1 treatment assignment $Z$, as mediated by
 $H$. That is, we will estimate the component of $Z$'s effect on $Y$ that comes about
 due to $Z$'s effect on $H$---path (1)---and $H$'s effect on $Y$, path
 (2).
-Notice that path (2) is identical to figure (a)---the effect of $H$ on
+Notice that path (2) is identical to panel (a)---the effect of $H$ on
 $Y$.
 We will use this equivalence to estimate and interpret indirect
 effects.
@@ -264,7 +264,7 @@ As part of the mediation analysis, we will also estimate path (3), the
 natural direct effect of $Z$ on $Y$---that is, the component of $Z$'s
 effect on $Y$ that is not due to hints $H$.
 
-Finally, we will estimate a principal stratification model, as represented in Figure
+Finally, we will estimate a principal stratification model, as represented in panel
 (c).
 In the principal stratification analysis, we do not model $H$ as an
 intervention that could, in theory, be randomized.
