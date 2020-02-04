@@ -125,7 +125,7 @@ As educational technology booms, so do RCTs in the mold of the RAND
 CTA1 study. A recent systematic review \citep{escueta2017education} cites 29
 published reports of RCTs of ``computer assisted learning'' programs,
 all but one of which was published since 2001. We are aware of
-numerous other such RCTs planned or ongoing. 
+numerous other such RCTs planned or ongoing.
 These RCTs produce log data automatically, as a bi-product.
 The current case-study is
 about the use of hints in CTA1, but the huge variation in products
@@ -140,7 +140,7 @@ read the initial instructional material while others skip it and dive
 directly into problem solving. Is skipping the material a productive
 strategy for students in terms of learning algebra, or should ALEKS be
 redesigned to prevent such skipping? %Researchers should not stop at
-%estimating overall average treatment effects, but 
+%estimating overall average treatment effects, but
 Our hope is that this paper can serve as a starting point
 for researchers interested in mining the rich resource of log data.
 
@@ -544,7 +544,7 @@ stratification analysis of Section \ref{sec:principalStratification}.
 \subsection{Data}\label{sec:data}
 
 \citep{pane2014effectiveness} estimated effects separately in middle
-schools and high schools in each the first two years of the RCT; the
+schools and high schools in each year of implementation; the
 only statistically significant treatment effect was in the high school
 sample in the second year.
 Since our goal was to better understand the CTA1
@@ -1359,7 +1359,7 @@ Eighty-eight percent of posterior draws of the slope of the
 $\hat{\tau}(\cdot)$ function were positive, implying a posterior
 probability of 0.88 that students who asked for hints
 with greater regularity benefited more from the CTA1 curriculum.
-The left hand panel plots one posterior draw of the $\bm{\eta(1)}$
+The right hand panel plots one posterior draw of $\eta(1)$
 alongside observed outcomes $Y$.
 The figure also includes estimated regression lines for the two
 treatment groups.
