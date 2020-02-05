@@ -958,7 +958,7 @@ Y(0,0);\;Y(1,0);\;Y(0,1);\;Y(1,1)
 representing the outcomes they would exhibit were they assigned to
 control and requested few hints, assigned to
 treatment and requested few hints, assigned to control and requested
-many hints, or assigned to treatment and requested many hints.
+many hints, or assigned to treatment and requested many hints, respectively.
 In the CTA1 trial, however, the potential outcome $Y(0,1)$ is
 meaningless: students in the control group had no access to CTA1, and
 therefore could not request hints.
@@ -1086,11 +1086,11 @@ CTA1 software was unavailable to the control group, $H(0)=0$ for all
 experimental participants, and $Y(1,H(0))\equiv Y(1,0)$.
 
 For treated subjects $i$ for whom $H_i=0$, then, treatment assignment
-did not affect $H$---$H_i(0)=H_i(1)=0$.
-In other words, for these subjects,
-\begin{equation*}
-Y_i(1,H(0))=Y_i(1,0)=Y_i(1,H(1))=Y_i
-\end{equation*}
+did not affect $H$, so $H_i(0)=H_i(1)=0$.
+%In other words, for these subjects,
+%\begin{equation*}
+%Y_i(1,H(0))=Y_i(1,0)=Y_i(1,H(1))=Y_i
+%\end{equation*}
 Therefore, when $Z_i=1$ and $H_i=0$,
 $\delta_i(1)=Y_i(1,H(1))-Y_i(1,H(0))=0$---there is no
 indirect effect.
@@ -1098,7 +1098,7 @@ indirect effect.
 Treated subjects with $H=1$ present more of a challenge.
 To estimate indirect effects for these subjects, we may rely on the
 same causal setup as in the observational approach:
-matched ignorability and the matching design of section
+matched ignorability and the matching design of Section
 \ref{sec:observational}.
 Each member of the treatment group with $H=1$ is matched to other
 treatment-group subjects with $H=0$.
@@ -1142,7 +1142,7 @@ Recall that the TOT effect is the average effect of $H$ on treatment
 group subjects with $H=1$.
 Both estimate contrast outcomes between $H=0$ and $H=1$, and both use
 data from only the treatment group.
-TOT is the average difference between the realized outcomes for students in
+TOT is the average difference between the realized outcomes for students
 with $Z=1$ and $H=1$, and their counterfactual outcomes were $Z=1$ and $H=0$.
 That is,
 \begin{equation*}
@@ -1166,7 +1166,7 @@ This can be re-written:
 &=\EE[Y(1,1)-Y(1,0)|Z=1,H=1]Pr(H=1)\\
 &=Pr(H=1)TOT
 \end{align*}
-Since $Pr(H=1)=$\Sexpr{round(mixProp,2)},
+Since $Pr(H=1)=$\Sexpr{round(mixProp,2)} by definition,
 $\hat{\Delta}=$\Sexpr{round(mixProp,2)}$TOT$.
 Estimated thusly, the indirect effect is negative: \Sexpr{round(effects[['tot_eff']][['coefficients']]*(mixProp),2)}, with
 a standard error of \Sexpr{round(effects$tot_eff$std.error*(mixProp),2)}.
@@ -1174,7 +1174,7 @@ This analysis suggests that the availability of hints
 actually \emph{lowers} the treatment effect, that CTA1 works not
 because of hints, but despite them.
 
-What would the effect be without hints?
+What would the effect be were all students to request few hints?
 To answer that question, we estimate ``direct'' effects,
 $\Xi=\EE[\xi(1)]=\EE[Y(1,H(0))]-\EE[Y(0,H(0))]$.
 Like indirect effects, this expression includes the average potential
@@ -1242,7 +1242,7 @@ problems students worked---in particular, its extreme values belong to
 those students who barely used the tutor at all.
 Further, it does not account for varying difficulty of the tutor's
 problems.
-In section \ref{sec:dichotomizingHintUsage}, we showed that
+In Section \ref{sec:dichotomizingHintUsage}, we showed that
 dichotomized $\bar{h}$ largely agrees with a dichotomized version of a
 more sophisticated measure of hint usage.
 However, when modeling hint usage continuously, the correspondence may
