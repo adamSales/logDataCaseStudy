@@ -495,11 +495,11 @@ To choose $c$, we first fit a modified Rasch mixture model
 \citep{rasch} to hint request data.
 Specifically, we modeled the probability of a hint request in each problem
 $p$, worked by student $i$, in which $i$ requested a hint and/or
-committed an error, as 
+committed an error, as
 \begin{equation}\label{eq:rasch}
 Pr(h_{ip})=logit^{-1}(\eta_i+\delta_{s[p]})
-\end{equation} 
-where $h_{ip}$ is the event that student $i$ requests a hint on 
+\end{equation}
+where $h_{ip}$ is the event that student $i$ requests a hint on
 problem $p$, $\eta_i$ is a student parameter, $\delta_{s[p]}$ is a
 section-level parameter for $s[p]$, the section that problem $p$ was
 drawn from, and $logit^{-1}(x)=\{1+exp(-x)\}^{-1}$ is the inverse logit
@@ -655,8 +655,8 @@ However, if these relevant characteristics were all measured and
 available, the ATE of $H$ on $Y$ would be identified.
 
 Let $\bm{x}_i$ represent a vector of baseline covariates for subject $i$.
-In our study of hints, $\bm{x}$ includes indicators for state, school
-id, class id, and the variables described in Table \ref{tab:covariateBalance}.
+In our study of hints, $\bm{x}$ includes indicators for state, school,
+and classroom, and the variables described in Table \ref{tab:covariateBalance}.
 Then we assume \citep[c.f.][]{rosenbaum1983central}:
 \begin{ass}{Strong Ignorability}
 \begin{equation*}
@@ -685,11 +685,12 @@ The propensity score model was:
 \begin{equation*}
 \pi_i=logit^{-1}(\alpha+\bm{\tilde{x}}\bm{\beta}+\epsilon^{state}+\epsilon^{school}+\epsilon^{class})
 \end{equation*}
-where $\bm{\tilde{x}}$ is the $\bm{x}$ vector excluding indicators for
-state, school, and class, which were each included using random
-intercepts modeled as normally distributed, including missingness
+where $\bm{\tilde{x}}$ is a vector of covariates including the
+variables in Table \ref{tab:covariateBalance}, missingness
 indicators for grade, race, sex, and economic disadvantage, and
 a natural spline with five degrees of freedom for pretest.
+State, school, and class, were each included using normally
+distributed random intercepts.
 
 We constructed an optimal full matching design \citep{hansen2004} to
 condition on estimated propensity scores $\hat{\pi}$ using the
@@ -735,7 +736,7 @@ match \citep[c.f.][]{rebar}:
 % assuming matched ignorability, we imagine a randomized trial in which
 % members of the CTA1 group were divided into strata defined by $m$, and
 % randomized to $H=1$ or $H=0$ within those strata.
-Under matched ignorability, the mean of the outcomes between $H=1$ and
+Under matched ignorability, the difference of mean outcomes between $H=1$ and
 $H=0$ students within each match is unbiased for the average treatment
 effect for students in that match.
 In other words, if $\tau_m=\overline{Y(H=1)}-\overline{Y(H=0)}$ is the
@@ -754,10 +755,10 @@ treatment effects in the sample.
 To estimate the average effect of $H$ for all subjects, set $w_m=
 n_{1m}+n_{0m}$, where $n_{1m}$ and $n_{0m}$ are the number of
 $H=1$ and $H=0$ subjects in match $m$, respectively.
-Alternatively, setting $w_m=n_{1m}$ estimates the average effect of
-$H$ on those subjects for whom $H=1$---the ``treatment on the
-treated,'' or TOT, effect.
-Weights $w_m=(1/n_{1m}+1/n_{0m})^{-1}$, the harmonic mean  are ``OLS'' or
+Alternatively, setting $w_m=n_{1m}$ estimates the the ``treatment on the
+treated,'' or TOT, effect---the average effect of
+$H$ on those subjects for whom $H=1$.
+Weights $w_m=(1/n_{1m}+1/n_{0m})^{-1}$ are ``OLS'' or
 ``precision'' \citep[c.f.][]{schochet2015statistical}; the
 estimate using these weights is equal to the coefficient on $H$ from
 an ordinary least squares (OLS) regression of $Y$ on $H$ and a set of dummy
@@ -790,20 +791,25 @@ Table \ref{tab:matchResults} gives treatment effect estimates,
 standard errors, and confidence intervals under these three weighting
 schemes.
 All three sets of standard errors
-and confidence intervals used the heteroskedasticity-robust ``HC3'' sandwich estimator,
-\citealt{sandwichPackage}.
+and confidence intervals used the heteroskedasticity-robust ``HC3'' sandwich estimator
+\citep{sandwichPackage}.
 The three estimates all roughly agree that being a high hint user
 decreases posttest scores by roughly a fifth of a standard deviation.
 That is, requesting hints hurts posttest scores---teachers should
 recommend against students' requesting hints.
 
 The similarity of the three estimates boosts our confidence, if only
-slightly. The ``ATE'' and ``TOT'' estimates refer to different groups
+slightly. The ATE and TOT estimates refer to different groups
 of students---ATE estimates an average effect for the entire treatment
 group, whereas TOT estimates an effect for high hint users. Had these
 been very different, we might wonder why the effect of hint requests
 varies so much between high and low hint users, and if that suggests
 selection bias.
+The OLS estimate downweights matched sets with many more $H=1$ than
+$H=0$ students or vice-versa, relative to matched sets with several of
+both.
+It is larger in magnitude and much less noisy than the other two
+estimates.
 % The fact that the additional covariate adjustment of the ANCOVA model
 % made little difference in the effect estimate suggests that the
 % propensity score match eliminated all or most of the confounding bias due to
@@ -909,7 +915,7 @@ t-statistic from an ordinary least squares regression of $H$ on $U$, along with 
 These sensitivity parameters may be benchmarked by estimating their
 counterparts when observed covariates are left out of the model.
 
-The last two columns of table \ref{tab:matchResults} give sensitivity intervals for each of the three weighted average treatment effects.
+The last two columns of Table \ref{tab:matchResults} give sensitivity intervals for each of the three weighted average treatment effects.
 The column of Table \ref{tab:matchResults} labeled ``[Pretest]''
 accounts for the possible omission of a covariate $U$ that, at most, predicts $Y$ and $H$ as well as do pretest scores.
 The resulting sensitivity intervals are quite wide, including
