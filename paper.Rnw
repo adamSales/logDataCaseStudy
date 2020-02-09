@@ -167,7 +167,7 @@ A rich, and often polemic, literature surrounds principal
 stratification and mediation analysis
 \citep[e.g.][]{rubin2004direct,vanderweele2011principal,pearl2011principal,mealli2012refreshing,vanderweele2012comments}.
 \citet{vanderweele2008simple}, \citet{jo2008causal} and others have
-derived formal equivalencies between parameters under certain
+derived formal equivalences between parameters under certain
 conditions.
 Our contribution will build on this literature in two ways: first, by
 providing a detailed demonstration and comparison of matching, mediation analysis,
@@ -1059,7 +1059,7 @@ status.
 Of course, in our example treatment mediator interactions are not
 identified, since $H=0$ and $\bar{h}=0$ in the control group, and very
 few treatment students asked for 0 hints.
-In any event, dichotomizing hint requests likely undersells the role
+In any event, dichotomizing hint requests likely under-sells the role
 of hints, but allows a tractable mediation analysis.
 
 In principle, effects $\delta(1)$ and $\xi(0)$ are defined at the
@@ -1222,15 +1222,21 @@ effects'':
 \end{equation*}
 This is the treatment effect for subjects who \emph{would} request
 hints at level $\bar{h}(1)=r$, if assigned to the treatment condition.
-Whereas the focus of the observational study and mediation
+Whereas the goal of the observational study and mediation
 analysis was the relationship between $\bar{h}$ and posttest scores, the
-focus of PS is the relationship between $\bar{h}$ and treatment effects.
-Estimating $\tau(r)$ requires estimating $\EE[Y(0)|\bar{h}(1)=r]$,
-despite the fact that $\bar{h}(1)$ is never observed at the same time as
-$Y(0)$. Note that despite this fact, $\tau(r)$ does not depend on
-strictly counterfactual quantities, as in mediation analysis.
-$\bar{h}(1)$ is defined for subjects in both randomized groups, but only
-observed in the treatment group.
+goal of PS is the relationship between $\bar{h}(1)$ and treatment effects.
+Notably, although $Y(0)$ and $\bar{h}(1)$ and $Y(0)$ are never
+simultaneously observed, the $\tau(r)$ estimand does not depend on any
+strictly-counterfactual outcomes.
+Unlike, say, $Y(0,H(1))$, $Y(0)$ and $Y(1)$ are each truly
+potential---they would each occur under treatment assignments $Z=0$
+and $Z=1$.
+That said, estimating $\tau(r)$ requires estimation of
+$\EE[Y(0)|\bar{h}(1)]$, the average of $Y(0)$ over a subset of the
+sample that is unobserved and must be inferred.
+For this reason, $\tau(r)$ is only \emph{partially} identified
+\citep[e.g.][]{mealli2016identification}; even with an infinite
+sample, principal effect estimates will still contain uncertainty.
 
 In previous sections $\bar{h}$ was dichotomized into $H$; such
 dichotomization is not necessary here.
@@ -1246,7 +1252,7 @@ In Section \ref{sec:dichotomizingHintUsage}, we showed that
 dichotomized $\bar{h}$ largely agrees with a dichotomized version of a
 more sophisticated measure of hint usage.
 However, when modeling hint usage continuously, the correspondence may
-not hold \citet[see][for a more complete discussion]{aoas}.
+not hold \citep[see][for a more complete discussion]{aoas}.
 
 For those reasons, we modeled hint usage at the problem level, with
 equation \eqref{eq:rasch}, but with two important differences.
@@ -1256,20 +1262,29 @@ replaced by $\eta (1)$, indicating that it is measuring
 were he or she assigned to the treatment condition.
 Whereas $\eta$ is only defined for students assigned to the treatment condition,
 $\eta(1)$ is defined for all the students in the study.
-Second, a modeling difference: since we are not dichotomizing $\eta(1)$
-in this analysis, we did not model it as a normal mixture, as in
+Second, a modeling difference: since we did not dichotomize $\eta(1)$
+in this analysis, we modeled it as normal , not as a normal mixture, as in
 \eqref{eq:mixture}.
-
-We incorporated the model for hint requests, (\ref{eq:rasch}), into
-the principal stratification model, replacing $\eta(1)$ for
-$\bar{h}(1)$.
-Then, the principal stratification estimand is
+With this change, the principal stratification estimand became
 \begin{equation*}
 \tau(r)=\EE[Y(1)-Y(0)|\eta(1)=r]
 \end{equation*}
+the treatment effect for students whose potential hint usage, if assigned to the treatment condition $\eta(1)=r$.
 A full treatment of this variant of principal stratification, including a
 discussion of identification and estimation, may be found in
 \citet{aoas}.
+
+
+
+\subsection{Identification and Estimation}
+Estimating $\tau(r)$ required estimating $\EE[Y(0)|\eta(1)=r]$,
+despite the fact that hint requests never observed at the same time as
+$Y(0)$ (in fact $\eta(1)$ isn't directly observed in either the
+treatment or control group).
+However, hint requests are observed, and the conditional distribution
+$\eta(1)|\bm{x}$ is identified, among those students with $Z=1$;
+because of randomization of $Z$, these inferences extend to the
+control group as well.
 
 Our approach to PS estimation is model-based and Bayesian, following
 \citet{page2012principal}, \citet{feller2016compared},
@@ -1302,8 +1317,6 @@ Unlike in typical PS setups, $\eta(1)$ is unobserved for both $Z=1$
 and $Z=0$ treatment groups, but is estimated using both $\bm{h}$ and
 $\bm{x}$ in the treatment group, but only $\bm{x}$ in the control
 group.
-
-\subsection{Identification and Estimation}
 
 First, students' proclivity to request hints is measured by the $\eta$
 parameter in (\ref{eq:rasch}).
@@ -1360,9 +1373,9 @@ In all cases, we expected true parameter values to be much smaller in
 magnitude than the prior standard deviation.
 
 Figure \ref{fig:psResults} shows the estimated linear function
-$\hat{\tau}{\eta(0)}$.
+$\hat{\tau}(r)$.
 The left panel shows the CTA1 treatment effect, $Y(1)-Y(0)$ as
-$\tau(1)$ varies; the black line shows the estimate (i.e. posterior
+$r=\tau(1)$ varies; the black line shows the estimate (i.e. posterior
 mean) and the red lines are random draws from the posterior
 distribution, showing estimation uncertainty.
 Eighty-eight percent of posterior draws of the slope of the
@@ -1391,6 +1404,11 @@ which grows with $\eta(1)$.
 \label{fig:psResults}
 \end{figure}
 
+These results suggest that students who, if assigned to the treatment
+condition, would be more likely to request hints on challenging
+problems, tend to experience higher treatment effects.
+That is, it suggests that frequent hint requesters benefit more from
+assignment to the CTA1 condition than infrequent hint requesters.
 
 \section{Comparing Strategies}\label{sec:synthesis}
 The goals, assumptions, and processes of matching, mediation analysis,
@@ -1454,7 +1472,7 @@ Our approach of dichotomizing hint request behavior as $H$ provides a
 way forward, at the cost of ignoring information that could be gleaned
 from more continuous measures of hint requests.
 
-In contrast, no ignorabilty assumptions are necessary for principal
+In contrast, no ignorability assumptions are necessary for principal
 stratification.
 % That said, an assumption similar to ignorability may play an important
 % role for interpretation.

@@ -144,13 +144,12 @@ standard deviation.
 
 Over the course of the CTA1 study, the software administrators
 gathered computer log data for students in the treatment group.
-They assembled a dataset that records which problems each student
+They assembled a dataset that recorded which problems each student
 worked, along with timestamps, the numbers of hints requested, and the
 number of errors committed for each problem.
-Log data from experiments like this present an unprecedented
-opportunity for education researchers:
-to use the fine-grained and rich data to
-help understand how, why, and when educational technology works.
+This log data is fine-grained and rich;
+education researchers could use it, and datasets like it,
+to gain insight into how, why, and when educational technology works.
 
 Along the same lines, log data presents a challenge, since it differs in
 structure and size from the type of data commonly encountered in
@@ -166,9 +165,11 @@ As educational technology booms, so do RCTs in the mold of the RAND
 CTA1 study. A recent systematic review \citep{escueta2017education} cites 29
 published reports of RCTs of ``computer assisted learning'' programs,
 all but one of which was published since 2001. We are aware of
-numerous other such RCTs planned or ongoing. The current case-study is
+numerous other such RCTs planned or ongoing.
+These RCTs produce log data automatically, as a bi-product.
+The current case-study is
 about the use of hints in CTA1, but the huge variation in products
-under study, each with their own unique designs, opens a wide set of opportunities to understand how features of those
+under study, each with its own unique design, opens a wide set of opportunities to understand how features of those
 products drive their effects. As one example, RAND is recently
 completed an efficacy study of a different algebra tutoring system,
 ALEKS. When students begin working on a particular topic in ALEKS, the
@@ -178,11 +179,10 @@ the problems, more instructional material. Some students diligently
 read the initial instructional material while others skip it and dive
 directly into problem solving. Is skipping the material a productive
 strategy for students in terms of learning algebra, or should ALEKS be
-redesigned to prevent such skipping? Researchers should not stop at
-estimating overall average treatment effects, but make use of the
-wealth of log data that these RCTs produce automatically, as a
-bi-product. Our hope is that this paper can serve as a starting point
-for researchers interested in mining this rich resource.
+redesigned to prevent such skipping? %Researchers should not stop at
+%estimating overall average treatment effects, but
+Our hope is that this paper can serve as a starting point
+for researchers interested in mining the rich resource of log data.
 
 This paper will illustrate three approaches to this type of research
 using log data from the CTA1 study---specifically, data on students' use
@@ -207,7 +207,7 @@ A rich, and often polemic, literature surrounds principal
 stratification and mediation analysis
 \citep[e.g.][]{rubin2004direct,vanderweele2011principal,pearl2011principal,mealli2012refreshing,vanderweele2012comments}.
 \citet{vanderweele2008simple}, \citet{jo2008causal} and others have
-derived formal equivalencies between parameters under certain
+derived formal equivalences between parameters under certain
 conditions.
 Our contribution will build on this literature in two ways: first, by
 providing a detailed demonstration and comparison of matching, mediation analysis,
@@ -277,7 +277,7 @@ Figure \ref{mediationFig} is a schematic representation of the three
 approaches to causal modeling of log data that we will discuss in this
 paper.
 First, an observational study to estimate the effect of hint usage $H$
-on posttest scores $Y$, is represented by figure (a).
+on posttest scores $Y$, is represented by panel (a).
 This approach, which we will discuss in Section
 \ref{sec:observational}, discards the control group from the RCT and
 uses techniques from observational studies to determine if and how requesting
@@ -290,13 +290,13 @@ discussed in \citet{rosenbaum2002observational},
 The conceptual and methodological issues we will discuss extend to
 other covariate control methods as well.
 
-Next, as represented in Figure (b), we will conduct a mediation
+Next, as represented in panel (b), we will conduct a mediation
 analysis, estimating natural
 indirect effects of CTA1 treatment assignment $Z$, as mediated by
 $H$. That is, we will estimate the component of $Z$'s effect on $Y$ that comes about
 due to $Z$'s effect on $H$---path (1)---and $H$'s effect on $Y$, path
 (2).
-Notice that path (2) is identical to figure (a)---the effect of $H$ on
+Notice that path (2) is identical to panel (a)---the effect of $H$ on
 $Y$.
 We will use this equivalence to estimate and interpret indirect
 effects.
@@ -304,7 +304,7 @@ As part of the mediation analysis, we will also estimate path (3), the
 natural direct effect of $Z$ on $Y$---that is, the component of $Z$'s
 effect on $Y$ that is not due to hints $H$.
 
-Finally, we will estimate a principal stratification model, as represented in Figure
+Finally, we will estimate a principal stratification model, as represented in panel
 (c).
 In the principal stratification analysis, we do not model $H$ as an
 intervention that could, in theory, be randomized.
@@ -351,11 +351,14 @@ model determines that they have mastered the requisite skills.
 Students using the Cognitive Tutor Algebra software work algebra
 problems on a computer.
 Each problem in the software is associated with a set of skills that
-the student must master, and a path (or set of paths) to solving the
-problem.
+the student must master in order to solve the problem.
+The software also specifies a ``solution path'' for each problem---a sequence
+of actions (such as ``multiply both sides of the equation by 3'')
+students must take in order to solve the problem.
+If there is more than one way to solve a problem, the software specifies
+multiple correct solution paths students may follow.
 As soon as a student errs in working through a problem---that is, departs from one of the
-solution paths---the
-software shows the student an error message.
+solution paths---the software shows the student an error message.
 This feedback is tailored to the specific mistake, and
 designed to guide the student back to a correct solution path.
 Similarly, when a student gets stuck, and is unable to determine the
@@ -419,7 +422,7 @@ immediate error messages were available, and one which did not provide
 feedback. Students in the feedback condition showed larger gains on a
 posttest, though it is unclear whether these gains were due to hints
 or error feedback.
-On the other hand, \citet{beck2008does} and \citet{goldin2012learner}, did not randomize hint
+\citet{beck2008does} and \citet{goldin2012learner}, did not randomize hint
 availability, but instead used statistical models to control for
 observed confounding.
 Both papers used students' subsequent performance within the tutor to
@@ -429,7 +432,7 @@ analytical methods to control for confounding.
 \citet{goldin2012learner} investigated two sources of heterogeneity in
 the effect of a hint request: by student and by the ``level'' of the
 hint (the first, second, or final hint available for a given problem).
-They found that, indeed, the effect of asking for a hint varies
+They found that the effect of asking for a hint varies
 between students, but on average it is negative for the first two
 hints requested on a problem, but positive for the final hint.
 
@@ -531,10 +534,11 @@ and 0 otherwise.
 To choose $c$, we first fit a modified Rasch mixture model
 \citep{rasch} to hint request data.
 Specifically, we modeled the probability of a hint request in each problem
-$p$, worked by student $i$, as
-\begin{equation*}\label{eq:rasch}
+$p$, worked by student $i$, in which $i$ requested a hint and/or
+committed an error, as
+\begin{equation}\label{eq:rasch}
 Pr(h_{ip})=logit^{-1}(\eta_i+\delta_{s[p]})
-\end{equation*}
+\end{equation}
 where $h_{ip}$ is the event that student $i$ requests a hint on
 problem $p$, $\eta_i$ is a student parameter, $\delta_{s[p]}$ is a
 section-level parameter for $s[p]$, the section that problem $p$ was
@@ -549,7 +553,7 @@ Instead, we included the section-level parameter $\delta_{s[p]}$,
 which measures the extent to which students tend to request hints on
 problems in section $s$.
 This essentially assumes that all problems within each section are equally
-likely to elicit a hint.
+likely to elicit a hint request.
 
 Then, in order to dichotomize hint request behavior, we modeled
 student effects $\eta$ as
@@ -584,7 +588,7 @@ stratification analysis of Section \ref{sec:principalStratification}.
 \subsection{Data}\label{sec:data}
 
 \citep{pane2014effectiveness} estimated effects separately in middle
-schools and high schools in each the first two years of the RCT; the
+schools and high schools in each year of implementation; the
 only statistically significant treatment effect was in the high school
 sample in the second year.
 Since our goal was to better understand the CTA1
@@ -691,8 +695,8 @@ However, if these relevant characteristics were all measured and
 available, the ATE of $H$ on $Y$ would be identified.
 
 Let $\bm{x}_i$ represent a vector of baseline covariates for subject $i$.
-In our study of hints, $\bm{x}$ includes indicators for state, school
-id, class id, and the variables described in Table \ref{tab:covariateBalance}.
+In our study of hints, $\bm{x}$ includes indicators for state, school,
+and classroom, and the variables described in Table \ref{tab:covariateBalance}.
 Then we assume \citep[c.f.][]{rosenbaum1983central}:
 \begin{ass}{Strong Ignorability}
 \begin{equation*}
@@ -721,11 +725,12 @@ The propensity score model was:
 \begin{equation*}
 \pi_i=logit^{-1}(\alpha+\bm{\tilde{x}}\bm{\beta}+\epsilon^{state}+\epsilon^{school}+\epsilon^{class})
 \end{equation*}
-where $\bm{\tilde{x}}$ is the $\bm{x}$ vector excluding indicators for
-state, school, and class, which were each included using random
-intercepts modeled as normally distributed, including missingness
+where $\bm{\tilde{x}}$ is a vector of covariates including the
+variables in Table \ref{tab:covariateBalance}, missingness
 indicators for grade, race, sex, and economic disadvantage, and
 a natural spline with five degrees of freedom for pretest.
+State, school, and class, were each included using normally
+distributed random intercepts.
 
 We constructed an optimal full matching design \citep{hansen2004} to
 condition on estimated propensity scores $\hat{\pi}$ using the
@@ -771,7 +776,7 @@ match \citep[c.f.][]{rebar}:
 % assuming matched ignorability, we imagine a randomized trial in which
 % members of the CTA1 group were divided into strata defined by $m$, and
 % randomized to $H=1$ or $H=0$ within those strata.
-Under matched ignorability, the mean of the outcomes between $H=1$ and
+Under matched ignorability, the difference of mean outcomes between $H=1$ and
 $H=0$ students within each match is unbiased for the average treatment
 effect for students in that match.
 In other words, if $\tau_m=\overline{Y(H=1)}-\overline{Y(H=0)}$ is the
@@ -790,10 +795,10 @@ treatment effects in the sample.
 To estimate the average effect of $H$ for all subjects, set $w_m=
 n_{1m}+n_{0m}$, where $n_{1m}$ and $n_{0m}$ are the number of
 $H=1$ and $H=0$ subjects in match $m$, respectively.
-Alternatively, setting $w_m=n_{1m}$ estimates the average effect of
-$H$ on those subjects for whom $H=1$---the ``treatment on the
-treated,'' or TOT, effect.
-Weights $w_m=(1/n_{1m}+1/n_{0m})^{-1}$, the harmonic mean  are ``OLS'' or
+Alternatively, setting $w_m=n_{1m}$ estimates the the ``treatment on the
+treated,'' or TOT, effect---the average effect of
+$H$ on those subjects for whom $H=1$.
+Weights $w_m=(1/n_{1m}+1/n_{0m})^{-1}$ are ``OLS'' or
 ``precision'' \citep[c.f.][]{schochet2015statistical}; the
 estimate using these weights is equal to the coefficient on $H$ from
 an ordinary least squares (OLS) regression of $Y$ on $H$ and a set of dummy
@@ -826,27 +831,32 @@ Table \ref{tab:matchResults} gives treatment effect estimates,
 standard errors, and confidence intervals under these three weighting
 schemes.
 All three sets of standard errors
-and confidence intervals used the heteroskedasticity-robust ``HC3'' sandwich estimator,
-\citealt{sandwichPackage}.
+and confidence intervals used the heteroskedasticity-robust ``HC3'' sandwich estimator
+\citep{sandwichPackage}.
 The three estimates all roughly agree that being a high hint user
 decreases posttest scores by roughly a fifth of a standard deviation.
 That is, requesting hints hurts posttest scores---teachers should
 recommend against students' requesting hints.
 
 The similarity of the three estimates boosts our confidence, if only
-slightly. The ``ATE'' and ``TOT'' estimates refer to different groups
+slightly. The ATE and TOT estimates refer to different groups
 of students---ATE estimates an average effect for the entire treatment
 group, whereas TOT estimates an effect for high hint users. Had these
 been very different, we might wonder why the effect of hint requests
 varies so much between high and low hint users, and if that suggests
 selection bias.
+The OLS estimate downweights matched sets with many more $H=1$ than
+$H=0$ students or vice-versa, relative to matched sets with several of
+both.
+It is larger in magnitude and much less noisy than the other two
+estimates.
 % The fact that the additional covariate adjustment of the ANCOVA model
 % made little difference in the effect estimate suggests that the
 % propensity score match eliminated all or most of the confounding bias due to
 % measured covariates; hence, additional adjustment was unnecessary.
 
 % latex table generated in R 3.6.2 by xtable 1.8-4 package
-% Wed Jan 29 14:36:34 2020
+% Sun Feb  9 15:15:44 2020
 \begin{table}[ht]
 \centering
 \begin{tabular}{rllccc}
@@ -908,7 +918,7 @@ t-statistic from an ordinary least squares regression of $H$ on $U$, along with 
 These sensitivity parameters may be benchmarked by estimating their
 counterparts when observed covariates are left out of the model.
 
-The last two columns of table \ref{tab:matchResults} give sensitivity intervals for each of the three weighted average treatment effects.
+The last two columns of Table \ref{tab:matchResults} give sensitivity intervals for each of the three weighted average treatment effects.
 The column of Table \ref{tab:matchResults} labeled ``[Pretest]''
 accounts for the possible omission of a covariate $U$ that, at most, predicts $Y$ and $H$ as well as do pretest scores.
 The resulting sensitivity intervals are quite wide, including
@@ -951,7 +961,7 @@ Y(0,0);\;Y(1,0);\;Y(0,1);\;Y(1,1)
 representing the outcomes they would exhibit were they assigned to
 control and requested few hints, assigned to
 treatment and requested few hints, assigned to control and requested
-many hints, or assigned to treatment and requested many hints.
+many hints, or assigned to treatment and requested many hints, respectively.
 In the CTA1 trial, however, the potential outcome $Y(0,1)$ is
 meaningless: students in the control group had no access to CTA1, and
 therefore could not request hints.
@@ -1052,7 +1062,7 @@ status.
 Of course, in our example treatment mediator interactions are not
 identified, since $H=0$ and $\bar{h}=0$ in the control group, and very
 few treatment students asked for 0 hints.
-In any event, dichotomizing hint requests likely undersells the role
+In any event, dichotomizing hint requests likely under-sells the role
 of hints, but allows a tractable mediation analysis.
 
 In principle, effects $\delta(1)$ and $\xi(0)$ are defined at the
@@ -1079,11 +1089,11 @@ CTA1 software was unavailable to the control group, $H(0)=0$ for all
 experimental participants, and $Y(1,H(0))\equiv Y(1,0)$.
 
 For treated subjects $i$ for whom $H_i=0$, then, treatment assignment
-did not affect $H$---$H_i(0)=H_i(1)=0$.
-In other words, for these subjects,
-\begin{equation*}
-Y_i(1,H(0))=Y_i(1,0)=Y_i(1,H(1))=Y_i
-\end{equation*}
+did not affect $H$, so $H_i(0)=H_i(1)=0$.
+%In other words, for these subjects,
+%\begin{equation*}
+%Y_i(1,H(0))=Y_i(1,0)=Y_i(1,H(1))=Y_i
+%\end{equation*}
 Therefore, when $Z_i=1$ and $H_i=0$,
 $\delta_i(1)=Y_i(1,H(1))-Y_i(1,H(0))=0$---there is no
 indirect effect.
@@ -1091,7 +1101,7 @@ indirect effect.
 Treated subjects with $H=1$ present more of a challenge.
 To estimate indirect effects for these subjects, we may rely on the
 same causal setup as in the observational approach:
-matched ignorability and the matching design of section
+matched ignorability and the matching design of Section
 \ref{sec:observational}.
 Each member of the treatment group with $H=1$ is matched to other
 treatment-group subjects with $H=0$.
@@ -1135,7 +1145,7 @@ Recall that the TOT effect is the average effect of $H$ on treatment
 group subjects with $H=1$.
 Both estimate contrast outcomes between $H=0$ and $H=1$, and both use
 data from only the treatment group.
-TOT is the average difference between the realized outcomes for students in
+TOT is the average difference between the realized outcomes for students
 with $Z=1$ and $H=1$, and their counterfactual outcomes were $Z=1$ and $H=0$.
 That is,
 \begin{equation*}
@@ -1159,7 +1169,7 @@ This can be re-written:
 &=\EE[Y(1,1)-Y(1,0)|Z=1,H=1]Pr(H=1)\\
 &=Pr(H=1)TOT
 \end{align*}
-Since $Pr(H=1)=$0.3,
+Since $Pr(H=1)=$0.3 by definition,
 $\hat{\Delta}=$0.3$TOT$.
 Estimated thusly, the indirect effect is negative: -0.04, with
 a standard error of 0.02.
@@ -1167,7 +1177,7 @@ This analysis suggests that the availability of hints
 actually \emph{lowers} the treatment effect, that CTA1 works not
 because of hints, but despite them.
 
-What would the effect be without hints?
+What would the effect be were all students to request few hints?
 To answer that question, we estimate ``direct'' effects,
 $\Xi=\EE[\xi(1)]=\EE[Y(1,H(0))]-\EE[Y(0,H(0))]$.
 Like indirect effects, this expression includes the average potential
@@ -1215,15 +1225,21 @@ effects'':
 \end{equation*}
 This is the treatment effect for subjects who \emph{would} request
 hints at level $\bar{h}(1)=r$, if assigned to the treatment condition.
-Whereas the focus of the observational study and mediation
+Whereas the goal of the observational study and mediation
 analysis was the relationship between $\bar{h}$ and posttest scores, the
-focus of PS is the relationship between $\bar{h}$ and treatment effects.
-Estimating $\tau(r)$ requires estimating $\EE[Y(0)|\bar{h}(1)=r]$,
-despite the fact that $\bar{h}(1)$ is never observed at the same time as
-$Y(0)$. Note that despite this fact, $\tau(r)$ does not depend on
-strictly counterfactual quantities, as in mediation analysis.
-$\bar{h}(1)$ is defined for subjects in both randomized groups, but only
-observed in the treatment group.
+goal of PS is the relationship between $\bar{h}(1)$ and treatment effects.
+Notably, although $Y(0)$ and $\bar{h}(1)$ and $Y(0)$ are never
+simultaneously observed, the $\tau(r)$ estimand does not depend on any
+strictly-counterfactual outcomes.
+Unlike, say, $Y(0,H(1))$, $Y(0)$ and $Y(1)$ are each truly
+potential---they would each occur under treatment assignments $Z=0$
+and $Z=1$.
+That said, estimating $\tau(r)$ requires estimation of
+$\EE[Y(0)|\bar{h}(1)]$, the average of $Y(0)$ over a subset of the
+sample that is unobserved and must be inferred.
+For this reason, $\tau(r)$ is only \emph{partially} identified
+\citep[e.g.][]{mealli2016identification}; even with an infinite
+sample, principal effect estimates will still contain uncertainty.
 
 In previous sections $\bar{h}$ was dichotomized into $H$; such
 dichotomization is not necessary here.
@@ -1235,11 +1251,11 @@ problems students worked---in particular, its extreme values belong to
 those students who barely used the tutor at all.
 Further, it does not account for varying difficulty of the tutor's
 problems.
-In section \ref{sec:dichotomizingHintUsage}, we showed that
+In Section \ref{sec:dichotomizingHintUsage}, we showed that
 dichotomized $\bar{h}$ largely agrees with a dichotomized version of a
 more sophisticated measure of hint usage.
 However, when modeling hint usage continuously, the correspondence may
-not hold \citet[see][for a more complete discussion]{aoas}.
+not hold \citep[see][for a more complete discussion]{aoas}.
 
 For those reasons, we modeled hint usage at the problem level, with
 equation \eqref{eq:rasch}, but with two important differences.
@@ -1249,20 +1265,29 @@ replaced by $\eta (1)$, indicating that it is measuring
 were he or she assigned to the treatment condition.
 Whereas $\eta$ is only defined for students assigned to the treatment condition,
 $\eta(1)$ is defined for all the students in the study.
-Second, a modeling difference: since we are not dichotomizing $\eta(1)$
-in this analysis, we did not model it as a normal mixture, as in
+Second, a modeling difference: since we did not dichotomize $\eta(1)$
+in this analysis, we modeled it as normal , not as a normal mixture, as in
 \eqref{eq:mixture}.
-
-We incorporated the model for hint requests, (\ref{eq:rasch}), into
-the principal stratification model, replacing $\eta(1)$ for
-$\bar{h}(1)$.
-Then, the principal stratification estimand is
+With this change, the principal stratification estimand became
 \begin{equation*}
 \tau(r)=\EE[Y(1)-Y(0)|\eta(1)=r]
 \end{equation*}
+the treatment effect for students whose potential hint usage, if assigned to the treatment condition $\eta(1)=r$.
 A full treatment of this variant of principal stratification, including a
 discussion of identification and estimation, may be found in
 \citet{aoas}.
+
+
+
+\subsection{Identification and Estimation}
+Estimating $\tau(r)$ required estimating $\EE[Y(0)|\eta(1)=r]$,
+despite the fact that hint requests never observed at the same time as
+$Y(0)$ (in fact $\eta(1)$ isn't directly observed in either the
+treatment or control group).
+However, hint requests are observed, and the conditional distribution
+$\eta(1)|\bm{x}$ is identified, among those students with $Z=1$;
+because of randomization of $Z$, these inferences extend to the
+control group as well.
 
 Our approach to PS estimation is model-based and Bayesian, following
 \citet{page2012principal}, \citet{feller2016compared},
@@ -1295,8 +1320,6 @@ Unlike in typical PS setups, $\eta(1)$ is unobserved for both $Z=1$
 and $Z=0$ treatment groups, but is estimated using both $\bm{h}$ and
 $\bm{x}$ in the treatment group, but only $\bm{x}$ in the control
 group.
-
-\subsection{Identification and Estimation}
 
 First, students' proclivity to request hints is measured by the $\eta$
 parameter in (\ref{eq:rasch}).
@@ -1353,16 +1376,16 @@ In all cases, we expected true parameter values to be much smaller in
 magnitude than the prior standard deviation.
 
 Figure \ref{fig:psResults} shows the estimated linear function
-$\hat{\tau}{\eta(0)}$.
+$\hat{\tau}(r)$.
 The left panel shows the CTA1 treatment effect, $Y(1)-Y(0)$ as
-$\tau(1)$ varies; the black line shows the estimate (i.e. posterior
+$r=\tau(1)$ varies; the black line shows the estimate (i.e. posterior
 mean) and the red lines are random draws from the posterior
 distribution, showing estimation uncertainty.
 Eighty-eight percent of posterior draws of the slope of the
 $\hat{\tau}(\cdot)$ function were positive, implying a posterior
 probability of 0.88 that students who asked for hints
 with greater regularity benefited more from the CTA1 curriculum.
-The left hand panel plots one posterior draw of the $\bm{\eta(1)}$
+The right hand panel plots one posterior draw of $\eta(1)$
 alongside observed outcomes $Y$.
 The figure also includes estimated regression lines for the two
 treatment groups.
@@ -1384,6 +1407,11 @@ which grows with $\eta(1)$.
 \label{fig:psResults}
 \end{figure}
 
+These results suggest that students who, if assigned to the treatment
+condition, would be more likely to request hints on challenging
+problems, tend to experience higher treatment effects.
+That is, it suggests that frequent hint requesters benefit more from
+assignment to the CTA1 condition than infrequent hint requesters.
 
 \section{Comparing Strategies}\label{sec:synthesis}
 The goals, assumptions, and processes of matching, mediation analysis,
@@ -1447,7 +1475,7 @@ Our approach of dichotomizing hint request behavior as $H$ provides a
 way forward, at the cost of ignoring information that could be gleaned
 from more continuous measures of hint requests.
 
-In contrast, no ignorabilty assumptions are necessary for principal
+In contrast, no ignorability assumptions are necessary for principal
 stratification.
 % That said, an assumption similar to ignorability may play an important
 % role for interpretation.
@@ -1723,7 +1751,7 @@ where we constrained $\mu_0<\mu_1$.
 %\clearpage
 \section{Covariate Balance Before and After Matching}
 % latex table generated in R 3.6.2 by xtable 1.8-4 package
-% Wed Jan 29 14:36:34 2020
+% Sun Feb  9 15:15:45 2020
 \begin{table}[ht]
 \centering
 \begin{tabular}{lrrrrrr}
