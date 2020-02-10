@@ -1417,7 +1417,10 @@ an EdTech RCT, each differ from each other, but also overlap in
 interesting ways.
 In the case discussed here, the observational study and mediation
 approaches appear to give the opposite conclusion from principal
-stratification.
+stratification---matching and mediation suggest that exessive hint
+requests hurt students' posttest scores, while principal
+stratification suggests that students who request more hints
+experiance higher treatment effects.
 This section will compare and contrast the three methods in terms of
  their necessary identification assumptions, their model fitting
  mechanics, and interpretation of their results.
