@@ -1,6 +1,6 @@
 \documentclass{article}\usepackage[]{graphicx}\usepackage[]{color}
-% maxwidth is the original width if it is less than linewidth
-% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
 \makeatletter
 \def\maxwidth{ %
   \ifdim\Gin@nat@width>\linewidth
@@ -855,8 +855,8 @@ estimates.
 % propensity score match eliminated all or most of the confounding bias due to
 % measured covariates; hence, additional adjustment was unnecessary.
 
-% latex table generated in R 3.6.2 by xtable 1.8-4 package
-% Sun Feb  9 15:15:44 2020
+% latex table generated in R 3.4.4 by xtable 1.8-2 package
+% Mon Feb 10 10:49:52 2020
 \begin{table}[ht]
 \centering
 \begin{tabular}{rllccc}
@@ -1179,7 +1179,7 @@ because of hints, but despite them.
 
 What would the effect be were all students to request few hints?
 To answer that question, we estimate ``direct'' effects,
-$\Xi=\EE[\xi(1)]=\EE[Y(1,H(0))]-\EE[Y(0,H(0))]$.
+$\Xi=\EE[\xi(0)]=\EE[Y(1,H(0))]-\EE[Y(0,H(0))]$.
 Like indirect effects, this expression includes the average potential
 outcome $\EE[Y(1,H(0))]$; unlike indirect effects, it includes a term for
 potential outcomes under the control condition.
@@ -1188,10 +1188,17 @@ construction of the estimator must account for the randomization
 scheme.
 This may be done with a regression estimator.
 One option is to construct outcome $\tilde{Y}$ as, simply, $Y$ for
-subjects in the control group and $\hat{Y}(1,0)$ for subjects in the
-treatment group.
+subjects in the control group and $\hat{Y}(1,0)$ (of Eq. \ref{eq:estY10}) for subjects in the
+treatment group:
+\begin{equation*}
+\tilde{Y}\equiv Z\hat{Y}(1,0)+(1-Z)\hat{Y}(1,0)
+\end{equation*}
 Then, regress it on a dummy variable for treatment group and dummy
-variables for randomization block.
+variables for randomization block:
+\begin{equation}\label{eq:directEffReg}
+\tilde{Y}_i=\alpha_{b[i]}+\hat{\Xi}Z_i+\epsilon_i
+\end{equation}
+where $\alpha_{b[i]}$ is a fixed intercept for subject $i$'s randomization block, $\hat{\Xi}$ is an estimate of $\Xi$ and $\epsilon_i$ is a regression error.
 The clustering of subjects within schools can be accounted for in a
 number of ways, such as including random intercepts for school or
 computing cluster-robust standard error estimates.
@@ -1199,10 +1206,22 @@ Following the latter route, and using the \texttt{clubSandwich}
 package in \texttt{R} \citep{clubsandwich}, we estimated a direct
 effect of
 0.14$\pm$0.23.
-Including covariates in the regression produces a direct effect of
+Adding covariates to the regression \eqref{eq:directEffReg} estimates a direct effect of
 0.18$\pm$0.19.
 
+\begin{table}
+\begin{tabular}{llll}
+Effect&Method&Estimate&CI\\
+$1-p_0=\EE[H(1)-H(0)|Z=1]$ & By Definition& 0.3 &n/a\\
+$TOT=\EE[Y(Z=1,H=1)-Y(Z=1,H=0)|Z=1]$&Matching& -0.14 & [-0.25,-0.03] \\
+$\Delta=\EE[Y(1,H(1))-Y(1,H(0))|Z=1]$&$(1-p_0)TOT$& -0.04 & [-0.07,-0.01] \\
+$\Xi=\EE[Y(1,H(0))-Y(0,H(0))]$&Regression \eqref{eq:directEffReg}& 0.14 & [-0.08,0.37] \\
+$\Xi=\EE[Y(1,H(0))-Y(0,H(0))]$& \eqref{eq:directEffReg} + covariates& 0.18 & [-0.01,0.38] 
 
+\end{tabular}
+\caption{Estimated effects in mediation analysis. }
+\label{tab:mediation}
+\end{table}
 
 \section{Principal Stratification}\label{sec:principalStratification}
 The observational study approach and mediation analysis both rely on
@@ -1420,7 +1439,10 @@ an EdTech RCT, each differ from each other, but also overlap in
 interesting ways.
 In the case discussed here, the observational study and mediation
 approaches appear to give the opposite conclusion from principal
-stratification.
+stratification---matching and mediation suggest that exessive hint
+requests hurt students' posttest scores, while principal
+stratification suggests that students who request more hints
+experiance higher treatment effects.
 This section will compare and contrast the three methods in terms of
  their necessary identification assumptions, their model fitting
  mechanics, and interpretation of their results.
@@ -1750,8 +1772,8 @@ where we constrained $\mu_0<\mu_1$.
 \end{knitrout}
 %\clearpage
 \section{Covariate Balance Before and After Matching}
-% latex table generated in R 3.6.2 by xtable 1.8-4 package
-% Sun Feb  9 15:15:45 2020
+% latex table generated in R 3.4.4 by xtable 1.8-2 package
+% Mon Feb 10 10:56:04 2020
 \begin{table}[ht]
 \centering
 \begin{tabular}{lrrrrrr}

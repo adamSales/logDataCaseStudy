@@ -1176,7 +1176,7 @@ because of hints, but despite them.
 
 What would the effect be were all students to request few hints?
 To answer that question, we estimate ``direct'' effects,
-$\Xi=\EE[\xi(1)]=\EE[Y(1,H(0))]-\EE[Y(0,H(0))]$.
+$\Xi=\EE[\xi(0)]=\EE[Y(1,H(0))]-\EE[Y(0,H(0))]$.
 Like indirect effects, this expression includes the average potential
 outcome $\EE[Y(1,H(0))]$; unlike indirect effects, it includes a term for
 potential outcomes under the control condition.
@@ -1185,10 +1185,17 @@ construction of the estimator must account for the randomization
 scheme.
 This may be done with a regression estimator.
 One option is to construct outcome $\tilde{Y}$ as, simply, $Y$ for
-subjects in the control group and $\hat{Y}(1,0)$ for subjects in the
-treatment group.
+subjects in the control group and $\hat{Y}(1,0)$ (of Eq. \ref{eq:estY10}) for subjects in the
+treatment group:
+\begin{equation*}
+\tilde{Y}\equiv Z\hat{Y}(1,0)+(1-Z)\hat{Y}(1,0)
+\end{equation*}
 Then, regress it on a dummy variable for treatment group and dummy
-variables for randomization block.
+variables for randomization block:
+\begin{equation}\label{eq:directEffReg}
+\tilde{Y}_i=\alpha_{b[i]}+\hat{\Xi}Z_i+\epsilon_i
+\end{equation}
+where $\alpha_{b[i]}$ is a fixed intercept for subject $i$'s randomization block, $\hat{\Xi}$ is an estimate of $\Xi$ and $\epsilon_i$ is a regression error.
 The clustering of subjects within schools can be accounted for in a
 number of ways, such as including random intercepts for school or
 computing cluster-robust standard error estimates.
@@ -1196,10 +1203,26 @@ Following the latter route, and using the \texttt{clubSandwich}
 package in \texttt{R} \citep{clubsandwich}, we estimated a direct
 effect of
 \Sexpr{citopm(dir1.1ci)}.
-Including covariates in the regression produces a direct effect of
+Adding covariates to the regression \eqref{eq:directEffReg} estimates a direct effect of
 \Sexpr{citopm(dir2.1ci)}.
 
+Table \ref{tab:mediation} summarizes our mediation results.
 
+\begin{table}
+\begin{tabular}{llll}
+Effect&Method&Estimate&CI\\
+<<mediationTable,echo=FALSE>>=
+cat(
+  '$1-p_0=\\EE[H(1)-H(0)|Z=1]$ & By Definition&',round(mixProp,2),'&n/a\\\\
+$TOT=\\EE[Y(Z=1,H=1)-Y(Z=1,H=0)|Z=1]$&Matching&',round(effects[['tot_eff']][['coefficients']],2),'&',printci(with(effects[['tot_eff']],c(conf.low,conf.high))),'\\\\
+$\\Delta=\\EE[Y(1,H(1))-Y(1,H(0))|Z=1]$&$(1-p_0)TOT$&',round(mixProp*effects[['tot_eff']][['coefficients']],2),'&',printci(mixProp*with(effects[['tot_eff']],c(conf.low,conf.high))),'\\\\
+$\\Xi=\\EE[Y(1,H(0))-Y(0,H(0))]$&Regression \\eqref{eq:directEffReg}&',round(dir1.1t[1],2),'&',printci(dir1.1ci),'\\\\
+$\\Xi=\\EE[Y(1,H(0))-Y(0,H(0))]$& \\eqref{eq:directEffReg} + covariates&',round(dir2.1t[1],2),'&',printci(dir2.1ci),'\n')
+@
+\end{tabular}
+\caption{Estimated effects in mediation analysis. }
+\label{tab:mediation}
+\end{table}
 
 \section{Principal Stratification}\label{sec:principalStratification}
 The observational study approach and mediation analysis both rely on
