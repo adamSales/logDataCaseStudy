@@ -866,7 +866,7 @@ addtorow <- list(
 
 print(xtable(matchTEtab,
   align='rrllccc',
-  caption='Estimates and sensitivity analysis of the effect of hint usage.',
+  caption='Estimates, standard errors, and sensitivity analysis of the weighted average effect of hint usage, under different weighting schemes.',
   label='tab:matchResults'),
   include.rownames=FALSE,sanitize.text.function =function(x) x,add.to.row=addtorow,include.colnames=FALSE)
 @
@@ -1210,15 +1210,18 @@ Table \ref{tab:mediation} summarizes our mediation results.
 
 \begin{table}
 \begin{tabular}{llll}
+\hline
 Effect&Method&Estimate&CI\\
+\hline
 <<mediationTable,echo=FALSE>>=
 cat(
   '$1-p_0=\\EE[H(1)-H(0)|Z=1]$ & By Definition&',round(mixProp,2),'&n/a\\\\
 $TOT=\\EE[Y(Z=1,H=1)-Y(Z=1,H=0)|Z=1]$&Matching&',round(effects[['tot_eff']][['coefficients']],2),'&',printci(with(effects[['tot_eff']],c(conf.low,conf.high))),'\\\\
 $\\Delta=\\EE[Y(1,H(1))-Y(1,H(0))|Z=1]$&$(1-p_0)TOT$&',round(mixProp*effects[['tot_eff']][['coefficients']],2),'&',printci(mixProp*with(effects[['tot_eff']],c(conf.low,conf.high))),'\\\\
 $\\Xi=\\EE[Y(1,H(0))-Y(0,H(0))]$&Regression \\eqref{eq:directEffReg}&',round(dir1.1t[1],2),'&',printci(dir1.1ci),'\\\\
-$\\Xi=\\EE[Y(1,H(0))-Y(0,H(0))]$& \\eqref{eq:directEffReg} + covariates&',round(dir2.1t[1],2),'&',printci(dir2.1ci),'\n')
+$\\Xi=\\EE[Y(1,H(0))-Y(0,H(0))]$& \\eqref{eq:directEffReg} + covariates&',round(dir2.1t[1],2),'&',printci(dir2.1ci),'\\\\\n')
 @
+\hline
 \end{tabular}
 \caption{Estimated effects in mediation analysis. }
 \label{tab:mediation}

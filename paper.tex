@@ -1209,15 +1209,20 @@ effect of
 Adding covariates to the regression \eqref{eq:directEffReg} estimates a direct effect of
 0.18$\pm$0.19.
 
+Table \ref{tab:mediation} summarizes our mediation results.
+
 \begin{table}
 \begin{tabular}{llll}
+\hline
 Effect&Method&Estimate&CI\\
+\hline
 $1-p_0=\EE[H(1)-H(0)|Z=1]$ & By Definition& 0.3 &n/a\\
 $TOT=\EE[Y(Z=1,H=1)-Y(Z=1,H=0)|Z=1]$&Matching& -0.14 & [-0.25,-0.03] \\
 $\Delta=\EE[Y(1,H(1))-Y(1,H(0))|Z=1]$&$(1-p_0)TOT$& -0.04 & [-0.07,-0.01] \\
 $\Xi=\EE[Y(1,H(0))-Y(0,H(0))]$&Regression \eqref{eq:directEffReg}& 0.14 & [-0.08,0.37] \\
-$\Xi=\EE[Y(1,H(0))-Y(0,H(0))]$& \eqref{eq:directEffReg} + covariates& 0.18 & [-0.01,0.38] 
+$\Xi=\EE[Y(1,H(0))-Y(0,H(0))]$& \eqref{eq:directEffReg} + covariates& 0.18 & [-0.01,0.38] \\
 
+\hline
 \end{tabular}
 \caption{Estimated effects in mediation analysis. }
 \label{tab:mediation}
