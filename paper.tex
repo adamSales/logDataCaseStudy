@@ -1,6 +1,6 @@
 \documentclass{article}\usepackage[]{graphicx}\usepackage[]{color}
-%% maxwidth is the original width if it is less than linewidth
-%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+% maxwidth is the original width if it is less than linewidth
+% otherwise use linewidth (to make sure the graphics do not exceed the margin)
 \makeatletter
 \def\maxwidth{ %
   \ifdim\Gin@nat@width>\linewidth
@@ -227,6 +227,8 @@ Section \ref{sec:synthesis} will compare the three methods directly,
 and discuss how they may be applied to data from other educational
 technology RCTs.
 Section \ref{sec:conclusion} will conclude.
+
+The \texttt{R} and Stan code used to for all of the analyses in the paper can be found in a github repository, \url{github.com/[redacted]}.
 
 \subsection{Brief Overview of Three Causal Approaches}
 \begin{figure}
@@ -626,8 +628,10 @@ were dropped from the study.\footnote{Including these students in a
   subjects with missing log data in a mediation or observational study
   design can be more problematic \citep[see, e.g.][]{li2017identifiability}.}
 
-All told, the main analysis included $n=$5,009 students, 2,091 of whom were assigned to the CTA1 condition and 2,918 of whom were assigned to control.
-The students were nested within 116 teachers, in 43 schools across five states.
+All told, the analyses presented here were all based on 2,091 students assigned to the CTA1 condition; the estimation of direct effects in Section \ref{sec:mediation} and the principal stratification also relied on the 2,918 students assigned to control.
+Together, the 5,009 students were nested within 116 teachers, in 43 schools across five states.
+%The observational study (Section \ref{sec:observational} and part of the mediation analysis \ref{sec:mediation} used only the treatment (CTA1) group.
+
 
 Table \ref{tab:covariateBalance} describes the covariates we used, including
 missingness information, control and treatment means, and standardized
@@ -751,6 +755,7 @@ variable size and composition.
 For instance, one matched set included 44 $H=1$ subjects matched to a
 single $H=0$ subject, and another matched 117 $H=0$ subjects to a
 single $H=1$ subject.
+All students in the CTA1 group of the dataset were included in the match.
 
 Figure \ref{fig:balance} and Table \ref{tab:balance} in the online appendix show that
 matching largely eliminated mean differences in pre-treatment
@@ -855,8 +860,8 @@ estimates.
 % propensity score match eliminated all or most of the confounding bias due to
 % measured covariates; hence, additional adjustment was unnecessary.
 
-% latex table generated in R 3.4.4 by xtable 1.8-2 package
-% Mon Feb 10 10:49:52 2020
+% latex table generated in R 3.6.2 by xtable 1.8-4 package
+% Tue Feb 11 09:12:59 2020
 \begin{table}[ht]
 \centering
 \begin{tabular}{rllccc}
@@ -869,7 +874,7 @@ OLS & -0.18 & 0.04 & [-0.25,-0.10] & [-0.41,0.06] & [-0.30,-0.05] \\
   TOT & -0.14 & 0.06 & [-0.25,-0.03] & [-0.47,0.19] & [-0.31,0.03] \\ 
    \hline
 \end{tabular}
-\caption{Estimates and sensitivity analysis of the effect of hint usage.} 
+\caption{Estimates, standard errors, and sensitivity analysis of the weighted average effect of hint usage on posttest scores, under different weighting schemes.} 
 \label{tab:matchResults}
 \end{table}
 
@@ -1777,8 +1782,8 @@ where we constrained $\mu_0<\mu_1$.
 \end{knitrout}
 %\clearpage
 \section{Covariate Balance Before and After Matching}
-% latex table generated in R 3.4.4 by xtable 1.8-2 package
-% Mon Feb 10 10:56:04 2020
+% latex table generated in R 3.6.2 by xtable 1.8-4 package
+% Tue Feb 11 09:12:59 2020
 \begin{table}[ht]
 \centering
 \begin{tabular}{lrrrrrr}

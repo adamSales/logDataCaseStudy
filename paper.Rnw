@@ -188,6 +188,8 @@ and discuss how they may be applied to data from other educational
 technology RCTs.
 Section \ref{sec:conclusion} will conclude.
 
+The \texttt{R} and Stan code used to for all of the analyses in the paper can be found in a github repository, \url{github.com/[redacted]}.
+
 \subsection{Brief Overview of Three Causal Approaches}
 \begin{figure}
 \centering
@@ -586,8 +588,10 @@ were dropped from the study.\footnote{Including these students in a
   subjects with missing log data in a mediation or observational study
   design can be more problematic \citep[see, e.g.][]{li2017identifiability}.}
 
-All told, the main analysis included $n=$\Sexpr{prettyNum(Ntot,',')} students, \Sexpr{pn(NtFinal)} of whom were assigned to the CTA1 condition and \Sexpr{pn(Ntot-NtFinal)} of whom were assigned to control.
-The students were nested within \Sexpr{pn(nteacher)} teachers, in \Sexpr{pn(nschool)} schools across five states.
+All told, the analyses presented here were all based on \Sexpr{pn(NtFinal)} students assigned to the CTA1 condition; the estimation of direct effects in Section \ref{sec:mediation} and the principal stratification also relied on the \Sexpr{pn(Ntot-NtFinal)} students assigned to control.
+Together, the \Sexpr{pn(Ntot)} students were nested within \Sexpr{pn(nteacher)} teachers, in \Sexpr{pn(nschool)} schools across five states.
+%The observational study (Section \ref{sec:observational} and part of the mediation analysis \ref{sec:mediation} used only the treatment (CTA1) group.
+
 
 Table \ref{tab:covariateBalance} describes the covariates we used, including
 missingness information, control and treatment means, and standardized
@@ -711,6 +715,7 @@ variable size and composition.
 For instance, one matched set included \Sexpr{max(sapply(levels(m3),function(ll) sum(optmatch:::getZfromMatch(m3)[m3==ll])))} $H=1$ subjects matched to a
 single $H=0$ subject, and another matched \Sexpr{max(sapply(levels(m3),function(ll) sum(!optmatch:::getZfromMatch(m3)[m3==ll])))} $H=0$ subjects to a
 single $H=1$ subject.
+All students in the CTA1 group of the dataset were included in the match.
 
 Figure \ref{fig:balance} and Table \ref{tab:balance} in the online appendix show that
 matching largely eliminated mean differences in pre-treatment
@@ -866,7 +871,7 @@ addtorow <- list(
 
 print(xtable(matchTEtab,
   align='rrllccc',
-  caption='Estimates, standard errors, and sensitivity analysis of the weighted average effect of hint usage, under different weighting schemes.',
+  caption='Estimates, standard errors, and sensitivity analysis of the weighted average effect of hint usage on posttest scores, under different weighting schemes.',
   label='tab:matchResults'),
   include.rownames=FALSE,sanitize.text.function =function(x) x,add.to.row=addtorow,include.colnames=FALSE)
 @
