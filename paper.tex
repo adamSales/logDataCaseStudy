@@ -869,12 +869,12 @@ estimates.
   &&&&\multicolumn{2}{c}{Sensitivity Intervals}\\
  Weights&Estimate&Std. Error&CI&[Pretest]&[Ethnicity] \\
  \hline
-OLS & -0.18 & 0.04 & [-0.25,-0.10] & [-0.41,0.06] & [-0.30,-0.05] \\ 
-  ATE & -0.12 & 0.05 & [-0.23,-0.02] & [-0.45,0.20] & [-0.29,0.04] \\ 
-  TOT & -0.14 & 0.06 & [-0.25,-0.03] & [-0.47,0.19] & [-0.31,0.03] \\ 
+OLS & -0.18 & 0.04 & [-0.25,-0.10] & [-0.41,0.06] & [-0.30,-0.05] \\
+  ATE & -0.12 & 0.05 & [-0.23,-0.02] & [-0.45,0.20] & [-0.29,0.04] \\
+  TOT & -0.14 & 0.06 & [-0.25,-0.03] & [-0.47,0.19] & [-0.31,0.03] \\
    \hline
 \end{tabular}
-\caption{Estimates, standard errors, and sensitivity analysis of the weighted average effect of hint usage on posttest scores, under different weighting schemes.} 
+\caption{Estimates, standard errors, and sensitivity analysis of the weighted average effect of hint usage on posttest scores, under different weighting schemes.}
 \label{tab:matchResults}
 \end{table}
 
@@ -1700,7 +1700,7 @@ The development of these causal models will require simultaneous consideration o
 
 \newpage
 \appendix
-
+\setcounter{page}{1}
 \section{Rasch Mixture Model of Hint Usage}
 
 To model hint requests with a mixture model, we modeled each hint
@@ -1722,26 +1722,26 @@ where we constrained $\mu_0<\mu_1$.
 ##  int<lower=1> N; // total number of obs (long format)
 ##  int<lower=1> nstud; // # students
 ##  int<lower=1> nsec; // # sections (problems nested in sections)
-## 
+##
 ## // indices
 ##  int<lower=1,upper=nstud> studentM[N]; //for each obs, which student?
 ##  int<lower=1,upper=nsec> section[N]; // for each obs, which section?
-## 
+##
 ## // data data
 ##  int<lower=0,upper=1> hint[N]; // for each obs, was a hint requested?
-## 
+##
 ## }
 ## parameters{
-## 
+##
 ##  vector[nstud] eta; // ability parameter
 ##  real<lower=0,upper=1> p1; // mixing proportion
 ##  //ordered[2] mu;             // locations of mixture components
 ##  real<upper=0> mu0; //location of mixture component 0
 ##  vector<lower=0>[2] sigma;  // scales of mixture components
-## 
+##
 ##  real delta[nsec]; // section difficulty parameter
 ##  //real<lower=0> sigSec; // scale of difficulty parameters
-## 
+##
 ## }
 ## transformed parameters{
 ##  real<lower=0> mu1; // location of mixture component 1
@@ -1751,31 +1751,31 @@ where we constrained $\mu_0<\mu_1$.
 ##  // logs of mixing proportions to save time
 ##  real log_p1=log(p1);
 ##  real log_p0=log(1-p1);
-## 
+##
 ## // linear predictor for logit model
 ##  real linPred[N];
-## 
+##
 ## // priors
 ##  sigma ~ lognormal(0, 2);
 ##  mu0 ~ normal(0, 2);
 ## // sigSec ~ lognormal(0,2);
 ##  p1~ beta(2,2); // I'd rather the groups have similar sizes
-## 
+##
 ## // model for section difficulty parameters
 ##  delta~normal(0,3);//sigSec);
-## 
+##
 ## // Rasch model for hint requests
 ##  for(i in 1:N)
 ##   linPred[i]= eta[studentM[i]]-delta[section[i]];
-## 
+##
 ##  hint~bernoulli_logit(linPred);
-## 
-## 
+##
+##
 ## // mixture model for ability parameters
 ##  for(n in 1:nstud)
 ##   target += log_sum_exp(log_p0+normal_lpdf(eta[n]|mu0,sigma[1]),
 ## 			log_p1+normal_lpdf(eta[n]|mu1,sigma[2]));
-## 
+##
 ## }
 \end{verbatim}
 \end{kframe}
@@ -1787,36 +1787,36 @@ where we constrained $\mu_0<\mu_1$.
 \begin{table}[ht]
 \centering
 \begin{tabular}{lrrrrrr}
-  &\multicolumn{3}{c}{Unmatched}&\multicolumn{3}{c}{Matched}\\
+  &\multicolumn{3}{c}{Before Matching}&\multicolumn{3}{c}{After Matching}\\
  \hline
- & std.diff & z &  & std.diff & z &  \\ 
+ & std.diff & z &  & std.diff & z &  \\
   \hline
-grade9 & -0.34 & -7.05 & *** & 0.03 & 0.44 &     \\ 
-  gradehigher & 0.34 & 7.05 & *** & -0.03 & -0.44 &     \\ 
-  raceWhiteAsian & -0.64 & -12.83 & *** & 0.03 & 0.75 &     \\ 
-  raceBlackMulti & 0.23 & 4.71 & *** & 0.01 & 0.24 &     \\ 
-  raceHispAIAN & 0.51 & 10.35 & *** & -0.05 & -0.98 &     \\ 
-  xirt & -0.52 & -10.54 & *** & 0.09 & 1.82 & .   \\ 
-  spectypical & -0.16 & -3.32 & *** & 0.03 & 0.48 &     \\ 
-  specspeced & 0.34 & 7.07 & *** & -0.10 & -1.44 &     \\ 
-  specgifted & -0.14 & -3.03 & **  & 0.06 & 1.16 &     \\ 
-  esl0 & -0.37 & -7.70 & *** & 0.04 & 0.63 &     \\ 
-  esl1 & 0.37 & 7.70 & *** & -0.04 & -0.63 &     \\ 
-  stateCT & 0.58 & 11.81 & *** & -0.00 & 0.00 &     \\ 
-  stateKY & -0.36 & -7.51 & *** & -0.00 & 0.00 &     \\ 
-  stateLA & -0.08 & -1.68 & .   & -0.00 & 0.00 &     \\ 
-  stateMI & -0.36 & -7.51 & *** & 0.00 & 0.00 &     \\ 
-  stateTX & 0.43 & 8.77 & *** & 0.00 & 0.00 &     \\ 
+grade9 & -0.34 & -7.05 & *** & 0.03 & 0.44 &     \\
+  gradehigher & 0.34 & 7.05 & *** & -0.03 & -0.44 &     \\
+  raceWhiteAsian & -0.64 & -12.83 & *** & 0.03 & 0.75 &     \\
+  raceBlackMulti & 0.23 & 4.71 & *** & 0.01 & 0.24 &     \\
+  raceHispAIAN & 0.51 & 10.35 & *** & -0.05 & -0.98 &     \\
+  xirt & -0.52 & -10.54 & *** & 0.09 & 1.82 & .   \\
+  spectypical & -0.16 & -3.32 & *** & 0.03 & 0.48 &     \\
+  specspeced & 0.34 & 7.07 & *** & -0.10 & -1.44 &     \\
+  specgifted & -0.14 & -3.03 & **  & 0.06 & 1.16 &     \\
+  esl0 & -0.37 & -7.70 & *** & 0.04 & 0.63 &     \\
+  esl1 & 0.37 & 7.70 & *** & -0.04 & -0.63 &     \\
+  stateCT & 0.58 & 11.81 & *** & -0.00 & 0.00 &     \\
+  stateKY & -0.36 & -7.51 & *** & -0.00 & 0.00 &     \\
+  stateLA & -0.08 & -1.68 & .   & -0.00 & 0.00 &     \\
+  stateMI & -0.36 & -7.51 & *** & 0.00 & 0.00 &     \\
+  stateTX & 0.43 & 8.77 & *** & 0.00 & 0.00 &     \\
    \hline
 \end{tabular}
-\caption{Covariate balance (standardized differences and Z-scores) before and after the propensity score match.} 
+\caption{Covariate balance (standardized differences and Z-scores) before and after the propensity score match.}
 \label{tab:balance}
 \end{table}
 
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=0.5\textwidth]{output/balancePlot.pdf}
+\includegraphics[width=\textwidth]{output/balancePlot.pdf}
 \caption{Covariate balance (standardized differences) before and after
   the propensity score match.}
 \label{fig:balance}
@@ -1839,39 +1839,39 @@ grade9 & -0.34 & -7.05 & *** & 0.03 & 0.44 &     \\
 ##  int<lower=1> nsec;
 ##  int<lower=1> nschool;
 ##  int<lower=1> npair;
-## 
+##
 ## // indices
 ##  int<lower=1,upper=nteacher> teacher[nstud];
 ##  int<lower=1,upper=npair> pair[nstud];
 ##  int<lower=1,upper=nschool> school[nstud];
 ##  int<lower=1,upper=nstud> studentM[nsecWorked];
 ##  int<lower=1,upper=nsec> section[nsecWorked];
-## 
+##
 ## // data data
 ##  int<lower=0,upper=1> hint[nsecWorked];
 ##  matrix[nstud,ncov] X;
 ##  int<lower=0,upper=1> Z[nstud];
 ##  real Y[nstud];
-## 
+##
 ## }
 ## parameters{
-## 
+##
 ##  vector[nstud] eta;
-## 
+##
 ##  vector[ncov] betaU;
 ##  vector[ncov] betaY;
-## 
+##
 ##  real a1;
 ##  real b0;
 ##  real b1;
-## 
+##
 ##  real teacherEffY[nteacher];
 ##  real teacherEffU[nteacher];
 ##  real pairEffect[npair];
 ##  real schoolEffU[nschool];
 ##  real schoolEffY[nschool];
 ##  real delta[nsec];
-## 
+##
 ##  real<lower=0> sigTchY;
 ##  real<lower=0> sigSclY;
 ##  real<lower=0> sigY[2];
@@ -1879,7 +1879,7 @@ grade9 & -0.34 & -7.05 & *** & 0.03 & 0.44 &     \\
 ##  real<lower=0> sigSclU;
 ##  real<lower=0> sigU;
 ## }
-## 
+##
 ## model{
 ##  real linPred[nsecWorked];
 ##  vector[nstud] muY;
@@ -1887,12 +1887,12 @@ grade9 & -0.34 & -7.05 & *** & 0.03 & 0.44 &     \\
 ##  real useEff[nstud];
 ##  real trtEff[nstud];
 ##  real sigYI[nstud];
-## 
-## 
+##
+##
 ## // hint model
 ##  for(i in 1:nsecWorked)
 ##   linPred[i]= delta[section[i]]+eta[studentM[i]];
-## 
+##
 ##  for(i in 1:nstud){
 ##   useEff[i]=a1*eta[i];
 ##   trtEff[i]=b0+b1*eta[i];
@@ -1901,31 +1901,31 @@ grade9 & -0.34 & -7.05 & *** & 0.03 & 0.44 &     \\
 ##          pairEffect[pair[i]]+useEff[i]+Z[i]*trtEff[i];
 ##   sigYI[i]=sigY[Z[i]+1];
 ##  }
-## 
+##
 ##  //priors
 ##  betaY~normal(0,2);
 ##  betaU~normal(0,2);
 ##  pairEffect~normal(0,2);
-## 
+##
 ##  a1~normal(0,1);
 ##  b0~normal(0,1);
 ##  b1~normal(0,1);
-## 
-## 
+##
+##
 ##  schoolEffY~normal(0,sigSclY);
 ##  schoolEffU~normal(0,sigSclU);
 ##  teacherEffU~normal(0,sigTchU);
 ##  teacherEffY~normal(0,sigTchY);
-## 
+##
 ##  hint~bernoulli_logit(linPred);
-## 
+##
 ##  eta~normal(muU+X*betaU,sigU);
 ##  Y~normal(muY+X*betaY,sigYI);
 ## }
 ## generated quantities{
 ## // int<lower=0,upper=1> hintRep[nsecWorked];
 ##  real Yrep[nstud];
-## 
+##
 ## // hintRep=bernoulli_logit_rng(linPred);
 ##  for(i in 1:nstud)
 ##   Yrep[i] = normal_rng(teacherEffY[teacher[i]]+schoolEffY[school[i]]+

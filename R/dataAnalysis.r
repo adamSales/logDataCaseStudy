@@ -101,12 +101,12 @@ hintAvgStud%>%
   geom_point()+
   facet_wrap(~xaxis,scales="free_x")
 
-runFull <- FALSE
+#runFull <- FALSE
 ### rasch mixture model?
 ##NOT RUN
 if(runFull) source('R/raschMixture.r') else load('output/raschMixOutput.RData')
 
-runFull <- TRUE
+#runFull <- TRUE
 
 mixProp <- round(mean(hintAvgStud$classProb),1)
 
@@ -133,7 +133,7 @@ if(runFull){
 dist3 <- match_on(M~predict(psmod3.2,type='link'),within=exactMatch(M~schoolid2,data=dat1),data=dat1)
 m3 <- fullmatch(dist3,data=dat1)
 
-balMod <- xBalance(M~grade+race+xirt+spec+esl+state,strata=list(unmatched=NULL,matched=~m3),report=c('std.diff','z.score','chisquare.test'),data=droplevels(dat1))
+balMod <- xBalance(M~grade+race+xirt+spec+esl+state,strata=list(`Before Matching`=NULL,`After Matching`=~m3),report=c('std.diff','z.score','chisquare.test'),data=droplevels(dat1))
 
 pdf('output/balancePlot.pdf')
 plot(balMod,colors=subwayPalette)
