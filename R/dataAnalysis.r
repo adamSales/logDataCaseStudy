@@ -133,7 +133,9 @@ if(runFull){
 dist3 <- match_on(M~predict(psmod3.2,type='link'),within=exactMatch(M~schoolid2,data=dat1),data=dat1)
 m3 <- fullmatch(dist3,data=dat1)
 
-balMod <- xBalance(M~grade+race+xirt+spec+esl+state,strata=list(`Before Matching`=NULL,`After Matching`=~m3),report=c('std.diff','z.score','chisquare.test'),data=droplevels(dat1))
+dat1$pretest <- dat1$xirt
+
+balMod <- xBalance(M~grade+race+pretest+spec+esl+state,strata=list(`Before Matching`=NULL,`After Matching`=~m3),report=c('std.diff','z.score','chisquare.test'),data=droplevels(dat1))
 
 pdf('output/balancePlot.pdf')
 plot(balMod,colors=subwayPalette)
