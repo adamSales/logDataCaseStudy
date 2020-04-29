@@ -101,38 +101,41 @@ The study \citep{pane2014effectiveness} found no effects in its first year, but 
 the second year of implementation students in high schools randomized to
 the CTA1 condition outperformed the control group on the posttest by a fifth of a
 standard deviation.
-
-Over the course of the CTA1 study, the software administrators
-gathered computer log data for students in the treatment group.
-They assembled a dataset that recorded which problems each student
-worked, along with timestamps, the numbers of hints requested, and the
-number of errors committed for each problem.
-This log data is fine-grained and rich;
-education researchers could use it, and datasets like it,
-to gain insight into how, why, and when educational technology works.
-
-Along the same lines, log data presents a challenge, since it differs in
-structure and size from the type of data commonly encountered in
-studies of causal mechanisms.
-While statistical models of log data are nearly as old as the data itself
-\citep[e.g.][]{corbett1994knowledge}, data from an RCT differs in
-two principal ways from more traditional domains.
-RCTs feature randomization of treatment assignment, and a posttest
-(or some other outcome) administered to both users and non-users.
-These factors allow for causal modeling.
-
-As educational technology booms, so do RCTs in the mold of the RAND
+As educational technology (EdTech) booms, so do RCTs in the mold of the RAND
 CTA1 study. A recent systematic review \citep{escueta2017education} cites 29
 published reports of RCTs of ``computer assisted learning'' programs,
 all but one of which was published since 2001. We are aware of
 numerous other such RCTs planned or ongoing.
-These RCTs produce log data automatically, as a bi-product.
-The current case-study is
-about the use of hints in CTA1, but the huge variation in products
-under study, each with its own unique design, opens a wide set of opportunities to understand how features of those
-products drive their effects. As one example, RAND is recently
+
+RCTs are invaluable tools for estimating these programs'
+efficacy. However, the interventions they study are highly
+multifaceted and complex. Each classroom, and each student within
+those classrooms, may use an EdTech application in a different way;
+presumably, the application's efficacy depends on these usage
+decisions.
+Similarly, EdTech applications often include a number of optional
+features---to what extent do each of these drive the program's
+effectiveness?
+The data collected during typical education RCTs---data on treatment
+assignments, outcomes, a standard set of demographics, and possibly a
+pretest---offer limited options for studying treatment effect
+heterogeneity, and offer no information on how the intervention was
+implemented.
+
+However, with little extra effort, researchers studying EdTech can
+gather rich implementation data over the course of an RCT.
+For instance, the software administrators running the CTA1 RCT
+gathered computer log data for students in the treatment group.
+They assembled a dataset that recorded which problems each student
+worked, along with timestamps, the numbers of hints requested, and the
+number of errors committed for each problem.
+Analogous log data is (or may be) collected from other EdTech RCTs.
+As one example, RAND recently
 completed an efficacy study of a different algebra tutoring system,
-ALEKS. When students begin working on a particular topic in ALEKS, the
+ALEKS, and gathered student log data in order to study
+implementation.
+For instance, an ongoing research project is using this dataset to
+study instructional material within ALEKS: when students begin working on a particular topic in ALEKS, the
 system first presents instructional material, followed by problem
 solving activities, and then, if students are unsuccessful at solving
 the problems, more instructional material. Some students diligently
@@ -141,13 +144,35 @@ directly into problem solving. Is skipping the material a productive
 strategy for students in terms of learning algebra, or should ALEKS be
 redesigned to prevent such skipping? %Researchers should not stop at
 %estimating overall average treatment effects, but
-Our hope is that this paper can serve as a starting point
-for researchers interested in mining the rich resource of log data.
+% Our hope is that this paper can serve as a starting point
+% for researchers interested in mining the rich resource of log data to
+% answer these types of questions.
+
+Analysis of log data from EdTech RCTs could, in principle, lead to
+insights on the relationship between implementation and effectiveness.
+Using log data, researchers could investigate how the product was
+actually implemented, as well as what aspects of implementation
+correlate with higher (or lower) treatment effects, or which features
+of the program drive its effects.
+
+However, answering these questions requires new statistical tools.
+These tools must simultaneously surmount three challenges: first,
+implementation is not typically randomized, so the relationship
+between log data and outcomes is likely confounded. Second,
+log data is only gathered from students assigned to use the
+intervention, and not from the control group. Third, log datasets have
+a complex structure---often a large number of granular observations of several types
+gathered over the course of each student's engagement with the
+program.
 
 This paper will illustrate three approaches to this type of research
 using log data from the CTA1 study---specifically, data on students' use
 of hints within the software.
-The first approach discards the control group, and analyzes
+We will attempt to answer two related questions: first, what role does
+the availability of hints play in driving the overall CTA1 treatment
+effect, and second, can requesting hints more often lead to a larger
+treatment effect.
+The first approach we consider discards the control group, and analyzes
 hint-requesting in the treatment group as an observational study,
 using a matching design
 \citep[c.f.][]{rosenbaum2002observational}. The
@@ -167,14 +192,14 @@ A rich, and often polemic, literature surrounds principal
 stratification and mediation analysis
 \citep[e.g.][]{rubin2004direct,vanderweele2011principal,pearl2011principal,mealli2012refreshing,vanderweele2012comments}.
 \citet{vanderweele2008simple}, \citet{jo2008causal} and others have
-derived formal equivalences between parameters under certain
-conditions.
+given conditions under which certain principal stratification and mediational
+estimands coincide.
 Our contribution will build on this literature in two ways: first, by
 providing a detailed demonstration and comparison of matching, mediation analysis,
 and principal stratification on the same dataset, and second by
 focusing on the applicability of these three methods in the specific
 context of studying implementation data from an randomized
-experiment studying educational technology (EdTech).
+experiment studying educational technology.
 
 After a brief overview of the three causal approaches,
 the next section will provide background for the case-study,
@@ -183,12 +208,18 @@ hints.
 The following three sections will present the observational study,
 causal mediation, and principal stratification approaches to the hint
 data.
-Section \ref{sec:synthesis} will compare the three methods directly,
+As it turns out, these analyses appear to give contradictory
+results---the observational study and mediation analysis estimate a
+negative effect of requesting hints, while the principal
+stratification analysis finds that students who request more hints
+experience larger overall treatment effects.
+Section \ref{sec:synthesis} will contrast these findings (including a
+possible reconciliation), compare the three methods generally,
 and discuss how they may be applied to data from other educational
 technology RCTs.
 Section \ref{sec:conclusion} will conclude.
 
-The \texttt{R} and Stan code used to for all of the analyses in the paper can be found in a github repository, \url{github.com/[redacted]}.
+The \texttt{R} and Stan code used to for all of the analyses in the paper can be found in a github repository, \url{https://github.com/adamSales/logDataCaseStudy}.
 
 \subsection{Brief Overview of Three Causal Approaches}
 \begin{figure}
