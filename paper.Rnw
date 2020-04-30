@@ -134,7 +134,7 @@ As one example, RAND recently
 completed an efficacy study of a different algebra tutoring system,
 ALEKS, and gathered student log data in order to study
 implementation.
-For instance, an ongoing research project is using this dataset to
+An ongoing research project is using this dataset to
 study instructional material within ALEKS: when students begin working on a particular topic in ALEKS, the
 system first presents instructional material, followed by problem
 solving activities, and then, if students are unsuccessful at solving
