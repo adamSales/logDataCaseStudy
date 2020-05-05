@@ -141,38 +141,41 @@ The study \citep{pane2014effectiveness} found no effects in its first year, but 
 the second year of implementation students in high schools randomized to
 the CTA1 condition outperformed the control group on the posttest by a fifth of a
 standard deviation.
-
-Over the course of the CTA1 study, the software administrators
-gathered computer log data for students in the treatment group.
-They assembled a dataset that recorded which problems each student
-worked, along with timestamps, the numbers of hints requested, and the
-number of errors committed for each problem.
-This log data is fine-grained and rich;
-education researchers could use it, and datasets like it,
-to gain insight into how, why, and when educational technology works.
-
-Along the same lines, log data presents a challenge, since it differs in
-structure and size from the type of data commonly encountered in
-studies of causal mechanisms.
-While statistical models of log data are nearly as old as the data itself
-\citep[e.g.][]{corbett1994knowledge}, data from an RCT differs in
-two principal ways from more traditional domains.
-RCTs feature randomization of treatment assignment, and a posttest
-(or some other outcome) administered to both users and non-users.
-These factors allow for causal modeling.
-
-As educational technology booms, so do RCTs in the mold of the RAND
+As educational technology (EdTech) booms, so do RCTs in the mold of the RAND
 CTA1 study. A recent systematic review \citep{escueta2017education} cites 29
 published reports of RCTs of ``computer assisted learning'' programs,
 all but one of which was published since 2001. We are aware of
 numerous other such RCTs planned or ongoing.
-These RCTs produce log data automatically, as a bi-product.
-The current case-study is
-about the use of hints in CTA1, but the huge variation in products
-under study, each with its own unique design, opens a wide set of opportunities to understand how features of those
-products drive their effects. As one example, RAND is recently
+
+RCTs are invaluable tools for estimating these programs'
+efficacy. However, the interventions they study are highly
+multifaceted and complex. Each classroom, and each student within
+those classrooms, may use an EdTech application in a different way;
+presumably, the application's efficacy depends on these usage
+decisions.
+Similarly, EdTech applications often include a number of optional
+features---to what extent do each of these drive the program's
+effectiveness?
+The data collected during typical education RCTs---data on treatment
+assignments, outcomes, a standard set of demographics, and possibly a
+pretest---offer limited options for studying treatment effect
+heterogeneity, and offer no information on how the intervention was
+implemented.
+
+However, with little extra effort, researchers studying EdTech can
+gather rich implementation data over the course of an RCT.
+For instance, the software administrators running the CTA1 RCT
+gathered computer log data for students in the treatment group.
+They assembled a dataset that recorded which problems each student
+worked, along with timestamps, the numbers of hints requested, and the
+number of errors committed for each problem.
+Analogous log data is (or may be) collected from other EdTech RCTs.
+As one example, RAND recently
 completed an efficacy study of a different algebra tutoring system,
-ALEKS. When students begin working on a particular topic in ALEKS, the
+ALEKS, and gathered student log data in order to study
+implementation.
+An ongoing research project is using this dataset to
+study instructional material within ALEKS: when students begin working on a particular topic in ALEKS, the
 system first presents instructional material, followed by problem
 solving activities, and then, if students are unsuccessful at solving
 the problems, more instructional material. Some students diligently
@@ -181,13 +184,35 @@ directly into problem solving. Is skipping the material a productive
 strategy for students in terms of learning algebra, or should ALEKS be
 redesigned to prevent such skipping? %Researchers should not stop at
 %estimating overall average treatment effects, but
-Our hope is that this paper can serve as a starting point
-for researchers interested in mining the rich resource of log data.
+% Our hope is that this paper can serve as a starting point
+% for researchers interested in mining the rich resource of log data to
+% answer these types of questions.
+
+Analysis of log data from EdTech RCTs could, in principle, lead to
+insights on the relationship between implementation and effectiveness.
+Using log data, researchers could investigate how the product was
+actually implemented, as well as what aspects of implementation
+correlate with higher (or lower) treatment effects, or which features
+of the program drive its effects.
+
+However, answering these questions requires new statistical tools.
+These tools must simultaneously surmount three challenges: first,
+implementation is not typically randomized, so the relationship
+between log data and outcomes is likely confounded. Second,
+log data is only gathered from students assigned to use the
+intervention, and not from the control group. Third, log datasets have
+a complex structure---often a large number of granular observations of several types
+gathered over the course of each student's engagement with the
+program.
 
 This paper will illustrate three approaches to this type of research
 using log data from the CTA1 study---specifically, data on students' use
 of hints within the software.
-The first approach discards the control group, and analyzes
+We will attempt to answer two related questions: first, what role does
+the availability of hints play in driving the overall CTA1 treatment
+effect, and second, can requesting hints more often lead to a larger
+treatment effect.
+The first approach we consider discards the control group, and analyzes
 hint-requesting in the treatment group as an observational study,
 using a matching design
 \citep[c.f.][]{rosenbaum2002observational}. The
@@ -207,127 +232,39 @@ A rich, and often polemic, literature surrounds principal
 stratification and mediation analysis
 \citep[e.g.][]{rubin2004direct,vanderweele2011principal,pearl2011principal,mealli2012refreshing,vanderweele2012comments}.
 \citet{vanderweele2008simple}, \citet{jo2008causal} and others have
-derived formal equivalences between parameters under certain
-conditions.
+given conditions under which certain principal stratification and mediational
+estimands coincide.
 Our contribution will build on this literature in two ways: first, by
 providing a detailed demonstration and comparison of matching, mediation analysis,
 and principal stratification on the same dataset, and second by
 focusing on the applicability of these three methods in the specific
 context of studying implementation data from an randomized
-experiment studying educational technology (EdTech).
+experiment studying educational technology.
 
-After a brief overview of the three causal approaches,
-the next section will provide background for the case-study,
+The following section will provide background for the case-study,
 describing the CTA1 curriculum, the RAND study, and our focus on
 hints.
-The following three sections will present the observational study,
-causal mediation, and principal stratification approaches to the hint
-data.
-Section \ref{sec:synthesis} will compare the three methods directly,
+The following three sections will present an observational study,
+which discards the control group altogether and estimates the effect
+of hint requests on posttest scores;
+causal mediation, which decomposes the overall treatment effect into a
+component driven by hint requests and another driven by other
+mechanisms; and principal stratification, which estimates separate
+treatment effects for groups of students who would request hints
+differently, if assigned to treatment.
+As it turns out, these analyses appear to give contradictory
+results---the observational study and mediation analysis estimate a
+negative effect of requesting hints, while the principal
+stratification analysis finds that students who request more hints
+experience larger overall treatment effects.
+Section \ref{sec:synthesis} will contrast these findings (including a
+possible reconciliation), compare the three methods generally,
 and discuss how they may be applied to data from other educational
 technology RCTs.
 Section \ref{sec:conclusion} will conclude.
 
-The \texttt{R} and Stan code used to for all of the analyses in the paper can be found in a github repository, \url{github.com/[redacted]}.
+The \texttt{R} and Stan code used to for all of the analyses in the paper can be found in a github repository, \url{https://github.com/adamSales/logDataCaseStudy}.
 
-\subsection{Brief Overview of Three Causal Approaches}
-\begin{figure}
-\centering
-\begin{tikzpicture}[scale=1,transform shape]
-	%\draw[help lines] (0,0) grid (15,3);
-	\node[draw,shape=circle, inner sep=0pt,minimum size=1cm] (z) at (1,0) {$H$};
-	\node[draw,shape=circle, inner sep=0pt,minimum size=1cm] (y) at +(0:3){$Y$};
-	%\node[draw,shape=circle, inner sep=0pt,minimum size=1cm] (x) at (2.5,3.5){$X$};
-	%\draw[->,line width=2pt](x)--(z);
-	%\draw[->,line width=2pt](x)--(y);
-	\draw[->,line width=2pt](z)--(y);
-	\node at (2.5,-1) {(a)};
-
-	\node[draw,shape=circle, inner sep=0pt,minimum size=1cm] (z) at (5,0) {$Z$};
-	\node[draw,shape=circle, inner sep=0pt,minimum size=1cm] (y) at +(8,0){$Y$};
-	\node[draw,shape=circle, inner sep=0pt,minimum size=1cm] (m) at (6.5,2){$H$};
-	\draw[->,line width=2pt](z)--(m);
-	\draw[->,line width=2pt](m)--(y);
-	\draw[->,line width=2pt](z)--(y);
-	\node at (5.4,1.2) {(1)};
-	\node at (7.6,1.2) {(2)};
-	\node at (6.5,.3) {(3)};
-	\node at (6.5,-1) {(b)};
-
-        \node[draw,shape=circle, inner sep=0pt,minimum size=1cm] (z) at (10,0) {$Z$};
-	\node[draw,shape=circle, inner sep=0pt,minimum size=1cm] (y) at +(12,0){$Y$};
-        \node (mid) at (11,0) {};
-        \node[draw,shape=circle, inner sep=0pt,minimum size=1cm] (h)
-        at (11,2) {$H(1)$};
-	%\node[draw,shape=circle, inner sep=0pt,minimum size=1cm] (x) at (2.5,3.5){$X$};
-	%\draw[->,line width=2pt](x)--(z);
-	%\draw[->,line width=2pt](x)--(y);
-	\draw[->,line width=2pt](z)--(y);
-        \draw[->,line width=2pt](h)--(mid);
-	\node at (11,-1) {(c)};
-
-\end{tikzpicture}
-\caption{A schematic representation of three causal models for
-  log data: (a) an observational study estimating the effects of hints
-  $H$ on posttest scores $Y$, (b) a mediation analysis estimating
-  natural direct effects of treatment assignment $Z$ on $Y$ and
-  indirect effects mediated by $H$, and (c) principal stratification.}
-\label{mediationFig}
-\end{figure}
-
-Figure \ref{mediationFig} is a schematic representation of the three
-approaches to causal modeling of log data that we will discuss in this
-paper.
-First, an observational study to estimate the effect of hint usage $H$
-on posttest scores $Y$, is represented by panel (a).
-This approach, which we will discuss in Section
-\ref{sec:observational}, discards the control group from the RCT and
-uses techniques from observational studies to determine if and how requesting
-a greater number of hints affects posttest scores.
-For the sake of illustration, we will use techniques similar to those
-discussed in \citet{rosenbaum2002observational},
- \citet{hansen2009b}, and \citet{ho:etal:2007}, combining a propensity
- score matching design with methods for analyzing experiments and
- parametric modeling.
-The conceptual and methodological issues we will discuss extend to
-other covariate control methods as well.
-
-Next, as represented in panel (b), we will conduct a mediation
-analysis, estimating natural
-indirect effects of CTA1 treatment assignment $Z$, as mediated by
-$H$. That is, we will estimate the component of $Z$'s effect on $Y$ that comes about
-due to $Z$'s effect on $H$---path (1)---and $H$'s effect on $Y$, path
-(2).
-Notice that path (2) is identical to panel (a)---the effect of $H$ on
-$Y$.
-We will use this equivalence to estimate and interpret indirect
-effects.
-As part of the mediation analysis, we will also estimate path (3), the
-natural direct effect of $Z$ on $Y$---that is, the component of $Z$'s
-effect on $Y$ that is not due to hints $H$.
-
-Finally, we will estimate a principal stratification model, as represented in panel
-(c).
-In the principal stratification analysis, we do not model $H$ as an
-intervention that could, in theory, be randomized.
-Instead, we posit a variable ``$H_i(1)$,''  subject $i$'s penchant for
-requesting hints \emph{if} $i$ is assigned to the treatment
-condition.
-Unlike $H$, $H(1)$ is well defined (if
-unobserved) for all participants in the RCT.
-Principal stratification treats $H(1)$ as an effect moderator or
-interaction variable: $H(1)$ does not affect $Y$, but the effect of
-$Z$ on $Y$ may vary as a function of $H(1)$.
-This analysis will largely follow the method of \citet{aoas}, which in
-turn built heavily on \citet{schwartz2011bayesian} and
-\citet{jin2008principal}.
-
-All three of these approaches are designed to model intermediate
-variables---those variables, like hint usage,
-that were possibly affected by $Z$ but were measured prior to $Y$.
-Though they were developed for more traditional data scenarios, the
-novel scenario of computer log data from an educational technology RCT
-presents new and interesting challenges and opportunities.
 
 \section{Case Study: The Role of Hints in the Cognitive Tutor Effect}
 
@@ -666,6 +603,28 @@ had they requested hints more often?
 Would high hint users have achieved higher posttest scores had the
 requested hints less often?
 
+This section will illustrate an observational study to answer these
+questions.
+Generally speaking, the observational study approach discards the
+control group entirely and uses statistical confounder control (in our
+case, propensity score matching) to estimate causal effects of a usage parameter on posttest scores.
+Implementing the method requires data from members of the treatment group: usage (in our case, $H$), posttest scores or another outcome of interest, and a set of baseline covariates to control for confounding.
+Since the control group is not used, identification does not depend on randomization---in fact, this same approach could be (and is) used with non-experimental data.
+However, outside of a planned experiment, posttest scores may not be available.
+Our usage variable $H$ is binary, which is necessary for classical propensity score matching; alternatve methods are available for usage variable that are continuous \citep[e.g.][]{hirano2004propensity}, ordered \citep[e.g.][]{leon2005mixed}, categorical \citep[e.g.][]{lopez2017estimation} or other types.
+Like all observational studies, it depends on the strong, untestable assumption of no unmeasured confounding.
+
+The approach we take here, following \citet{rosenbaum2002observational},
+ \citet{hansen2009b}, and \citet{ho:etal:2007}, has three broad steps.
+In the first, we construct a "match," identifying groups of students, some of whom have $H=0$ and others with $H=1$, but who are otherwise comparable.
+The hope is that the distribution of $H$ within this match resembles what might have been seen if (counterfactually) $H$ had been randomized within matched groups.
+This stage is iterative: we construct a match, evaluate it (most importantly by checking if matched students have similar baseline covariate distributions), and if necessary construct a new match.
+In the second step, we estimate the average effect of $H$ on posttest scores, by comparing posttest scores between matched students with $H=1$ and $H=0$.
+In the third and final step, we account for the possiblity of unmeasured confounding in a sensitivity analysis.
+
+The next subsection will give more formal background on propensity score matching, including notation and idenfication assumptions. Following subsections will illustrate each of the three steps of propensity score matching.
+
+\subsection{Observational Study: Background}
 Let $Y_i$ represent subject $i$'s posttest score, and let $Z_i$ represent
 $i$'s treatment status (i.e. the CTA1 or control group).
 Following \citet{neyman} and \citet{rubin}, let $Y_i(Z=1)$ be
@@ -735,6 +694,8 @@ indicators for grade, race, sex, and economic disadvantage, and
 a natural spline with five degrees of freedom for pretest.
 State, school, and class, were each included using normally
 distributed random intercepts.
+
+\subsection{Constructing and Evaluating a Match}
 
 We constructed an optimal full matching design \citep{hansen2004} to
 condition on estimated propensity scores $\hat{\pi}$ using the
@@ -861,7 +822,7 @@ estimates.
 % measured covariates; hence, additional adjustment was unnecessary.
 
 % latex table generated in R 3.6.2 by xtable 1.8-4 package
-% Tue Feb 11 09:12:59 2020
+% Mon Apr 27 14:45:08 2020
 \begin{table}[ht]
 \centering
 \begin{tabular}{rllccc}
@@ -869,12 +830,12 @@ estimates.
   &&&&\multicolumn{2}{c}{Sensitivity Intervals}\\
  Weights&Estimate&Std. Error&CI&[Pretest]&[Ethnicity] \\
  \hline
-OLS & -0.18 & 0.04 & [-0.25,-0.10] & [-0.41,0.06] & [-0.30,-0.05] \\
-  ATE & -0.12 & 0.05 & [-0.23,-0.02] & [-0.45,0.20] & [-0.29,0.04] \\
-  TOT & -0.14 & 0.06 & [-0.25,-0.03] & [-0.47,0.19] & [-0.31,0.03] \\
+OLS & -0.18 & 0.04 & [-0.25,-0.10] & [-0.41,0.06] & [-0.30,-0.05] \\ 
+  ATE & -0.12 & 0.05 & [-0.23,-0.02] & [-0.45,0.20] & [-0.29,0.04] \\ 
+  TOT & -0.14 & 0.06 & [-0.25,-0.03] & [-0.47,0.19] & [-0.31,0.03] \\ 
    \hline
 \end{tabular}
-\caption{Estimates, standard errors, and sensitivity analysis of the weighted average effect of hint usage on posttest scores, under different weighting schemes.}
+\caption{Estimates, standard errors, and sensitivity analysis of the weighted average effect of hint usage on posttest scores, under different weighting schemes.} 
 \label{tab:matchResults}
 \end{table}
 
@@ -897,6 +858,8 @@ OLS & -0.18 & 0.04 & [-0.25,-0.10] & [-0.41,0.06] & [-0.30,-0.05] \\
 %   sensitivity analysis of the effect of hint usage.}
 % \label{tab:matchResults}
 % \end{table}
+
+\subsection{Sensitivity Analysis: Assessing the Role of Unmeasured Confounding}
 
 None of these estimates addressed the possibility of confounding from
 unmeasured covariates; instead, they relied on matched ignorability.
@@ -955,6 +918,20 @@ mediator, which itself, in turn, affected the outcome.
 In contrast, the direct effect is the component of the effect that
 operates via other mechanisms.
 
+The method we present here builds on the results from the observational study in the previous section.
+Estimating the indirect effect is a way to interpret the estimated effect of $H$ in the context of the overall treatment effect of the EdTech intervention.
+In fact, in our analysis estimating indirect effects requires no more data than the observational study.
+Estimating direct effects requires, additionally, data from the control group: posttest scores and (ideally) baseline covariates.
+The randomization of the intervention in the RCT now plays an important role in identification, since the overall effect of the intervention on posttest scores is at issue, as does the fact that the control group does not have access to the program.
+Finaly, the assumption of no unmeasured confounding remains important.
+
+The following subsection reviews the formal definitions of direct and indirect effects.
+The next two subsections illustrate the estimation of direct and indirect effects, respectively, in our study of hints.
+It turns out that indirect effects are are nearly unidentifiable, without some acrobatics; however, under the identification scheme we present here, estimating indirect effects is exceedingly simple.
+Therefore, Section \ref{sec:indirectEst} will mostly consist of a discussion of identification.
+Section \ref{sec:directEst} builds on the framework of the previous subsections to estimate direct effects with a regression model.
+
+\subsection{Review: Defining Direct and Indirect Effect}
 More precisely, express a subject's potential outcomes as a function
 of two variables, treatment assignment $Z$ and hint requests $H$:
 $Y(Z,H)$.
@@ -1028,8 +1005,8 @@ $\xi(0)$ gives the effect of assignment to CTA1 if hints were,
 perhaps counterfactually, held at their control level, $H=0$.
 
 
-\subsection{Identification and Estimation of Direct and Indirect
-  Effects}
+\subsection{Identification and Estimation Log Data  Indirect
+  Effects}\label{sec:indirectEst}
 
 Since the potential outcome $Y(0,1)$ is undefined in the CTA1 hints
 study, any expression (potentially) including $Y(0,1)$ is also
@@ -1182,6 +1159,8 @@ This analysis suggests that the availability of hints
 actually \emph{lowers} the treatment effect, that CTA1 works not
 because of hints, but despite them.
 
+\subsection{Estimating Log Data Direct Effects}\label{sec:directEst}
+
 What would the effect be were all students to request few hints?
 To answer that question, we estimate ``direct'' effects,
 $\Xi=\EE[\xi(0)]=\EE[Y(1,H(0))]-\EE[Y(0,H(0))]$.
@@ -1273,7 +1252,7 @@ sample, principal effect estimates will still contain uncertainty.
 In previous sections $\bar{h}$ was dichotomized into $H$; such
 dichotomization is not necessary here.
 However, $\bar{h}$ has some disadvantages as a continuous measure of
-hint usage.
+hint usage \citep{aoas}.
 For one, since it is essentially a sample mean over a subset of each student's
 worked problems, much of its variance is driven by the total number of
 problems students worked---in particular, its extreme values belong to
@@ -1700,7 +1679,7 @@ The development of these causal models will require simultaneous consideration o
 
 \newpage
 \appendix
-\setcounter{page}{1}
+
 \section{Rasch Mixture Model of Hint Usage}
 
 To model hint requests with a mixture model, we modeled each hint
@@ -1722,26 +1701,26 @@ where we constrained $\mu_0<\mu_1$.
 ##  int<lower=1> N; // total number of obs (long format)
 ##  int<lower=1> nstud; // # students
 ##  int<lower=1> nsec; // # sections (problems nested in sections)
-##
+## 
 ## // indices
 ##  int<lower=1,upper=nstud> studentM[N]; //for each obs, which student?
 ##  int<lower=1,upper=nsec> section[N]; // for each obs, which section?
-##
+## 
 ## // data data
 ##  int<lower=0,upper=1> hint[N]; // for each obs, was a hint requested?
-##
+## 
 ## }
 ## parameters{
-##
+## 
 ##  vector[nstud] eta; // ability parameter
 ##  real<lower=0,upper=1> p1; // mixing proportion
 ##  //ordered[2] mu;             // locations of mixture components
 ##  real<upper=0> mu0; //location of mixture component 0
 ##  vector<lower=0>[2] sigma;  // scales of mixture components
-##
+## 
 ##  real delta[nsec]; // section difficulty parameter
 ##  //real<lower=0> sigSec; // scale of difficulty parameters
-##
+## 
 ## }
 ## transformed parameters{
 ##  real<lower=0> mu1; // location of mixture component 1
@@ -1751,31 +1730,31 @@ where we constrained $\mu_0<\mu_1$.
 ##  // logs of mixing proportions to save time
 ##  real log_p1=log(p1);
 ##  real log_p0=log(1-p1);
-##
+## 
 ## // linear predictor for logit model
 ##  real linPred[N];
-##
+## 
 ## // priors
 ##  sigma ~ lognormal(0, 2);
 ##  mu0 ~ normal(0, 2);
 ## // sigSec ~ lognormal(0,2);
 ##  p1~ beta(2,2); // I'd rather the groups have similar sizes
-##
+## 
 ## // model for section difficulty parameters
 ##  delta~normal(0,3);//sigSec);
-##
+## 
 ## // Rasch model for hint requests
 ##  for(i in 1:N)
 ##   linPred[i]= eta[studentM[i]]-delta[section[i]];
-##
+## 
 ##  hint~bernoulli_logit(linPred);
-##
-##
+## 
+## 
 ## // mixture model for ability parameters
 ##  for(n in 1:nstud)
 ##   target += log_sum_exp(log_p0+normal_lpdf(eta[n]|mu0,sigma[1]),
 ## 			log_p1+normal_lpdf(eta[n]|mu1,sigma[2]));
-##
+## 
 ## }
 \end{verbatim}
 \end{kframe}
@@ -1783,40 +1762,40 @@ where we constrained $\mu_0<\mu_1$.
 %\clearpage
 \section{Covariate Balance Before and After Matching}
 % latex table generated in R 3.6.2 by xtable 1.8-4 package
-% Tue Feb 11 09:12:59 2020
+% Mon Apr 27 14:45:09 2020
 \begin{table}[ht]
 \centering
 \begin{tabular}{lrrrrrr}
-  &\multicolumn{3}{c}{Before Matching}&\multicolumn{3}{c}{After Matching}\\
+  &\multicolumn{3}{c}{Unmatched}&\multicolumn{3}{c}{Matched}\\
  \hline
- & std.diff & z &  & std.diff & z &  \\
+ & std.diff & z &  & std.diff & z &  \\ 
   \hline
-grade9 & -0.34 & -7.05 & *** & 0.03 & 0.44 &     \\
-  gradehigher & 0.34 & 7.05 & *** & -0.03 & -0.44 &     \\
-  raceWhiteAsian & -0.64 & -12.83 & *** & 0.03 & 0.75 &     \\
-  raceBlackMulti & 0.23 & 4.71 & *** & 0.01 & 0.24 &     \\
-  raceHispAIAN & 0.51 & 10.35 & *** & -0.05 & -0.98 &     \\
-  xirt & -0.52 & -10.54 & *** & 0.09 & 1.82 & .   \\
-  spectypical & -0.16 & -3.32 & *** & 0.03 & 0.48 &     \\
-  specspeced & 0.34 & 7.07 & *** & -0.10 & -1.44 &     \\
-  specgifted & -0.14 & -3.03 & **  & 0.06 & 1.16 &     \\
-  esl0 & -0.37 & -7.70 & *** & 0.04 & 0.63 &     \\
-  esl1 & 0.37 & 7.70 & *** & -0.04 & -0.63 &     \\
-  stateCT & 0.58 & 11.81 & *** & -0.00 & 0.00 &     \\
-  stateKY & -0.36 & -7.51 & *** & -0.00 & 0.00 &     \\
-  stateLA & -0.08 & -1.68 & .   & -0.00 & 0.00 &     \\
-  stateMI & -0.36 & -7.51 & *** & 0.00 & 0.00 &     \\
-  stateTX & 0.43 & 8.77 & *** & 0.00 & 0.00 &     \\
+grade9 & -0.34 & -7.05 & *** & 0.03 & 0.44 &     \\ 
+  gradehigher & 0.34 & 7.05 & *** & -0.03 & -0.44 &     \\ 
+  raceWhiteAsian & -0.64 & -12.83 & *** & 0.03 & 0.75 &     \\ 
+  raceBlackMulti & 0.23 & 4.71 & *** & 0.01 & 0.24 &     \\ 
+  raceHispAIAN & 0.51 & 10.35 & *** & -0.05 & -0.98 &     \\ 
+  xirt & -0.52 & -10.54 & *** & 0.09 & 1.82 & .   \\ 
+  spectypical & -0.16 & -3.32 & *** & 0.03 & 0.48 &     \\ 
+  specspeced & 0.34 & 7.07 & *** & -0.10 & -1.44 &     \\ 
+  specgifted & -0.14 & -3.03 & **  & 0.06 & 1.16 &     \\ 
+  esl0 & -0.37 & -7.70 & *** & 0.04 & 0.63 &     \\ 
+  esl1 & 0.37 & 7.70 & *** & -0.04 & -0.63 &     \\ 
+  stateCT & 0.58 & 11.81 & *** & -0.00 & 0.00 &     \\ 
+  stateKY & -0.36 & -7.51 & *** & -0.00 & 0.00 &     \\ 
+  stateLA & -0.08 & -1.68 & .   & -0.00 & 0.00 &     \\ 
+  stateMI & -0.36 & -7.51 & *** & 0.00 & 0.00 &     \\ 
+  stateTX & 0.43 & 8.77 & *** & 0.00 & 0.00 &     \\ 
    \hline
 \end{tabular}
-\caption{Covariate balance (standardized differences and Z-scores) before and after the propensity score match.}
+\caption{Covariate balance (standardized differences and Z-scores) before and after the propensity score match.} 
 \label{tab:balance}
 \end{table}
 
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=\textwidth]{output/balancePlot.pdf}
+\includegraphics[width=0.5\textwidth]{output/balancePlot.pdf}
 \caption{Covariate balance (standardized differences) before and after
   the propensity score match.}
 \label{fig:balance}
@@ -1839,39 +1818,39 @@ grade9 & -0.34 & -7.05 & *** & 0.03 & 0.44 &     \\
 ##  int<lower=1> nsec;
 ##  int<lower=1> nschool;
 ##  int<lower=1> npair;
-##
+## 
 ## // indices
 ##  int<lower=1,upper=nteacher> teacher[nstud];
 ##  int<lower=1,upper=npair> pair[nstud];
 ##  int<lower=1,upper=nschool> school[nstud];
 ##  int<lower=1,upper=nstud> studentM[nsecWorked];
 ##  int<lower=1,upper=nsec> section[nsecWorked];
-##
+## 
 ## // data data
 ##  int<lower=0,upper=1> hint[nsecWorked];
 ##  matrix[nstud,ncov] X;
 ##  int<lower=0,upper=1> Z[nstud];
 ##  real Y[nstud];
-##
+## 
 ## }
 ## parameters{
-##
+## 
 ##  vector[nstud] eta;
-##
+## 
 ##  vector[ncov] betaU;
 ##  vector[ncov] betaY;
-##
+## 
 ##  real a1;
 ##  real b0;
 ##  real b1;
-##
+## 
 ##  real teacherEffY[nteacher];
 ##  real teacherEffU[nteacher];
 ##  real pairEffect[npair];
 ##  real schoolEffU[nschool];
 ##  real schoolEffY[nschool];
 ##  real delta[nsec];
-##
+## 
 ##  real<lower=0> sigTchY;
 ##  real<lower=0> sigSclY;
 ##  real<lower=0> sigY[2];
@@ -1879,7 +1858,7 @@ grade9 & -0.34 & -7.05 & *** & 0.03 & 0.44 &     \\
 ##  real<lower=0> sigSclU;
 ##  real<lower=0> sigU;
 ## }
-##
+## 
 ## model{
 ##  real linPred[nsecWorked];
 ##  vector[nstud] muY;
@@ -1887,12 +1866,12 @@ grade9 & -0.34 & -7.05 & *** & 0.03 & 0.44 &     \\
 ##  real useEff[nstud];
 ##  real trtEff[nstud];
 ##  real sigYI[nstud];
-##
-##
+## 
+## 
 ## // hint model
 ##  for(i in 1:nsecWorked)
 ##   linPred[i]= delta[section[i]]+eta[studentM[i]];
-##
+## 
 ##  for(i in 1:nstud){
 ##   useEff[i]=a1*eta[i];
 ##   trtEff[i]=b0+b1*eta[i];
@@ -1901,31 +1880,31 @@ grade9 & -0.34 & -7.05 & *** & 0.03 & 0.44 &     \\
 ##          pairEffect[pair[i]]+useEff[i]+Z[i]*trtEff[i];
 ##   sigYI[i]=sigY[Z[i]+1];
 ##  }
-##
+## 
 ##  //priors
 ##  betaY~normal(0,2);
 ##  betaU~normal(0,2);
 ##  pairEffect~normal(0,2);
-##
+## 
 ##  a1~normal(0,1);
 ##  b0~normal(0,1);
 ##  b1~normal(0,1);
-##
-##
+## 
+## 
 ##  schoolEffY~normal(0,sigSclY);
 ##  schoolEffU~normal(0,sigSclU);
 ##  teacherEffU~normal(0,sigTchU);
 ##  teacherEffY~normal(0,sigTchY);
-##
+## 
 ##  hint~bernoulli_logit(linPred);
-##
+## 
 ##  eta~normal(muU+X*betaU,sigU);
 ##  Y~normal(muY+X*betaY,sigYI);
 ## }
 ## generated quantities{
 ## // int<lower=0,upper=1> hintRep[nsecWorked];
 ##  real Yrep[nstud];
-##
+## 
 ## // hintRep=bernoulli_logit_rng(linPred);
 ##  for(i in 1:nstud)
 ##   Yrep[i] = normal_rng(teacherEffY[teacher[i]]+schoolEffY[school[i]]+

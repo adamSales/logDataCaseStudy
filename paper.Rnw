@@ -204,7 +204,7 @@ experiment studying educational technology.
 The following section will provide background for the case-study,
 describing the CTA1 curriculum, the RAND study, and our focus on
 hints.
-The following three sections will present the observational study,
+The following three sections will present an observational study,
 which discards the control group altogether and estimates the effect
 of hint requests on posttest scores;
 causal mediation, which decomposes the overall treatment effect into a
@@ -563,6 +563,28 @@ had they requested hints more often?
 Would high hint users have achieved higher posttest scores had the
 requested hints less often?
 
+This section will illustrate an observational study to answer these
+questions.
+Generally speaking, the observational study approach discards the
+control group entirely and uses statistical confounder control (in our
+case, propensity score matching) to estimate causal effects of a usage parameter on posttest scores.
+Implementing the method requires data from members of the treatment group: usage (in our case, $H$), posttest scores or another outcome of interest, and a set of baseline covariates to control for confounding.
+Since the control group is not used, identification does not depend on randomization---in fact, this same approach could be (and is) used with non-experimental data.
+However, outside of a planned experiment, posttest scores may not be available.
+Our usage variable $H$ is binary, which is necessary for classical propensity score matching; alternatve methods are available for usage variable that are continuous \citep[e.g.][]{hirano2004propensity}, ordered \citep[e.g.][]{leon2005mixed}, categorical \citep[e.g.][]{lopez2017estimation} or other types.
+Like all observational studies, it depends on the strong, untestable assumption of no unmeasured confounding.
+
+The approach we take here, following \citet{rosenbaum2002observational},
+ \citet{hansen2009b}, and \citet{ho:etal:2007}, has three broad steps.
+In the first, we construct a "match," identifying groups of students, some of whom have $H=0$ and others with $H=1$, but who are otherwise comparable.
+The hope is that the distribution of $H$ within this match resembles what might have been seen if (counterfactually) $H$ had been randomized within matched groups.
+This stage is iterative: we construct a match, evaluate it (most importantly by checking if matched students have similar baseline covariate distributions), and if necessary construct a new match.
+In the second step, we estimate the average effect of $H$ on posttest scores, by comparing posttest scores between matched students with $H=1$ and $H=0$.
+In the third and final step, we account for the possiblity of unmeasured confounding in a sensitivity analysis.
+
+The next subsection will give more formal background on propensity score matching, including notation and idenfication assumptions. Following subsections will illustrate each of the three steps of propensity score matching.
+
+\subsection{Observational Study: Background}
 Let $Y_i$ represent subject $i$'s posttest score, and let $Z_i$ represent
 $i$'s treatment status (i.e. the CTA1 or control group).
 Following \citet{neyman} and \citet{rubin}, let $Y_i(Z=1)$ be
@@ -632,6 +654,8 @@ indicators for grade, race, sex, and economic disadvantage, and
 a natural spline with five degrees of freedom for pretest.
 State, school, and class, were each included using normally
 distributed random intercepts.
+
+\subsection{Constructing and Evaluating a Match}
 
 We constructed an optimal full matching design \citep{hansen2004} to
 condition on estimated propensity scores $\hat{\pi}$ using the
@@ -832,6 +856,8 @@ print(xtable(matchTEtab,
 % \label{tab:matchResults}
 % \end{table}
 
+\subsection{Sensitivity Analysis: Assessing the Role of Unmeasured Confounding}
+
 None of these estimates addressed the possibility of confounding from
 unmeasured covariates; instead, they relied on matched ignorability.
 This would be a particular concern if pretest scores do not completely
@@ -889,6 +915,20 @@ mediator, which itself, in turn, affected the outcome.
 In contrast, the direct effect is the component of the effect that
 operates via other mechanisms.
 
+The method we present here builds on the results from the observational study in the previous section.
+Estimating the indirect effect is a way to interpret the estimated effect of $H$ in the context of the overall treatment effect of the EdTech intervention.
+In fact, in our analysis estimating indirect effects requires no more data than the observational study.
+Estimating direct effects requires, additionally, data from the control group: posttest scores and (ideally) baseline covariates.
+The randomization of the intervention in the RCT now plays an important role in identification, since the overall effect of the intervention on posttest scores is at issue, as does the fact that the control group does not have access to the program.
+Finaly, the assumption of no unmeasured confounding remains important.
+
+The following subsection reviews the formal definitions of direct and indirect effects.
+The next two subsections illustrate the estimation of direct and indirect effects, respectively, in our study of hints.
+It turns out that indirect effects are are nearly unidentifiable, without some acrobatics; however, under the identification scheme we present here, estimating indirect effects is exceedingly simple.
+Therefore, Section \ref{sec:indirectEst} will mostly consist of a discussion of identification.
+Section \ref{sec:directEst} builds on the framework of the previous subsections to estimate direct effects with a regression model.
+
+\subsection{Review: Defining Direct and Indirect Effect}
 More precisely, express a subject's potential outcomes as a function
 of two variables, treatment assignment $Z$ and hint requests $H$:
 $Y(Z,H)$.
@@ -962,8 +1002,8 @@ $\xi(0)$ gives the effect of assignment to CTA1 if hints were,
 perhaps counterfactually, held at their control level, $H=0$.
 
 
-\subsection{Identification and Estimation of Direct and Indirect
-  Effects}
+\subsection{Identification and Estimation Log Data  Indirect
+  Effects}\label{sec:indirectEst}
 
 Since the potential outcome $Y(0,1)$ is undefined in the CTA1 hints
 study, any expression (potentially) including $Y(0,1)$ is also
@@ -1116,6 +1156,8 @@ This analysis suggests that the availability of hints
 actually \emph{lowers} the treatment effect, that CTA1 works not
 because of hints, but despite them.
 
+\subsection{Estimating Log Data Direct Effects}\label{sec:directEst}
+
 What would the effect be were all students to request few hints?
 To answer that question, we estimate ``direct'' effects,
 $\Xi=\EE[\xi(0)]=\EE[Y(1,H(0))]-\EE[Y(0,H(0))]$.
@@ -1209,7 +1251,7 @@ sample, principal effect estimates will still contain uncertainty.
 In previous sections $\bar{h}$ was dichotomized into $H$; such
 dichotomization is not necessary here.
 However, $\bar{h}$ has some disadvantages as a continuous measure of
-hint usage.
+hint usage \citep{aoas}.
 For one, since it is essentially a sample mean over a subset of each student's
 worked problems, much of its variance is driven by the total number of
 problems students worked---in particular, its extreme values belong to
