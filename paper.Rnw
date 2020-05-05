@@ -201,13 +201,17 @@ focusing on the applicability of these three methods in the specific
 context of studying implementation data from an randomized
 experiment studying educational technology.
 
-After a brief overview of the three causal approaches,
-the next section will provide background for the case-study,
+The following section will provide background for the case-study,
 describing the CTA1 curriculum, the RAND study, and our focus on
 hints.
 The following three sections will present the observational study,
-causal mediation, and principal stratification approaches to the hint
-data.
+which discards the control group altogether and estimates the effect
+of hint requests on posttest scores;
+causal mediation, which decomposes the overall treatment effect into a
+component driven by hint requests and another driven by other
+mechanisms; and principal stratification, which estimates separate
+treatment effects for groups of students who would request hints
+differently, if assigned to treatment.
 As it turns out, these analyses appear to give contradictory
 results---the observational study and mediation analysis estimate a
 negative effect of requesting hints, while the principal
@@ -221,104 +225,6 @@ Section \ref{sec:conclusion} will conclude.
 
 The \texttt{R} and Stan code used to for all of the analyses in the paper can be found in a github repository, \url{https://github.com/adamSales/logDataCaseStudy}.
 
-\subsection{Brief Overview of Three Causal Approaches}
-\begin{figure}
-\centering
-\begin{tikzpicture}[scale=1,transform shape]
-	%\draw[help lines] (0,0) grid (15,3);
-	\node[draw,shape=circle, inner sep=0pt,minimum size=1cm] (z) at (1,0) {$H$};
-	\node[draw,shape=circle, inner sep=0pt,minimum size=1cm] (y) at +(0:3){$Y$};
-	%\node[draw,shape=circle, inner sep=0pt,minimum size=1cm] (x) at (2.5,3.5){$X$};
-	%\draw[->,line width=2pt](x)--(z);
-	%\draw[->,line width=2pt](x)--(y);
-	\draw[->,line width=2pt](z)--(y);
-	\node at (2.5,-1) {(a)};
-
-	\node[draw,shape=circle, inner sep=0pt,minimum size=1cm] (z) at (5,0) {$Z$};
-	\node[draw,shape=circle, inner sep=0pt,minimum size=1cm] (y) at +(8,0){$Y$};
-	\node[draw,shape=circle, inner sep=0pt,minimum size=1cm] (m) at (6.5,2){$H$};
-	\draw[->,line width=2pt](z)--(m);
-	\draw[->,line width=2pt](m)--(y);
-	\draw[->,line width=2pt](z)--(y);
-	\node at (5.4,1.2) {(1)};
-	\node at (7.6,1.2) {(2)};
-	\node at (6.5,.3) {(3)};
-	\node at (6.5,-1) {(b)};
-
-        \node[draw,shape=circle, inner sep=0pt,minimum size=1cm] (z) at (10,0) {$Z$};
-	\node[draw,shape=circle, inner sep=0pt,minimum size=1cm] (y) at +(12,0){$Y$};
-        \node (mid) at (11,0) {};
-        \node[draw,shape=circle, inner sep=0pt,minimum size=1cm] (h)
-        at (11,2) {$H(1)$};
-	%\node[draw,shape=circle, inner sep=0pt,minimum size=1cm] (x) at (2.5,3.5){$X$};
-	%\draw[->,line width=2pt](x)--(z);
-	%\draw[->,line width=2pt](x)--(y);
-	\draw[->,line width=2pt](z)--(y);
-        \draw[->,line width=2pt](h)--(mid);
-	\node at (11,-1) {(c)};
-
-\end{tikzpicture}
-\caption{A schematic representation of three causal models for
-  log data: (a) an observational study estimating the effects of hints
-  $H$ on posttest scores $Y$, (b) a mediation analysis estimating
-  natural direct effects of treatment assignment $Z$ on $Y$ and
-  indirect effects mediated by $H$, and (c) principal stratification.}
-\label{mediationFig}
-\end{figure}
-
-Figure \ref{mediationFig} is a schematic representation of the three
-approaches to causal modeling of log data that we will discuss in this
-paper.
-First, an observational study to estimate the effect of hint usage $H$
-on posttest scores $Y$, is represented by panel (a).
-This approach, which we will discuss in Section
-\ref{sec:observational}, discards the control group from the RCT and
-uses techniques from observational studies to determine if and how requesting
-a greater number of hints affects posttest scores.
-For the sake of illustration, we will use techniques similar to those
-discussed in \citet{rosenbaum2002observational},
- \citet{hansen2009b}, and \citet{ho:etal:2007}, combining a propensity
- score matching design with methods for analyzing experiments and
- parametric modeling.
-The conceptual and methodological issues we will discuss extend to
-other covariate control methods as well.
-
-Next, as represented in panel (b), we will conduct a mediation
-analysis, estimating natural
-indirect effects of CTA1 treatment assignment $Z$, as mediated by
-$H$. That is, we will estimate the component of $Z$'s effect on $Y$ that comes about
-due to $Z$'s effect on $H$---path (1)---and $H$'s effect on $Y$, path
-(2).
-Notice that path (2) is identical to panel (a)---the effect of $H$ on
-$Y$.
-We will use this equivalence to estimate and interpret indirect
-effects.
-As part of the mediation analysis, we will also estimate path (3), the
-natural direct effect of $Z$ on $Y$---that is, the component of $Z$'s
-effect on $Y$ that is not due to hints $H$.
-
-Finally, we will estimate a principal stratification model, as represented in panel
-(c).
-In the principal stratification analysis, we do not model $H$ as an
-intervention that could, in theory, be randomized.
-Instead, we posit a variable ``$H_i(1)$,''  subject $i$'s penchant for
-requesting hints \emph{if} $i$ is assigned to the treatment
-condition.
-Unlike $H$, $H(1)$ is well defined (if
-unobserved) for all participants in the RCT.
-Principal stratification treats $H(1)$ as an effect moderator or
-interaction variable: $H(1)$ does not affect $Y$, but the effect of
-$Z$ on $Y$ may vary as a function of $H(1)$.
-This analysis will largely follow the method of \citet{aoas}, which in
-turn built heavily on \citet{schwartz2011bayesian} and
-\citet{jin2008principal}.
-
-All three of these approaches are designed to model intermediate
-variables---those variables, like hint usage,
-that were possibly affected by $Z$ but were measured prior to $Y$.
-Though they were developed for more traditional data scenarios, the
-novel scenario of computer log data from an educational technology RCT
-presents new and interesting challenges and opportunities.
 
 \section{Case Study: The Role of Hints in the Cognitive Tutor Effect}
 
