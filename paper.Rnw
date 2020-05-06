@@ -1216,7 +1216,36 @@ The observational study approach and mediation analysis both rely on
 an ignorability assumption to estimate the effect of $H$ on $Y$, in
 the latter case framing this effect as one component of the overall
 treatment effect.
-Principal stratification \citep[PS;][]{frangakis} takes a different approach entirely.
+Principal stratification \citep[PS;][]{frangakis} takes a different
+approach entirely, more akin to moderation than to mediation.
+
+The goal of principal stratification is to stratify all students in
+the RCT---in both the treatment and control arms---based on how they
+would use the software were they (perhaps counterfactually) assigned
+to the treatment condition, and then to estimate the average effect of
+assignment to the treatment condition separately in different stratum.
+Principal stratification analysis requires data on outcomes
+(e.g. posttest scores) in both tretment arms, as well as data on
+implementation.
+In classical principal stratification
+\citep[e.g.][]{page2012principal,feller2016compared}, the intermediate
+variable, implementation, is discrete or categorical, leading to
+discrete strata.
+Other approachs \citep[e.g.]{gilbertHudgens,jin2008principal} allow
+the intermediate variable to be continuous.
+The method we use here is based on \citet{aoas}, in which the variable
+defining principal strata is latent---specifically, the ``ability''
+parameter is \eqref{eq:rasch}.
+For this approach, implementation is measured with a series of binary
+measurements for each student, with each measurement taken from a
+specific problem or section.
+Other implementation data structures may call for different
+measurement models.
+Finally, covariates may not be strictly necessary for principal
+stratification, but they can be extremely helpful.
+
+
+
 In the PS approach, $Y(0)=Y(Z=0)$ and $Y(1)=Y(Z=1)$ are the only potential
 outcomes for $Y$.
 As in mediation analysis, hint behavior has potential outcomes as
@@ -1297,7 +1326,7 @@ because of randomization of $Z$, these inferences extend to the
 control group as well.
 
 Our approach to PS estimation is model-based and Bayesian, following
-\citet{page2012principal}, \citet{feller2016compared},
+\citet{jin2008principal},
 \citet{schwartz2011bayesian} and others.
 The PS model consists of three sub-models, all depending on a
  vector of parameters $\bm{\theta}$ that contains regression
