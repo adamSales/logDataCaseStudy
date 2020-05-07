@@ -1219,15 +1219,19 @@ treatment effect.
 Principal stratification \citep[PS;][]{frangakis} takes a different
 approach entirely, more akin to moderation than to mediation.
 
-The goal of principal stratification is to stratify all students in
+The goal of PS is to stratify all students in
 the RCT---in both the treatment and control arms---based on how they
 would use the software were they (perhaps counterfactually) assigned
 to the treatment condition, and then to estimate the average effect of
 assignment to the treatment condition separately in different stratum.
-Principal stratification analysis requires data on outcomes
+In an RCT, identification of these average effects relies on
+randomization of treatment assignment,
+rather than confounding control or assumptions about
+unmeasured confounders.
+PS analysis requires data on outcomes
 (e.g. posttest scores) in both tretment arms, as well as data on
 implementation.
-In classical principal stratification
+In classical PS
 \citep[e.g.][]{page2012principal,feller2016compared}, the intermediate
 variable, implementation, is discrete or categorical, leading to
 discrete strata.
@@ -1241,11 +1245,25 @@ measurements for each student, with each measurement taken from a
 specific problem or section.
 Other implementation data structures may call for different
 measurement models.
-Finally, covariates may not be strictly necessary for principal
-stratification, but they can be extremely helpful.
+Finally, covariates may not be strictly necessary for PS, but they can be extremely helpful.
+
+Below, we describe a Bayesian PS model fit in one step.
+However, the full process of PS analysis is a much more involved
+procedure.
+After a formal introduction in Section \ref{sec:psIntro},
+\S~\ref{sec:psModel} describes a set of sub-models for student hint
+requests, posttest scores, and treatment effects.
+Ideally, each of these models should be carefully tailored to each
+data application, and each must be rigorously tested.
+Model checking includes examination of residual data plots, fake data
+simulation, and fitting a range of alternative specifications in a
+sensitivity analysis.
+More details for checking PS models can be found in \citet{aoas},
+\citet{psTutorial}, and for Bayesian models in general in
+\citet{gelman2014bayesian} and \citet{mcelreath2020statistical}.
 
 
-
+\subsection{Principal Effects for EdTech Log Data}\label{sec:psIntro}
 In the PS approach, $Y(0)=Y(Z=0)$ and $Y(1)=Y(Z=1)$ are the only potential
 outcomes for $Y$.
 As in mediation analysis, hint behavior has potential outcomes as
@@ -1254,7 +1272,7 @@ Specifically, the rate at which as student requests hints, $\bar{h}$,
 has potential values $\bar{h}(1)$ and $\bar{h}(0)$,
 though only $\bar{h}(1)$ is relevant in the CTA1 study.
 
-The goal of principal stratification is to estimate ``principal
+The goal of PS is to estimate ``principal
 effects'':
 \begin{equation*}
 \tau(r)=\EE[Y(1)-Y(0)|\bar{h}(1)=r]
@@ -1304,18 +1322,18 @@ $\eta(1)$ is defined for all the students in the study.
 Second, a modeling difference: since we did not dichotomize $\eta(1)$
 in this analysis, we modeled it as normal , not as a normal mixture, as in
 \eqref{eq:mixture}.
-With this change, the principal stratification estimand became
+With this change, the PS estimand became
 \begin{equation*}
 \tau(r)=\EE[Y(1)-Y(0)|\eta(1)=r]
 \end{equation*}
 the treatment effect for students whose potential hint usage, if assigned to the treatment condition $\eta(1)=r$.
-A full treatment of this variant of principal stratification, including a
+A full treatment of this variant of PS, including a
 discussion of identification and estimation, may be found in
 \citet{aoas}.
 
 
 
-\subsection{Identification and Estimation}
+\subsection{Specifying PS Models}\label{sec:psModel}
 Estimating $\tau(r)$ required estimating $\EE[Y(0)|\eta(1)=r]$,
 despite the fact that hint requests never observed at the same time as
 $Y(0)$ (in fact $\eta(1)$ isn't directly observed in either the
@@ -1407,9 +1425,11 @@ $\bm{\beta^Y}$ and $\bm{\beta^M}$ were normal with mean zero and
 standard deviation 2;
 priors for treatment effects and the coefficient on $\eta(1)$ were standard
 normal.
-The rest of the parameters received Stan's default uniform priors.
+The rest of the parameters received standard reference priors.
 In all cases, we expected true parameter values to be much smaller in
 magnitude than the prior standard deviation.
+
+\subsection{Estimating Principal Effects}\label{sec:PSest}
 
 Figure \ref{fig:psResults} shows the estimated linear function
 $\hat{\tau}(r)$.
