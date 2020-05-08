@@ -472,13 +472,13 @@ and 0 otherwise.
 
 To choose $c$, we first fit a modified Rasch mixture model
 \citep{rasch} to hint request data.
-Specifically, we modeled the probability of a hint request in each problem
+Specifically, we modeled the probability of at least one hint request in each problem
 $p$, worked by student $i$, in which $i$ requested a hint and/or
 committed an error, as
 \begin{equation}\label{eq:rasch}
 Pr(h_{ip})=logit^{-1}(\eta_i+\delta_{s[p]})
 \end{equation}
-where $h_{ip}$ is the event that student $i$ requests a hint on
+where $h_{ip}$ is the event that student $i$ requests at least one hint on
 problem $p$, $\eta_i$ is a student parameter, $\delta_{s[p]}$ is a
 section-level parameter for $s[p]$, the section that problem $p$ was
 drawn from, and $logit^{-1}(x)=\{1+exp(-x)\}^{-1}$ is the inverse logit
@@ -491,8 +491,14 @@ level parameters would be hard to estimate.
 Instead, we included the section-level parameter $\delta_{s[p]}$,
 which measures the extent to which students tend to request hints on
 problems in section $s$.
-This essentially assumes that all problems within each section are equally
+This essentially models all problems within each section as equally
 likely to elicit a hint request.
+
+With even more granular data, \eqref{eq:rasch} could be further elaborated. 
+In the Cognitive Tutor, problems often have multiple parts, and each part offers its own hints.
+Researchers in posession of data on each part of each worked problem could specify a model at the part-level, instead of at the problem-level like \eqref{rasch}. 
+Perhaps an even better option (suggested by an anonymous reviewer) would incorporate data on the specific skills required to solve each problem.
+While sections of the tutor differ from each other in the skills they teach, not every problem in each section includes the same set of skills; different problems requiring the same skill set will be similar in difficulty \citep[see, e.g.]{goldin2012learner,pavlik2009performance}. 
 
 Then, in order to dichotomize hint request behavior, we modeled
 student effects $\eta$ as
@@ -506,6 +512,7 @@ users have $\eta$ drawn from a normal distribution with mean $\mu_1$
 and standard deviation $\sigma_1$, and low hint users have $\eta$
 drawn from a normal distribution with mean $\mu_0$ and standard
 deviation $\sigma_0$.
+
 
 Our main parameter of interest here is $p_0$, the proportion of
 students who are low hint users.
