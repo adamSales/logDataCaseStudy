@@ -912,11 +912,12 @@ effect and a ``direct'' effect.
 The indirect effect captures the component of the effect that is due
 to the mediator: the treatment affected the outcome by affecting the
 mediator, which itself, in turn, affected the outcome.
-In contrast, the direct effect is the component of the effect that
-operates via other mechanisms.
+Assignment to the treatment condition allowed students to request hints during their work---how did the availability of hints affect their posttest scores?
+The direct effect is the component of the overall effect that operates via other mechanisms. 
+For instance, how would assignment to CTA1 affect posttest scores were hints not available (or, at least, limited)?
+
 
 The method we present here builds on the results from the observational study in the previous section.
-Estimating the indirect effect is a way to interpret the estimated effect of $H$ in the context of the overall treatment effect of the EdTech intervention.
 In fact, in our analysis estimating indirect effects requires no more data than the observational study.
 Estimating direct effects requires, additionally, data from the control group: posttest scores and (ideally) baseline covariates.
 The randomization of the intervention in the RCT now plays an important role in identification, since the overall effect of the intervention on posttest scores is at issue, as does the fact that the control group does not have access to the program.
@@ -1212,22 +1213,22 @@ $\\Xi=\\EE[Y(1,H(0))-Y(0,H(0))]$& \\eqref{eq:directEffReg} + covariates&',round(
 \end{table}
 
 \section{Principal Stratification}\label{sec:principalStratification}
-The observational study approach and mediation analysis both rely on
-an ignorability assumption to estimate the effect of $H$ on $Y$, in
-the latter case framing this effect as one component of the overall
-treatment effect.
-Principal stratification \citep[PS;][]{frangakis} takes a different
-approach entirely, more akin to moderation than to mediation.
 
-The goal of PS is to stratify all students in
+In a principal stratification \citep[PS;][]{frangakis}  analysis, the researcher stratifies all students in
 the RCT---in both the treatment and control arms---based on how they
-would use the software were they (perhaps counterfactually) assigned
-to the treatment condition, and then to estimate the average effect of
+\emph{would} use the software were they (perhaps counterfactually) assigned
+to the treatment condition.
+The goal is to estimate the average effect of
 assignment to the treatment condition separately in different stratum.
-In an RCT, identification of these average effects relies on
+In our analysis, we imagine that each student has his or her own proclivity to request hints, when possible: if assigned to treatment, each student would tend to request hints at a different rate.
+How does the effect of assignment to the CTA1 condition vary with these proclivities?
+Would the benefit of being assigned to the CTA1 condition be higher or lower for students who would tend to request more hints than for those who would tend to request fewer?
+
+In an RCT, identification of these varying effects relies on
 randomization of treatment assignment,
 rather than confounding control or assumptions about
 unmeasured confounders.
+Unlike the observational study or mediation analysis, PS in an RCT requires no assumptions about unmeasured confounding. 
 PS analysis requires data on outcomes
 (e.g. posttest scores) in both tretment arms, as well as data on
 implementation.
@@ -1261,7 +1262,6 @@ sensitivity analysis.
 More details for checking PS models can be found in \citet{aoas},
 \citet{psTutorial}, and for Bayesian models in general in
 \citet{gelman2014bayesian} and \citet{mcelreath2020statistical}.
-
 
 \subsection{Principal Effects for EdTech Log Data}\label{sec:psIntro}
 In the PS approach, $Y(0)=Y(Z=0)$ and $Y(1)=Y(Z=1)$ are the only potential

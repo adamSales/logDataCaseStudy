@@ -822,7 +822,7 @@ estimates.
 % measured covariates; hence, additional adjustment was unnecessary.
 
 % latex table generated in R 3.6.2 by xtable 1.8-4 package
-% Mon Apr 27 14:45:08 2020
+% Fri May  8 16:01:57 2020
 \begin{table}[ht]
 \centering
 \begin{tabular}{rllccc}
@@ -915,11 +915,12 @@ effect and a ``direct'' effect.
 The indirect effect captures the component of the effect that is due
 to the mediator: the treatment affected the outcome by affecting the
 mediator, which itself, in turn, affected the outcome.
-In contrast, the direct effect is the component of the effect that
-operates via other mechanisms.
+Assignment to the treatment condition allowed students to request hints during their work---how did the availability of hints affect their posttest scores?
+The direct effect is the component of the overall effect that operates via other mechanisms. 
+For instance, how would assignment to CTA1 affect posttest scores were hints not available (or, at least, limited)?
+
 
 The method we present here builds on the results from the observational study in the previous section.
-Estimating the indirect effect is a way to interpret the estimated effect of $H$ in the context of the overall treatment effect of the EdTech intervention.
 In fact, in our analysis estimating indirect effects requires no more data than the observational study.
 Estimating direct effects requires, additionally, data from the control group: posttest scores and (ideally) baseline covariates.
 The randomization of the intervention in the RCT now plays an important role in identification, since the overall effect of the intervention on posttest scores is at issue, as does the fact that the control group does not have access to the program.
@@ -1213,11 +1214,57 @@ $\Xi=\EE[Y(1,H(0))-Y(0,H(0))]$& \eqref{eq:directEffReg} + covariates& 0.18 & [-0
 \end{table}
 
 \section{Principal Stratification}\label{sec:principalStratification}
-The observational study approach and mediation analysis both rely on
-an ignorability assumption to estimate the effect of $H$ on $Y$, in
-the latter case framing this effect as one component of the overall
-treatment effect.
-Principal stratification \citep[PS;][]{frangakis} takes a different approach entirely.
+
+In a principal stratification \citep[PS;][]{frangakis}  analysis, the researcher stratifies all students in
+the RCT---in both the treatment and control arms---based on how they
+\emph{would} use the software were they (perhaps counterfactually) assigned
+to the treatment condition.
+The goal is to estimate the average effect of
+assignment to the treatment condition separately in different stratum.
+In our analysis, we imagine that each student has his or her own proclivity to request hints, when possible: if assigned to treatment, each student would tend to request hints at a different rate.
+How does the effect of assignment to the CTA1 condition vary with these proclivities?
+Would the benefit of being assigned to the CTA1 condition be higher or lower for students who would tend to request more hints than for those who would tend to request fewer?
+
+In an RCT, identification of these varying effects relies on
+randomization of treatment assignment,
+rather than confounding control or assumptions about
+unmeasured confounders.
+Unlike the observational study or mediation analysis, PS in an RCT requires no assumptions about unmeasured confounding. 
+PS analysis requires data on outcomes
+(e.g. posttest scores) in both tretment arms, as well as data on
+implementation.
+In classical PS
+\citep[e.g.][]{page2012principal,feller2016compared}, the intermediate
+variable, implementation, is discrete or categorical, leading to
+discrete strata.
+Other approachs \citep[e.g.]{gilbertHudgens,jin2008principal} allow
+the intermediate variable to be continuous.
+The method we use here is based on \citet{aoas}, in which the variable
+defining principal strata is latent---specifically, the ``ability''
+parameter is \eqref{eq:rasch}.
+For this approach, implementation is measured with a series of binary
+measurements for each student, with each measurement taken from a
+specific problem or section.
+Other implementation data structures may call for different
+measurement models.
+Finally, covariates may not be strictly necessary for PS, but they can be extremely helpful.
+
+Below, we describe a Bayesian PS model fit in one step.
+However, the full process of PS analysis is a much more involved
+procedure.
+After a formal introduction in Section \ref{sec:psIntro},
+\S~\ref{sec:psModel} describes a set of sub-models for student hint
+requests, posttest scores, and treatment effects.
+Ideally, each of these models should be carefully tailored to each
+data application, and each must be rigorously tested.
+Model checking includes examination of residual data plots, fake data
+simulation, and fitting a range of alternative specifications in a
+sensitivity analysis.
+More details for checking PS models can be found in \citet{aoas},
+\citet{psTutorial}, and for Bayesian models in general in
+\citet{gelman2014bayesian} and \citet{mcelreath2020statistical}.
+
+\subsection{Principal Effects for EdTech Log Data}\label{sec:psIntro}
 In the PS approach, $Y(0)=Y(Z=0)$ and $Y(1)=Y(Z=1)$ are the only potential
 outcomes for $Y$.
 As in mediation analysis, hint behavior has potential outcomes as
@@ -1226,7 +1273,7 @@ Specifically, the rate at which as student requests hints, $\bar{h}$,
 has potential values $\bar{h}(1)$ and $\bar{h}(0)$,
 though only $\bar{h}(1)$ is relevant in the CTA1 study.
 
-The goal of principal stratification is to estimate ``principal
+The goal of PS is to estimate ``principal
 effects'':
 \begin{equation*}
 \tau(r)=\EE[Y(1)-Y(0)|\bar{h}(1)=r]
@@ -1276,18 +1323,18 @@ $\eta(1)$ is defined for all the students in the study.
 Second, a modeling difference: since we did not dichotomize $\eta(1)$
 in this analysis, we modeled it as normal , not as a normal mixture, as in
 \eqref{eq:mixture}.
-With this change, the principal stratification estimand became
+With this change, the PS estimand became
 \begin{equation*}
 \tau(r)=\EE[Y(1)-Y(0)|\eta(1)=r]
 \end{equation*}
 the treatment effect for students whose potential hint usage, if assigned to the treatment condition $\eta(1)=r$.
-A full treatment of this variant of principal stratification, including a
+A full treatment of this variant of PS, including a
 discussion of identification and estimation, may be found in
 \citet{aoas}.
 
 
 
-\subsection{Identification and Estimation}
+\subsection{Specifying PS Models}\label{sec:psModel}
 Estimating $\tau(r)$ required estimating $\EE[Y(0)|\eta(1)=r]$,
 despite the fact that hint requests never observed at the same time as
 $Y(0)$ (in fact $\eta(1)$ isn't directly observed in either the
@@ -1298,7 +1345,7 @@ because of randomization of $Z$, these inferences extend to the
 control group as well.
 
 Our approach to PS estimation is model-based and Bayesian, following
-\citet{page2012principal}, \citet{feller2016compared},
+\citet{jin2008principal},
 \citet{schwartz2011bayesian} and others.
 The PS model consists of three sub-models, all depending on a
  vector of parameters $\bm{\theta}$ that contains regression
@@ -1379,9 +1426,11 @@ $\bm{\beta^Y}$ and $\bm{\beta^M}$ were normal with mean zero and
 standard deviation 2;
 priors for treatment effects and the coefficient on $\eta(1)$ were standard
 normal.
-The rest of the parameters received Stan's default uniform priors.
+The rest of the parameters received standard reference priors.
 In all cases, we expected true parameter values to be much smaller in
 magnitude than the prior standard deviation.
+
+\subsection{Estimating Principal Effects}\label{sec:PSest}
 
 Figure \ref{fig:psResults} shows the estimated linear function
 $\hat{\tau}(r)$.
@@ -1762,7 +1811,7 @@ where we constrained $\mu_0<\mu_1$.
 %\clearpage
 \section{Covariate Balance Before and After Matching}
 % latex table generated in R 3.6.2 by xtable 1.8-4 package
-% Mon Apr 27 14:45:09 2020
+% Fri May  8 16:01:58 2020
 \begin{table}[ht]
 \centering
 \begin{tabular}{lrrrrrr}
