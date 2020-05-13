@@ -454,11 +454,11 @@ problems in section $s$.
 This essentially models all problems within each section as equally
 likely to elicit a hint request.
 
-With even more granular data, \eqref{eq:rasch} could be further elaborated. 
+With even more granular data, \eqref{eq:rasch} could be further elaborated.
 In the Cognitive Tutor, problems often have multiple parts, and each part offers its own hints.
-Researchers in posession of data on each part of each worked problem could specify a model at the part-level, instead of at the problem-level like \eqref{rasch}. 
+Researchers in posession of data on each part of each worked problem could specify a model at the part-level, instead of at the problem-level like \eqref{rasch}.
 Perhaps an even better option (suggested by an anonymous reviewer) would incorporate data on the specific skills required to solve each problem.
-While sections of the tutor differ from each other in the skills they teach, not every problem in each section includes the same set of skills; different problems requiring the same skill set will be similar in difficulty \citep[see, e.g.]{goldin2012learner,pavlik2009performance}. 
+While sections of the tutor differ from each other in the skills they teach, not every problem in each section includes the same set of skills; different problems requiring the same skill set will be similar in difficulty \citep[see, e.g.]{goldin2012learner,pavlik2009performance}.
 
 Then, in order to dichotomize hint request behavior, we modeled
 student effects $\eta$ as
@@ -899,14 +899,17 @@ effects.
 In fact, pretest is the most important of our observed covariates; it is the observed covariate whose omission would cause the most bias.
 This is unsurprising, since pretests are generally considered to be the most important covariate to measure, and studies that include pretest measures often reproduce experimental estimates \citep[e.g.][]{cook2008three,cook2009bias}.
 Therefore, a sensitivity analysis considering an omitted covariate as important as pretest scores may be too pessimistic.
-Instead,
-the final column of Table \ref{tab:matchResults} gives sensitivity intervals for the omission of a covariate that, at most, predicts $Y$ and $H$ as well as ethnicity dummy variables, the second most important of our observed covariates.
+On the other hand, it is likely that pretest scores do not fully capture between-student variance in academic ability; that is, there may be important components of prior ability (such as the ability to learn algebra) that are correlated with hint requests and posttest scores but not reflected in pretest scores.
+A hypothetical measurement of one of those components may indeed have constituted a more important covariate than pretest scores.
+
+A more optimistic scenario is reflected in the final column of Table \ref{tab:matchResults}.
+That column gives sensitivity intervals for the omission of a covariate that, at most, predicts $Y$ and $H$ as well as ethnicity dummy variables, the second most important of our observed covariates.
 These sensitivity intervals are also wide, but the interval corresponding
 to OLS weights is entirely negative.
 
 The conclusion is that the omission of a confounder as important as ethnicity indicators
 cannot explain the estimated OLS-weighted ATE.
-Allowing for the possible omission of such a covariate, we infer that requesting a
+Allowing for the possible omission of such a covariate, the results suggest that requesting a
 large number of hints hurts students' posttest scores.
 The size of the effect may be as small as
 \Sexpr{min(abs(round(sens[['prec_eff']]['race',]*100)))}\% of a standard deviation
@@ -920,7 +923,7 @@ The indirect effect captures the component of the effect that is due
 to the mediator: the treatment affected the outcome by affecting the
 mediator, which itself, in turn, affected the outcome.
 Assignment to the treatment condition allowed students to request hints during their work---how did the availability of hints affect their posttest scores?
-The direct effect is the component of the overall effect that operates via other mechanisms. 
+The direct effect is the component of the overall effect that operates via other mechanisms.
 For instance, how would assignment to CTA1 affect posttest scores were hints not available (or, at least, limited)?
 
 
@@ -1160,7 +1163,8 @@ Since $Pr(H=1)=$\Sexpr{round(mixProp,2)} by definition,
 $\hat{\Delta}=$\Sexpr{round(mixProp,2)}$TOT$.
 Estimated thusly, the indirect effect is negative: \Sexpr{round(effects[['tot_eff']][['coefficients']]*(mixProp),2)}, with
 a standard error of \Sexpr{round(effects$tot_eff$std.error*(mixProp),2)}.
-This analysis suggests that the availability of hints
+Like the $TOT$ estimate on which it is based, this estimate of indirect effects assumes matched ignorabilty---no confounding between $H$ and $Y$ within matched sets.
+With this important caveat, this analysis suggests that the availability of hints
 actually \emph{lowers} the treatment effect, that CTA1 works not
 because of hints, but despite them.
 
@@ -1198,7 +1202,7 @@ effect of
 Adding covariates to the regression \eqref{eq:directEffReg} estimates a direct effect of
 \Sexpr{citopm(dir2.1ci)}.
 
-Table \ref{tab:mediation} summarizes our mediation results.
+Table \ref{tab:mediation} summarizes our mediation results: assuming matched ignorability, assignment to CTA1 increases student test scores despite the availablity of hints (an indirect effect of \Sexpr{round(mixProp*effects[['tot_eff']][['coefficients']],2)} standard deviations), and the effect due to CTA1's other mechanisms is \Sexpr{round(dir2.1t[1],2)}.
 
 \begin{table}
 \begin{tabular}{llll}
@@ -1235,7 +1239,7 @@ In an RCT, identification of these varying effects relies on
 randomization of treatment assignment,
 rather than confounding control or assumptions about
 unmeasured confounders.
-Unlike the observational study or mediation analysis, PS in an RCT requires no assumptions about unmeasured confounding. 
+Unlike the observational study or mediation analysis, PS in an RCT requires no assumptions about unmeasured confounding.
 PS analysis requires data on outcomes
 (e.g. posttest scores) in both tretment arms, as well as data on
 implementation.
@@ -1588,13 +1592,14 @@ Our observational study suggested that hint requests have a negative effect: stu
 requested hints more often than the \Sexpr{round((1-mixProp)*100)}th
 percentile score lower on the posttest, after controlling for observed
 covariates.
-As far as we can tell, the optimal strategy is to request few, if any, hints.
-While our estimate is subject to bias from an omitted confounder, the omitted variable must be a relatively strong predictor of hint usage and of posttest scores in order to explain the observed relationship.
+Taken at face value, this suggests that the optimal strategy is to request few, if any, hints.
+%While our estimate is subject to bias from an omitted confounder, the omitted variable must be a relatively strong predictor of hint usage and of posttest scores in order to explain the observed relationship.
+However, this conclusion assumes that there were no omitted confounders.
 An omitted confounder that is as important as pretest could explain the relationship, but an omitted confounder as important as ethnicity---our second most important covariate---could not (so long as we estimate an OLS-weighted average effect).
 
 Mediation analysis essentially interprets the observational study result in terms of the
 overall CTA1 treatment effect.
-Specifically, our analysis showed that CTA1 affected students'
+Specifically, the analysis in \ref{sec:mediation} showed that CTA1 affected students'
 posttest scores in (at least) two opposite ways: by allowing hints, it
 lowered their posttest scores, but its other mechanisms increased
 their scores by an even greater amount.
