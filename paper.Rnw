@@ -1205,17 +1205,16 @@ Adding covariates to the regression \eqref{eq:directEffReg} estimates a direct e
 Table \ref{tab:mediation} summarizes our mediation results: assuming matched ignorability, assignment to CTA1 increases student test scores despite the availablity of hints (an indirect effect of \Sexpr{round(mixProp*effects[['tot_eff']][['coefficients']],2)} standard deviations), and the effect due to CTA1's other mechanisms is \Sexpr{round(dir2.1t[1],2)}.
 
 \begin{table}
-\begin{tabular}{llll}
+\centering
+\begin{tabular}{lll}
 \hline
-Effect&Method&Estimate&CI\\
+Effect&Estimate&CI\\
 \hline
 <<mediationTable,echo=FALSE>>=
 cat(
-  '$1-p_0=\\EE[H(1)-H(0)|Z=1]$ & By Definition&',round(mixProp,2),'&n/a\\\\
-$TOT=\\EE[Y(Z=1,H=1)-Y(Z=1,H=0)|Z=1]$&Matching&',round(effects[['tot_eff']][['coefficients']],2),'&',printci(with(effects[['tot_eff']],c(conf.low,conf.high))),'\\\\
-$\\Delta=\\EE[Y(1,H(1))-Y(1,H(0))|Z=1]$&$(1-p_0)TOT$&',round(mixProp*effects[['tot_eff']][['coefficients']],2),'&',printci(mixProp*with(effects[['tot_eff']],c(conf.low,conf.high))),'\\\\
-$\\Xi=\\EE[Y(1,H(0))-Y(0,H(0))]$&Regression \\eqref{eq:directEffReg}&',round(dir1.1t[1],2),'&',printci(dir1.1ci),'\\\\
-$\\Xi=\\EE[Y(1,H(0))-Y(0,H(0))]$& \\eqref{eq:directEffReg} + covariates&',round(dir2.1t[1],2),'&',printci(dir2.1ci),'\\\\\n')
+'Avg. Indirect Effect ($\\Delta$)&',round(mixProp*effects[['tot_eff']][['coefficients']],2),'&',printci(mixProp*with(effects[['tot_eff']],c(conf.low,conf.high))),'\\\\
+Avg. Direct Effect ($\\Xi$)&',round(dir1.1t[1],2),'&',printci(dir1.1ci),'\\\\
+Avg. Direct Effect, covariate adjusted ($\\Xi$) &',round(dir2.1t[1],2),'&',printci(dir2.1ci),'\\\\\n')
 @
 \hline
 \end{tabular}

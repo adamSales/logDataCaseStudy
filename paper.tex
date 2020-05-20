@@ -829,7 +829,7 @@ estimates.
 % measured covariates; hence, additional adjustment was unnecessary.
 
 % latex table generated in R 3.6.2 by xtable 1.8-4 package
-% Wed May 13 17:14:14 2020
+% Wed May 20 10:38:55 2020
 \begin{table}[ht]
 \centering
 \begin{tabular}{rllccc}
@@ -1208,15 +1208,14 @@ Adding covariates to the regression \eqref{eq:directEffReg} estimates a direct e
 Table \ref{tab:mediation} summarizes our mediation results: assuming matched ignorability, assignment to CTA1 increases student test scores despite the availablity of hints (an indirect effect of -0.04 standard deviations), and the effect due to CTA1's other mechanisms is 0.18.
 
 \begin{table}
-\begin{tabular}{llll}
+\centering
+\begin{tabular}{lll}
 \hline
-Effect&Method&Estimate&CI\\
+Effect&Estimate&CI\\
 \hline
-$1-p_0=\EE[H(1)-H(0)|Z=1]$ & By Definition& 0.3 &n/a\\
-$TOT=\EE[Y(Z=1,H=1)-Y(Z=1,H=0)|Z=1]$&Matching& -0.14 & [-0.25,-0.03] \\
-$\Delta=\EE[Y(1,H(1))-Y(1,H(0))|Z=1]$&$(1-p_0)TOT$& -0.04 & [-0.07,-0.01] \\
-$\Xi=\EE[Y(1,H(0))-Y(0,H(0))]$&Regression \eqref{eq:directEffReg}& 0.14 & [-0.08,0.37] \\
-$\Xi=\EE[Y(1,H(0))-Y(0,H(0))]$& \eqref{eq:directEffReg} + covariates& 0.18 & [-0.01,0.38] \\
+Avg. Indirect Effect ($\Delta$)& -0.04 & [-0.07,-0.01] \\
+Avg. Direct Effect ($\Xi$)& 0.14 & [-0.08,0.37] \\
+Avg. Direct Effect, covariate adjusted ($\Xi$) & 0.18 & [-0.01,0.38] \\
 
 \hline
 \end{tabular}
@@ -1823,7 +1822,7 @@ where we constrained $\mu_0<\mu_1$.
 %\clearpage
 \section{Covariate Balance Before and After Matching}
 % latex table generated in R 3.6.2 by xtable 1.8-4 package
-% Wed May 13 17:14:15 2020
+% Wed May 20 10:38:57 2020
 \begin{table}[ht]
 \centering
 \begin{tabular}{lrrrrrr}
