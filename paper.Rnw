@@ -1672,6 +1672,30 @@ among actual experimental subjects.
 These concerns are important but beyond the scope of the current
 paper; for more discussion, see the citations in the introduction.
 
+In summary: in situations where the average treatment effect of an
+implementation variable can be estimated with little confounding bias
+(due to the availability of high-quality covariates, good reason to
+believe in random, or haphazard, variation in implementation, or other
+factors), there is much to recommend the observational study approach.
+A wide variety of estimation techniques are available---such as the propensity score
+matching illustrated here---many of which are straightforward to carry
+out and highly transparent.
+The result---the ATE of implementation on the outcome---is an
+intuitive estimand.
+
+Mediation analysis can complement the observational study if,
+additionally, one well-represented level of the implementation
+variable is interpretable in the control condition.
+For instance, in our example, $H=0$ included both low hint usage in
+the treatment group and no access to hints in the control group.
+In that case, mediation analysis can contextualize the estimated
+effect in the observational study in terms of the overall treatment
+effect, so that implementation can be interpreted as a causal
+mechanism.
+
+However, if unobserved confounding is a serious threat, and complex
+statistical modeling (and model checking) is not a practical barrier,
+PS may be a better choice.
 % \begin{table}
 % \begin{tabular}{p{1in}p{1.5}p{2in}p{2in}}
 % & Observational Study&Mediation Analysis &Principal Stratification\\
