@@ -456,7 +456,8 @@ to the percentage of problems a student requests a hint.%
 a hint on a problem and $e$ is the event that the student makes
 an error, then $Pr(h|h\text{ or }e)=1/\{1+Pr(e\text{ and not }h)/Pr(h)\}$.}
 Making an error on a problem without having requested a hint reflects
-a hesitance to request a hint when one might have been warranted.
+a hesitance to request a hint when one might have been warranted (or a
+careless mistake).
 $\bar{h}$ ignores the class of challenging problems on which students
 are challenged and figure the answer out (or guess correctly) without
 requesting a hint.
@@ -678,7 +679,8 @@ were randomized) then the average treatment effect (ATE) of $H$ on $Y$,
 $\EE[Y(H=1)]-\EE[Y(H=0)]$, could be estimated without bias or further
 assumptions.
 Of course, the distribution of $H_i$ is unknown, and is presumably a
-function of $i$'s individual characteristics.
+function of $i$'s individual characteristics (which, as we shall see,
+differed at baseline between those students with $H=1$ and those with $H=0$).
 However, if these relevant characteristics were all measured and
 available, the ATE of $H$ on $Y$ would be identified.
 
@@ -1696,9 +1698,9 @@ if risks of confounding bias appear limited
 (due to the availability of high-quality covariates, good reason to
 believe variation in implementation is random or haphazard, or other
 factors).
-A wide variety of straightforward and transparent estimation techniques 
+A wide variety of straightforward and transparent estimation techniques
 are available, such as the propensity score
-matching illustrated here, optionally also including covariates in the 
+matching illustrated here, optionally also including covariates in the
 outcomes model for additional protection against bias.
 The result---the ATE of implementation on the outcome---is an
 intuitive estimand.
@@ -1709,7 +1711,7 @@ variable is interpretable in the control condition.
 In our example, $H=0$ included both low hint usage in
 the treatment group and no access to hints in the control group.
 When employed, mediation analysis can contextualize the estimated
-implementation effect from the observational study in terms of the 
+implementation effect from the observational study in terms of the
 experiment's overall treatment
 effect, enabling implementation to be interpreted as a causal
 mechanism.
