@@ -483,24 +483,40 @@ problem $p$, $\eta_i$ is a student parameter, $\delta_{s[p]}$ is a
 section-level parameter for $s[p]$, the section that problem $p$ was
 drawn from, and $logit^{-1}(x)=\{1+exp(-x)\}^{-1}$ is the inverse logit
 function.
+
 Typically, the student parameter $\eta_i$ measures student ability;
 here, instead, it measures a student's proclivity to request a hint.
-The typical Rasch model includes a problem-level ``difficulty'' parameter, but in our
-dataset many problems were worked by very few students, so problem
-level parameters would be hard to estimate.
+The typical Rasch model includes a problem-level ``difficulty''
+parameter; here, it would measure the likelihood an individual problem
+elicits a hint request.
+That paramter is important in our context because the
+specific problems a student works on may influence his or her hint
+requests.
+For instance, two students with the same underlying proclivity to request
+hints $\eta$ may actually differ in their observed hint requests, because one
+worked harder problems than the other.
+However, in our dataset many problems were worked by very few students, so problem-level parameters would be hard to estimate.
 Instead, we included the section-level parameter $\delta_{s[p]}$,
 which measures the extent to which students tend to request hints on
 problems in section $s$.
-This essentially models all problems within each section as equally
-likely to elicit a hint request.
+Ignoring the differences between problems within a section could allow for wider
+variance in the average problem difficulty each student experiences
+than is captured by the section level parameters $\delta_{s[p]}$.
+That could, in turn, induce a difference in hint requests between two
+students with similar $\eta$ or vice-versa, and lead
+to bias in our estimate of $\eta$.
+Since the Cognitive Tutor selects problems for students based on estimates
+of their current skill mastery \citep{steveFaied2020}, this
+possibility is not out of the question.
 
-With even more granular data, \eqref{eq:rasch} could be further elaborated.
+With even more granular data, \eqref{eq:rasch} could be further
+elaborated, avoiding this assumption.
 In the Cognitive Tutor, problems often have multiple parts, and each part offers its own hints.
 Researchers in posession of data on each part of each worked problem could specify a model at the part-level, instead of at the problem-level like \eqref{rasch}.
 Perhaps an even better option (suggested by an anonymous reviewer) would incorporate data on the specific skills required to solve each problem.
 While sections of the tutor differ from each other in the skills they teach, not every problem in each section includes the same set of skills; different problems requiring the same skill set will be similar in difficulty \citep[see, e.g.]{goldin2012learner,pavlik2009performance}.
 
-Then, in order to dichotomize hint request behavior, we modeled
+In order to dichotomize hint request behavior, we modeled
 student effects $\eta$ as
 \begin{equation}\label{eq:mixture}
 \eta\sim
@@ -551,9 +567,11 @@ Log data were missing for some students, either because the log files
 were not retrievable, or because of an imperfect ability to link log
 data to other student records.
 Further, log data for sections that were not part of the
-standard CTA1 Algebra I curriculum and problems worked by fewer than 100
+standard CTA1 Algebra I curriculum and sections worked by fewer than 100
 students were omitted from the
-dataset.
+dataset.\footnote{The model was re-run without dropping sections, and
+  after dropping sections worked by fewer than 500 students, with
+  similar results.}
 
 To construct our analysis dataset, we first dropped treatment schools with log data missing
 for 90\% or more students.
@@ -1673,6 +1691,32 @@ among actual experimental subjects.
 These concerns are important but beyond the scope of the current
 paper; for more discussion, see the citations in the introduction.
 
+In summary: there is much to recommend the observational study approach
+if risks of confounding bias appear limited
+(due to the availability of high-quality covariates, good reason to
+believe variation in implementation is random or haphazard, or other
+factors).
+A wide variety of straightforward and transparent estimation techniques 
+are available, such as the propensity score
+matching illustrated here, optionally also including covariates in the 
+outcomes model for additional protection against bias.
+The result---the ATE of implementation on the outcome---is an
+intuitive estimand.
+
+Mediation analysis may have stronger standing where
+at least one well-represented level of the implementation
+variable is interpretable in the control condition.
+In our example, $H=0$ included both low hint usage in
+the treatment group and no access to hints in the control group.
+When employed, mediation analysis can contextualize the estimated
+implementation effect from the observational study in terms of the 
+experiment's overall treatment
+effect, enabling implementation to be interpreted as a causal
+mechanism.
+
+However, where unobserved confounding is a serious threat, and complex
+statistical modeling (and model checking) is not a practical barrier,
+PS may be a better choice because no ignorability assumptions are necessary.
 % \begin{table}
 % \begin{tabular}{p{1in}p{1.5}p{2in}p{2in}}
 % & Observational Study&Mediation Analysis &Principal Stratification\\
