@@ -798,19 +798,20 @@ and confidence intervals used the heteroskedasticity-robust ``HC3'' sandwich est
 \citep{sandwichPackage}.
 The three estimates all roughly agree that being a high hint user
 decreases posttest scores by roughly a fifth of a standard deviation.
-That is, requesting hints hurts posttest scores---teachers should
-recommend against students' requesting hints.
+That is, they suggest that requesting hints hurts posttest scores.
 
 The similarity of the three estimates boosts our confidence, if only
 slightly. The ATE and TOT estimates refer to different groups
 of students---ATE estimates an average effect for the entire treatment
 group, whereas TOT estimates an effect for high hint users. Had these
-been very different, we might wonder why the effect of hint requests
+been very different, one might wonder why the effect of hint requests
 varies so much between high and low hint users, and if that suggests
 selection bias.
 The OLS estimate downweights matched sets with many more $H=1$ than
 $H=0$ students or vice-versa, relative to matched sets with several of
 both.
+(Recall that such imbalanced matched sets were the result of the
+decision to include every subject in the analysis.)
 It is larger in magnitude and much less noisy than the other two
 estimates.
 % The fact that the additional covariate adjustment of the ANCOVA model
@@ -1065,60 +1066,54 @@ That being the case, the data provide little to no information about
 the distribution of potential outcomes when the software is used
 but no hints are requested.
 
-Dichotomizing hint requests into $H$, instead of $\bar{h}$, re-defines
-the causal question.
-To make sense of the respective roles of $H$ and $\bar{h}$, the
-continuous measure on which it is based (see Section
-\ref{sec:dichotomizingHintUsage}),
-we may imagine a process in
-which students are assigned $H$, and under that constraint choose a
-value for $\bar{h}$.
-In the control group all students are assigned $H=0$ and $\bar{h}=0$, but
-in the treatment group \Sexpr{round((1-mixProp)*100)}\% of students have $H=1$ and \Sexpr{round((mixProp)*100)}\% have
-$H=0$, and $\bar{h}$ varies within those groups.
-That structure implies a ``treatment mediator interaction''
-where the effect of the mediator on the outcome varies by treatment
-status.
-Of course, in our example treatment mediator interactions are not
-identified, since $H=0$ and $\bar{h}=0$ in the control group, and very
-few treatment students asked for 0 hints.
-In any event, dichotomizing hint requests likely under-sells the role
-of hints, but allows a tractable mediation analysis.
-
-In principle, effects $\delta(1)$ and $\xi(0)$ are defined at the
-individual level, as $\delta(1)_i$ and $\xi(0)_i$.
-However, as in the usual causal inference case, individual effects are
-not identified without strong assumptions, and the target of
-estimation is instead taken to be super-population average effects,
-$\Delta\equiv\EE[\delta(1)]$ and $\Xi\equiv\EE[\xi(0)]$. Our approach to estimating these
-is to estimate the means of each of the component potential outcomes,
-$\EE Y(1,H(1))$, $\EE Y(1,H(0))$, and $\EE Y(0,H(0))$.
-The first and last of these, $\EE Y(1,H(1))=\EE Y(Z=1)$ and $\EE
-Y(0,H(0))=\EE Y(Z=0)$ are non-parametrically identified due to the
-randomization of treatment assignment.
-
-On the other hand, randomization alone does not identify the strictly counterfactual
-potential outcome $\EE Y(1,H(0))$.
-In a typical mediation analysis of an RCT, identification of the
-distribution of $H(0)$ may be estimated based on the observed
-distribution of $H$ in the control group, due to randomization.
-In contrast, in the CTA1 study, $H$ is not observed in the control
-group.
-However, $H(0)$ was determined by the experimental design: since the
-CTA1 software was unavailable to the control group, $H(0)=0$ for all
-experimental participants, and $Y(1,H(0))\equiv Y(1,0)$.
-
-For treated subjects $i$ for whom $H_i=0$, then, treatment assignment
+Dichotomizing hint requests into $H$ provides a
+way forward.
+The experimental design ensures that $H(0)=0$ for all experimental
+participants, since
+CTA1 software was unavailable to the control group.
+Therefore, $Y(1,H(0))\equiv Y(1,0)$.
+Specifically, for treated subjects $i$ for whom $H_i=0$, then, treatment assignment
 did not affect $H$, so $H_i(0)=H_i(1)=0$.
 %In other words, for these subjects,
 %\begin{equation*}
 %Y_i(1,H(0))=Y_i(1,0)=Y_i(1,H(1))=Y_i
 %\end{equation*}
-Therefore, when $Z_i=1$ and $H_i=0$,
+In other words, when $Z_i=1$ and $H_i=0$,
 $\delta_i(1)=Y_i(1,H(1))-Y_i(1,H(0))=0$---there is no
 indirect effect.
 
-Treated subjects with $H=1$ present more of a challenge.
+Of course, $H=0$ in the treatment group typically means requesting
+\emph{some} hints, but not many, whereas subjects in the control group
+request exactly zero hints.
+One way to make sense of mediational estimands involving $H$ is to
+imagine an experiment in which students are assigned to different
+values of $H$.
+\Sexpr{round((1-mixProp)*100)}\% of students in the treatment group
+are randomly assigned to $H=1$ and \Sexpr{round((mixProp)*100)}\% to
+$H=0$.
+This assignment constrains $\bar{h}$, the proportion of problems on which they
+may request hints, so that if $H_i=0$,
+$\bar{h}_i$ is constrained to be less than
+\Sexpr{sprintf('%.1f',quantile(hintAvgStud[['propHintStud']],1-mixProp))},
+but if $H_i=1$ $\bar{h}_i$ must be greater than or equal to
+\Sexpr{sprintf('%.1f',quantile(hintAvgStud[['propHintStud']],1-mixProp))}.
+In contrast, all students in the control group are assigned $H=0$ and $\bar{h}=0$.
+
+In principle, effects $\delta(1)$ and $\xi(0)$ are defined at the
+individual level, as $\delta_i(1)$ and $\xi_i(0)$.
+However, individual effects are
+not identified without strong assumptions, so the target of
+estimation is instead taken to be super-population average effects,
+$\Delta\equiv\EE[\delta(1)]$ and $\Xi\equiv\EE[\xi(0)]$.
+Our approach to estimating these
+is to estimate the means of each of the component potential outcomes,
+$\EE Y(1,H(1))$, $\EE Y(1,H(0))$, and $\EE Y(0,H(0))$.
+The first and last of these, $\EE Y(1,H(1))=\EE Y(Z=1)$ and $\EE
+Y(0,H(0))=\EE Y(Z=0)$ are non-parametrically identified due to the
+randomization of treatment assignment.
+Additionally, as described above, $\delta_i(1)=0$ as long as $Z_i=1$ and $H_i=0$.
+
+Treated subjects with $H_i=1$ present more of a challenge.
 To estimate indirect effects for these subjects, we may rely on the
 same causal setup as in the observational approach:
 matched ignorability and the matching design of Section
@@ -1127,7 +1122,7 @@ Each member of the treatment group with $H=1$ is matched to other
 treatment-group subjects with $H=0$.
 Matched ignorability states that within these matched sets, $Y(1,0)$
 is independent of $H$.
-Therefore, if subject $i$ is matched to subject $j$, $H_i=1$, and
+Therefore, if subject $i$ is matched to subject $j$, with $H_i=1$, and
 $H_j=0$, we may estimate $Y_i(1,0)$ based on the observed
 $Y_j=Y_j(1,0)$.
 When $i$, with $H_i=1$, is matched to several subjects with $H=0$,
