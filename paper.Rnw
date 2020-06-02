@@ -634,7 +634,7 @@ one of the relevant potential outcomes is ever observed for each
 subject.
 For instance, $Y(H=1)$ is unobserved for members of the
 treatment group with $H=0$.
-If $Pr(H_i=1)$ were known for each $i$ (as would be the case if $H$
+If $Pr(H_i=1)$ were known for each $i$, and bounded away from 1 and 0, (as would be the case if $H$
 were randomized) then the average treatment effect (ATE) of $H$ on $Y$,
 $\EE[Y(H=1)]-\EE[Y(H=0)]$, could be estimated without bias or further
 assumptions.
@@ -668,7 +668,7 @@ the probability of a treatment-group subject requesting frequent hints, conditio
 his or her covariate vector $\bm{x}$.
 \citet{rosenbaum1983central} shows that conditioning on $\pi$ is
 equivalent to conditioning on $\bm{x}$.
-We estimated $\pi$ using a Bayesian multilevel logistic regression,
+We estimated $\pi$ using a multilevel logistic regression,
 using the \texttt{lme4} package in
 \texttt{R} \citep{lme4}.
 The propensity score model was:
@@ -691,19 +691,29 @@ We matched $H=0$ subjects to $H=1$ subjects in such a way as
 to minimize the overall distance between subjects in matched sets in
 the logit-transformed propensity scores, $logit(\hat{\pi})$.
 We constrained the match so that students could only be matched within
-schools.
-This was for two reasons: first, schools determine a number of factors
+schools, since schools determine a number of factors
 that in turn may impact posttest scores, including baseline
 student characteristics, pedagogical styles, and CTA1 usage patterns
-\citep[see][]{descriptivePaper}, and second, doing so facilitated the mediation
-analysis in the following section.
+\citep[see][]{descriptivePaper}.%, and second, doing so facilitated the mediation
+%analysis in the following section.
 Each matched set was allowed to contain any positive number of $H=1$
 and any positive number of $H=0$ subjects, resulting in matches of
 variable size and composition.
 For instance, one matched set included \Sexpr{max(sapply(levels(m3),function(ll) sum(optmatch:::getZfromMatch(m3)[m3==ll])))} $H=1$ subjects matched to a
 single $H=0$ subject, and another matched \Sexpr{max(sapply(levels(m3),function(ll) sum(!optmatch:::getZfromMatch(m3)[m3==ll])))} $H=0$ subjects to a
 single $H=1$ subject.
-All students in the CTA1 group of the dataset were included in the match.
+
+This strategy allowed every student in the CTA1 arm our dataset to be included in the match.
+In contrast, many matching studies discard subjects in the data sample
+with estimated propensity scores close to 1 or 0, focusing on the
+``region of common support'' \citep[e.g.]{caliendo2008some,shadish2010primer}.
+Doing so requires modifying the causal estimand---studies can only
+estimate the ATE for included subjects and those who resemble them.
+We chose, instead, to include every subject in order to simplify the mediation
+analysis in the following section, and validated the match by
+inspecting covariate balance.
+This came at the cost of imprecision in estimating the overall ATE,
+which we discuss in more detail below.
 
 Figure \ref{fig:balance} and Table \ref{tab:balance} in the online appendix show that
 matching largely eliminated mean differences in pre-treatment
