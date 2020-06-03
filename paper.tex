@@ -513,7 +513,7 @@ possibility is not out of the question.
 With even more granular data, \eqref{eq:rasch} could be further
 elaborated, avoiding this assumption.
 In the Cognitive Tutor, problems often have multiple parts, and each part offers its own hints.
-Researchers in posession of data on each part of each worked problem could specify a model at the part-level, instead of at the problem-level like \eqref{rasch}.
+Researchers in posession of data on each part of each worked problem could specify a model at the part-level, instead of at the problem-level like \eqref{eq:rasch}.
 Perhaps an even better option (suggested by an anonymous reviewer) would incorporate data on the specific skills required to solve each problem.
 While sections of the tutor differ from each other in the skills they teach, not every problem in each section includes the same set of skills; different problems requiring the same skill set will be similar in difficulty \citep[see, e.g.]{goldin2012learner,pavlik2009performance}.
 
@@ -1148,14 +1148,9 @@ $\hat{Y}_i(1,H(0))=\hat{Y}_i(1,0)$ from \eqref{eq:estY10}.
 Then, we can estimate $\Delta$, the average indirect effect in the
 treatment group, by averaging over the treatment group:
 \begin{equation*}
- \hat{\Delta}\equiv\widehat{\EE[\delta(0)|Z=1]}=\frac{1}{n_T}\displaystyle\sum_{i:Z_i=1} Y_i-\hat{Y}_i(1,H(0))
+ \hat{\Delta}\equiv\widehat{\EE[\delta(0)]}=\frac{1}{n_T}\displaystyle\sum_{i:Z_i=1} Y_i-\hat{Y}_i(1,H(0))
 \end{equation*}
-(Typically, the overall average indirect effect, $\EE[\delta(0)]$, is
-estimated instead of the average indirect effect of the treatment
-group, $\EE[\delta(0)|Z=1]$.
-We estimated the latter since data from the control group was not used
-in our estimation strategy, and estimating the overall average would
-simply complicate our standard error estimation.)
+
 
 This estimate is a close cousin of the ``TOT'' estimate in Table
 \ref{tab:matchResults} from the previous section.
@@ -1167,7 +1162,7 @@ TOT is the average difference between the realized outcomes for students
 with $Z=1$ and $H=1$, and their counterfactual outcomes were $Z=1$ and $H=0$.
 That is,
 \begin{equation*}
-TOT=\EE[Y(1,1)-Y(1,0)|Z=1,H=1]
+TOT=\EE[Y(1,1)-Y(1,0)|H=1]
 \end{equation*}
 
 $\hat{\Delta}$ estimates the difference between the average outcome
@@ -1175,24 +1170,25 @@ for students in the entire treatment group, and the average outcome
 for the treatment group were $H=0$ for all students.
 That is
 \begin{equation*}
-\Delta=\EE[Y(1,H(1))-Y(1,0)|Z=1]
+\Delta=\EE[Y(1,H(1))-Y(1,0)]
 \end{equation*}
 This can be re-written:
 \begin{align*}
 \begin{split}
-\Delta&=\EE[Y(1,1)-Y(1,0)|Z=1,H=1]Pr(H=1)\\
-&\qquad +\EE[Y(1,0)-Y(1,0)|Z=1,H=0]Pr(H=0)
+\Delta&=\EE[Y(1,1)-Y(1,0)|H=1]Pr(H=1)\\
+&\qquad +\EE[Y(1,0)-Y(1,0)|H=0]Pr(H=0)
 \end{split}
 \\[2ex]
-&=\EE[Y(1,1)-Y(1,0)|Z=1,H=1]Pr(H=1)\\
+&=\EE[Y(1,1)-Y(1,0)|H=1]Pr(H=1)\\
 &=Pr(H=1)TOT
 \end{align*}
-Since $Pr(H=1)=$0.3 by definition,
+Since, by definition, $Pr(H=1)=$0.3, we have that
 $\hat{\Delta}=$0.3$TOT$.
 Estimated thusly, the indirect effect is negative: -0.04, with
 a standard error of 0.02.
 Like the $TOT$ estimate on which it is based, this estimate of indirect effects assumes matched ignorabilty---no confounding between $H$ and $Y$ within matched sets.
-With this important caveat, this analysis suggests that the availability of hints
+With this important caveat, this analysis suggests that the
+wide availability of a hints
 actually \emph{lowers} the treatment effect, that CTA1 works not
 because of hints, but despite them.
 
@@ -1212,7 +1208,7 @@ One option is to construct outcome $\tilde{Y}$ as, simply, $Y$ for
 subjects in the control group and $\hat{Y}(1,0)$ (of Eq. \ref{eq:estY10}) for subjects in the
 treatment group:
 \begin{equation*}
-\tilde{Y}\equiv Z\hat{Y}(1,0)+(1-Z)\hat{Y}(1,0)
+\tilde{Y}\equiv Z\hat{Y}(1,0)+(1-Z)Y(0,0)
 \end{equation*}
 Then, regress it on a dummy variable for treatment group and dummy
 variables for randomization block:
