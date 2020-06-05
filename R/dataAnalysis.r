@@ -238,13 +238,16 @@ dat2 <- rbind(dat1[,names(datC)],datC)
 
 dir1.1 <- lm(yhat~treatment+pair,data=dat2)
 dir1.1vcv <- vcovCR(dir1.1,dat2$schoolid2,type='CR2')
-dir1.1t <- coeftest(dir1.1,dir1.1vcv)[2,]
-dir1.1ci <- coefci(dir1.1,'treatment',vcov.=dir1.1vcv)
+dir1.1t <- coef_test(dir1.1,dir1.1vcv,coefs='treatment')
+dir1.1ci <- conf_int(dir1.1,dir1.1vcv,coefs='treatment')
+dir1.1ci <- c(dir1.1ci$CI_L[1],dir1.1ci$CI_U[1])
 
 dir2.1 <- update(dir1.1,.~.+poly(xirt,2)+race+grade+esl+frl+sex)
 dir2.1vcv <- vcovCR(dir2.1,dat2$schoolid2,type='CR2')
-dir2.1t <- coeftest(dir2.1,dir2.1vcv)[2,]
-dir2.1ci <- coefci(dir2.1,'treatment',vcov.=dir2.1vcv)
+dir2.1t <- coef_test(dir2.1,dir2.1vcv,coefs='treatment')
+dir2.1ci <- conf_int(dir2.1,dir2.1vcv,coefs='treatment')
+dir2.1ci <- c(dir2.1ci$CI_L[1],dir2.1ci$CI_U[1])
+
 
 
 
