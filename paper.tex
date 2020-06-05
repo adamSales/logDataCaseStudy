@@ -764,7 +764,7 @@ with $H=0$.
 The p-value from an omnibus covariate balance test
 \citep{covBal} is 0.39.
 
-\subsection{Estimating the Effects of $H$ on Posttest Scores}
+\subsection{Estimating the Effects of $H$ on Posttest Scores}\label{sec:obsEst}
 
 Let $M_i$ be a categorical variable denoting the matched set that $i$
 belongs to.
@@ -956,9 +956,11 @@ effect and a ``direct'' effect.
 The indirect effect captures the component of the effect that is due
 to the mediator: the treatment affected the outcome by affecting the
 mediator, which itself, in turn, affected the outcome.
-Assignment to the treatment condition allowed students to request hints during their work---how did the availability of hints affect their posttest scores?
+Assignment to the treatment condition allowed students to request many
+hints during their work---how did the wide availability of hints affect their posttest scores?
 The direct effect is the component of the overall effect that operates via other mechanisms.
-For instance, how would assignment to CTA1 affect posttest scores were hints not available (or, at least, limited)?
+For instance, how would assignment to CTA1 affect posttest scores were
+hints more limited?
 
 
 The method we present here builds on the results from the observational study in the previous section.
@@ -967,14 +969,25 @@ Estimating direct effects requires, additionally, data from the control group: p
 The randomization of the intervention in the RCT now plays an important role in identification, since the overall effect of the intervention on posttest scores is at issue, as does the fact that the control group does not have access to the program.
 Finaly, the assumption of no unmeasured confounding remains important.
 
+It is worth noting here that conducting mediation analysis requires
+measuring or positing a value of the mediator in the control arm of
+the study.
+We know that CTA1 hints were not available to the control group, so we
+set $H=0$.
+However, other facets of log data may not be defined, or coherent, in
+the control group; for instance, students' proclivity to master the
+skills of one CTA1 section before moving on to the next \citep{aoas}
+or teachers' practice of reassigning students to new CTA1 sections
+\citep{reassignmentEffect}.
+In cases such as these, the mediation framework may not apply.
+
 The following subsection reviews the formal definitions of direct and indirect effects.
-The next two subsections illustrate the estimation of direct and indirect effects, respectively, in our study of hints.
-It turns out that indirect effects are are nearly unidentifiable, without some acrobatics; however, under the identification scheme we present here, estimating indirect effects is exceedingly simple.
-Therefore, Section \ref{sec:indirectEst} will mostly consist of a discussion of identification.
-Section \ref{sec:directEst} builds on the framework of the previous subsections to estimate direct effects with a regression model.
+Subsection \ref{sec:medID} discusses identification, and
+\ref{sec:indirectEst} and \ref{sec:directEst} discuss estimation of
+indirect and direct effects, respectively.
 
 \subsection{Review: Defining Direct and Indirect Effect}
-More precisely, express a subject's potential outcomes as a function
+Express a subject's potential outcomes as a function
 of two variables, treatment assignment $Z$ and hint requests $H$:
 $Y(Z,H)$.
 Now, if $Z$ and $H$ are both binary, as in our example, subjects
@@ -1002,7 +1015,7 @@ In the CTA1 study, $H(0)=0$ for all subjects.
 
 Combining potential values for $Y$ and for $H$ yields the fundamental
 building blocks of causal mediation analysis
-\citep[e.g.][]{vanderweele2015explanation,sales2017mediation}.
+\citep[e.g.][]{vanderweele2015explanation}.
 Let $Y(z,H(z'))$
 represent the outcome that a subject would express given treatment
 assignment $z$, but the hint behavior that he or she would have
@@ -1042,13 +1055,16 @@ $\delta(0)+\xi(1)$.
 These decompositions can potentially reveal the role hints play in the
 CTA1 treatment effect: $\delta(1)$ gives the extent to which
 assignment to CTA1 affects a student's posttest score by (possibly)
-causing him or her to request hints.
+causing him or her to request many hints.
 $\xi(0)$ gives the effect of assignment to CTA1 if hints were,
 perhaps counterfactually, held at their control level, $H=0$.
 
+Rather than attempt to estimate individual direct and indirect effects
+$\xi_i$ and $\delta_i$, our goal will be to estimate their means,
+$\EE \xi$ and $\EE \delta$.
 
-\subsection{Identification and Estimation Log Data  Indirect
-  Effects}\label{sec:indirectEst}
+\subsection{Identification of Direct and Indirect
+  Effects}\label{sec:medID}
 
 Since the potential outcome $Y(0,1)$ is undefined in the CTA1 hints
 study, any expression (potentially) including $Y(0,1)$ is also
@@ -1071,21 +1087,17 @@ but no hints are requested.
 
 Dichotomizing hint requests into $H$ provides a
 way forward.
-The experimental design ensures that $H(0)=0$ for all experimental
-participants, since
-CTA1 software was unavailable to the control group.
-Therefore, $Y(1,H(0))\equiv Y(1,0)$.
-Specifically, for treated subjects $i$ for whom $H_i=0$, then, treatment assignment
-did not affect $H$, so $H_i(0)=H_i(1)=0$.
-%In other words, for these subjects,
-%\begin{equation*}
-%Y_i(1,H(0))=Y_i(1,0)=Y_i(1,H(1))=Y_i
-%\end{equation*}
-In other words, when $Z_i=1$ and $H_i=0$,
-$\delta_i(1)=Y_i(1,H(1))-Y_i(1,H(0))=0$---there is no
-indirect effect.
+Since the experimental design ensures that $H(0)=0$, $Y(1,H(0))\equiv
+Y(1,0)$; this potential outcome is observed for subjects in
+the treatment arm with $H=0$.
+As above, $Y(0,H(0))=Y(0,0)$ and $Y(1,H(1))$ are the observed outcomes
+for subjects in the control and treatment arms, respectively.
+Therefore, we observe each of the potential outcomes in the definitions of
+$\delta(1)$ and $\xi(0)$ for at least some non-trivial
+portion of subjects in the study sample.
 
-Of course, $H=0$ in the treatment group typically means requesting
+Of course, $H=0$ means something different in the two treatment arms:
+in the treatment group $H=0$ typically means requesting
 \emph{some} hints, but not many, whereas subjects in the control group
 request exactly zero hints.
 One way to make sense of mediational estimands involving $H$ is to
@@ -1102,91 +1114,84 @@ but if $H_i=1$ $\bar{h}_i$ must be greater than or equal to
 0.6.
 In contrast, all students in the control group are assigned $H=0$ and $\bar{h}=0$.
 
-In principle, effects $\delta(1)$ and $\xi(0)$ are defined at the
-individual level, as $\delta_i(1)$ and $\xi_i(0)$.
-However, individual effects are
-not identified without strong assumptions, so the target of
-estimation is instead taken to be super-population average effects,
-$\Delta\equiv\EE[\delta(1)]$ and $\Xi\equiv\EE[\xi(0)]$.
-Our approach to estimating these
-is to estimate the means of each of the component potential outcomes,
-$\EE Y(1,H(1))$, $\EE Y(1,H(0))$, and $\EE Y(0,H(0))$.
-The first and last of these, $\EE Y(1,H(1))=\EE Y(Z=1)$ and $\EE
-Y(0,H(0))=\EE Y(Z=0)$ are non-parametrically identified due to the
-randomization of treatment assignment.
-Additionally, as described above, $\delta_i(1)=0$ as long as $Z_i=1$ and $H_i=0$.
-
-Treated subjects with $H_i=1$ present more of a challenge.
-To estimate indirect effects for these subjects, we may rely on the
-same causal setup as in the observational approach:
-matched ignorability and the matching design of Section
-\ref{sec:observational}.
-Each member of the treatment group with $H=1$ is matched to other
-treatment-group subjects with $H=0$.
-Matched ignorability states that within these matched sets, $Y(1,0)$
-is independent of $H$.
-Therefore, if subject $i$ is matched to subject $j$, with $H_i=1$, and
-$H_j=0$, we may estimate $Y_i(1,0)$ based on the observed
-$Y_j=Y_j(1,0)$.
-When $i$, with $H_i=1$, is matched to several subjects with $H=0$,
-$Y_i(1,0)$ is estimated with the average of their observed outcomes.
-
-Specifically, let
+Average potential outcomes $\EE Y(1,H(1))$ and $\EE Y(0,H(0))$ are
+identified due to the randomization of $Z$, but estimating $\EE
+Y(1,H(0))$ requires imputing the
+potential outcome $Y(1,0)$ for treated subjects with $H_i=1$.
+However, it turns out that the matching estimators from
+\ref{sec:observational} already solved this problem:
+under matched ignorability, within matched sets, $Y(1,0)$
+is independent of $H$, implying that $\EE[Y(1,0)|M,H=1]=\EE[Y(1,0)|M,H=0]$.
+That suggests imputations
 \begin{equation}\label{eq:estY10}
 \hat{Y}_i(1,0)=\begin{cases}
- Y_i & H_i=0\\[3ex]
-\frac{\displaystyle\sum_{j:M_j=M_i}
-  Y_j(1-H_j)}{\displaystyle\sum_{j:M_j=M_i} 1-H_j} & H_i=1
+ Y_i & H_i=0\\
+\bar{Y}_{M=m_i,H=0} & H_i=1
 \end{cases}
 \end{equation}
-For treated subjects with $H=1$, the estimated $\hat{Y}(1,0)$ is the
-average outcome of their matched pairs with $H=0$.
+That is, when $Z_i=1$ and $H_i=0$, no imputation is necessary, since
+$Y_i(1,0)=Y_i$, the observed outcome. When $Z_i=1$ and $H_i=1$,
+impute $Y(1,0)$ as the average of the observed outcomes from the $H=0$ subjects
+matched to $i$.
+Matched ignorability implies that the imputations will be unbiased.
 
-Now, for each member $i$ of the treatment group we have observed
-$Y_i(1,H(1))=Y_i$, and estimated or inferred
-$\hat{Y}_i(1,H(0))=\hat{Y}_i(1,0)$ from \eqref{eq:estY10}.
-Then, we can estimate $\Delta$, the average indirect effect in the
-treatment group, by averaging over the treatment group:
+\subsection{Estimating Log Data Indirect Effects}\label{sec:indirectEst}
+
+Since $\EE \delta(1)$ involves only $Z=1$ potential outcomes, and
+$H(0)=0$ is known based on the study design, $\EE\delta(1)$ may be
+estimated using data from the treatment group only.
+
+Using the imputations from \eqref{eq:estY10}, we estimate
+$\EE\delta(1)$ as
 \begin{equation*}
- \hat{\Delta}\equiv\widehat{\EE[\delta(0)]}=\frac{1}{n_T}\displaystyle\sum_{i:Z_i=1} Y_i-\hat{Y}_i(1,H(0))
+\widehat{\EE\delta(1)}=\widehat{\EE Y(Z=1)}-\widehat{\EE
+  Y(1,0)}=\frac{1}{n_T}\displaystyle\sum_{i:Z_i=1} Y_i-\hat{Y}_i(1,0)
+\end{equation*}
+where $n_T=\sum_i Z_i$, the number of subjects in the treatment
+group.
+Since $Y_i=\hat{Y}_i(1,0)$ whenever $H_i=0$, the summand is non-zero
+only when $H_i=1$.
+Further, note that when multiple $H=1$ subjects share a
+matched set, they also share imputations $\hat{Y}(1,0)$.
+Re-writing $\widehat{\EE\delta(1)}$ in terms of matched sets $M=m$,
+\begin{align}
+\widehat{\EE\delta(1)}&=\frac{1}{n_T}\displaystyle\sum_m\displaystyle\sum_{i:H_i=1,M_i=m}
+                        Y_i-\bar{Y}_{M=m_i,H=0} \nonumber \\
+&=\frac{1}{n_T}\displaystyle\sum_m
+  n_{1m}(\bar{Y}_{M=m_i,H=1}-\bar{Y}_{m=m_i,H=0}) \nonumber \\
+&=\frac{1}{n_T}\displaystyle\sum_mn_{1m}\hat{\tau}_m=\frac{\sum_iH_i}{n_T}\widehat{TOT} \label{eq:indTot1}
+\end{align}
+where $n_{1m}$ and $\hat{\tau}_m$ were defined in Section
+\ref{sec:obsEst} as the number of $H=1$ subjects in match $m$ and the
+difference in the sample mean of $Y$ between $H=1$ and $H=0$ subjects
+in match $m$, respectively, and $\hat{TOT}$ is the TOT estimate,
+\eqref{eq:tauWeightedMean} with $w_m=n_{1m}$.
+The upshot of \eqref{eq:indTot1} is that under matched ignorability,
+$\EE\delta(0)$ can be estimated as the TOT times the proportion of the
+treatment group with $H=1$.
+
+Actually, this relationship between $\EE\delta(0)$ and the TOT holds
+in the population, regardless of how the TOT is estimated.
+This is because when $H_i=0$, then $H_i(1)=H_i(0)=0$, so the individual direct effect
+$\delta_i(1)=0$, and when $H_i=1$,
+ $\delta_i(1)=Y_i(H=1)-Y_i(H=0)$, the effect of $H$ on $Y$.
+Therefore,
+\begin{equation*}
+\EE \delta(1)=\EE\EE[\delta(1)|H]=\EE[\delta(1)|H=1]Pr(H=1)=TOTPr(H=1)
 \end{equation*}
 
-
-This estimate is a close cousin of the ``TOT'' estimate in Table
-\ref{tab:matchResults} from the previous section.
-Recall that the TOT effect is the average effect of $H$ on treatment
-group subjects with $H=1$.
-Both estimate contrast outcomes between $H=0$ and $H=1$, and both use
-data from only the treatment group.
-TOT is the average difference between the realized outcomes for students
-with $Z=1$ and $H=1$, and their counterfactual outcomes were $Z=1$ and $H=0$.
-That is,
-\begin{equation*}
-TOT=\EE[Y(1,1)-Y(1,0)|H=1]
-\end{equation*}
-
-$\hat{\Delta}$ estimates the difference between the average outcome
-for students in the entire treatment group, and the average outcome
-for the treatment group were $H=0$ for all students.
-That is
-\begin{equation*}
-\Delta=\EE[Y(1,H(1))-Y(1,0)]
-\end{equation*}
-This can be re-written:
-\begin{align*}
-\begin{split}
-\Delta&=\EE[Y(1,1)-Y(1,0)|H=1]Pr(H=1)\\
-&\qquad +\EE[Y(1,0)-Y(1,0)|H=0]Pr(H=0)
-\end{split}
-\\[2ex]
-&=\EE[Y(1,1)-Y(1,0)|H=1]Pr(H=1)\\
-&=Pr(H=1)TOT
-\end{align*}
-Since, by definition, $Pr(H=1)=$0.3, we have that
-$\hat{\Delta}=$0.3$TOT$.
-Estimated thusly, the indirect effect is negative: -0.04, with
+In the hint study, the definition of $H$ implies that
+$Pr(H=1)=\sum_iH_i/n_T=$0.3.
+Therefore, our estimate of the average indirect effect is
+$\widehat{\EE \delta(1)}=$0.3$\widehat{TOT}$.
+In Table \ref{tab:matchResults}, we estimated the TOT as
+-0.14 with a
+standard error of 0.06.
+Thefore, we estimate an average indirect effect of -0.04, with
 a standard error of 0.02.
-Like the $TOT$ estimate on which it is based, this estimate of indirect effects assumes matched ignorabilty---no confounding between $H$ and $Y$ within matched sets.
+
+It is worth repeating that these estimates assume matched ignorabilty---no confounding between
+$H$ and $Y$ within matched sets.
 With this important caveat, this analysis suggests that the
 wide availability of a hints
 actually \emph{lowers} the treatment effect, that CTA1 works not
@@ -1195,36 +1200,42 @@ because of hints, but despite them.
 \subsection{Estimating Log Data Direct Effects}\label{sec:directEst}
 
 What would the effect be were all students to request few hints?
-To answer that question, we estimate ``direct'' effects,
-$\Xi=\EE[\xi(0)]=\EE[Y(1,H(0))]-\EE[Y(0,H(0))]$.
-Like indirect effects, this expression includes the average potential
-outcome $\EE[Y(1,H(0))]$; unlike indirect effects, it includes a term for
-potential outcomes under the control condition.
-Since the main contrast of $\Xi$ is due to treatment assignment,
-construction of the estimator must account for the randomization
-scheme.
-This may be done with a regression estimator.
-One option is to construct outcome $\tilde{Y}$ as, simply, $Y$ for
-subjects in the control group and $\hat{Y}(1,0)$ (of Eq. \ref{eq:estY10}) for subjects in the
-treatment group:
+To answer that question, we estimate average direct effects,
+$\EE[\xi(0)]=\EE[Y(1,H(0))]-\EE[Y(0,H(0))]=\EE[Y(1,0)-Y(0,0)]$.\footnote{This
+  is equivalent to the ``controlled direct effect,'' $CDE(0)$
+  e.g. \citet[][p. 57]{vanderweele2015explanation}.}
+In principal, this could be estimated as the difference in sample
+means of $\hat{Y}(1,0)$ in the treatment group and observed $Y=Y(0,0)$
+in the control group.
+In general, if we let
 \begin{equation*}
 \tilde{Y}\equiv Z\hat{Y}(1,0)+(1-Z)Y(0,0)
 \end{equation*}
-Then, regress it on a dummy variable for treatment group and dummy
-variables for randomization block:
+then we can estimate $\EE[\xi(0)]$ as the ATE of treatment assignment
+$Z$ on $\tilde{Y}$.
+Just like estimates of the ATE of $Z$ on $Y$, this estimate should
+account for the experimental design: a paired, group-randomized trial
+with students clustered in schools and schools randomized within
+pairs.
+
+For the sake of simplicity, we will use an OLS regression estimator,
+with cluster-robust standard errors \citep{pustejovsky2018small},
+clustered at the school level.
+(Since in Section \ref{sec:observational} subjects were matched
+within schools, school-level cluster-robust standard errors also account for the
+dependence of $\hat{Y}(1,0)$ between matched treated students.)
+Specifically:
 \begin{equation}\label{eq:directEffReg}
-\tilde{Y}_i=\alpha_{b[i]}+\hat{\Xi}Z_i+\epsilon_i
+\tilde{Y}_i=\alpha_{p[i]}+\hat{\EE\xi}Z_i+\epsilon_i
 \end{equation}
-where $\alpha_{b[i]}$ is a fixed intercept for subject $i$'s randomization block, $\hat{\Xi}$ is an estimate of $\Xi$ and $\epsilon_i$ is a regression error.
-The clustering of subjects within schools can be accounted for in a
-number of ways, such as including random intercepts for school or
-computing cluster-robust standard error estimates.
-Following the latter route, and using the \texttt{clubSandwich}
-package in \texttt{R} \citep{clubsandwich}, we estimated a direct
+where $\alpha_{p[i]}$ is a fixed intercept for the randomization pair
+of subject $i$'s school, $\hat{\EE\xi}$ is an estimate of $\EE\xi$ and $\epsilon_i$ is a regression error.
+Using the \texttt{clubSandwich} package in \texttt{R}
+\citep{clubsandwich} to estimate standard errors, and 95\% confidence intervals, we estimated a direct
 effect of
-0.14$\pm$0.23.
+0.14$\pm$0.25.
 Adding covariates to the regression \eqref{eq:directEffReg} estimates a direct effect of
-0.18$\pm$0.19.
+0.18$\pm$0.21.
 
 Table \ref{tab:mediation} summarizes our mediation results: assuming matched ignorability, assignment to CTA1 increases student test scores despite the availablity of hints (an indirect effect of -0.04 standard deviations), and the effect due to CTA1's other mechanisms is 0.18.
 
@@ -1234,9 +1245,9 @@ Table \ref{tab:mediation} summarizes our mediation results: assuming matched ign
 \hline
 Effect&Estimate&CI\\
 \hline
-Avg. Indirect Effect ($\Delta$)& -0.04 & [-0.07,-0.01] \\
-Avg. Direct Effect ($\Xi$)& 0.14 & [-0.08,0.37] \\
-Avg. Direct Effect, covariate adjusted ($\Xi$) & 0.18 & [-0.01,0.38] \\
+Avg. Indirect Effect ($\EE \delta(1)$)& -0.04 & [-0.07,-0.01] \\
+Avg. Direct Effect ($\EE\xi$)& 0.14 & [-0.10,0.39] \\
+Avg. Direct Effect, covariate adjusted ($\EE\xi$) & 0.18 & [-0.03,0.39] \\
 
 \hline
 \end{tabular}
@@ -2077,3 +2088,20 @@ grade9 & -0.34 & -7.05 & *** & 0.03 & 0.44 &     \\
 
 \end{document}
 
+
+
+When $i$, with $H_i=1$, is matched to several subjects with $H=0$,
+$Y_i(1,0)$ is estimated with the average of their observed outcomes.
+
+
+Now, for each member $i$ of the treatment group we have observed
+$Y_i(1,H(1))=Y_i$, and estimated or inferred
+$\hat{Y}_i(1,H(0))=\hat{Y}_i(1,0)$ from \eqref{eq:estY10}.
+Then, we can estimate $\EE \delta(1)$, the average indirect effect in the
+treatment group, by averaging over the treatment group:
+\begin{equation*}
+ \hat{\EE \delta(1)}\equiv\widehat{\EE[\delta(0)]}=\frac{1}{n_T}\displaystyle\sum_{i:Z_i=1} Y_i-\hat{Y}_i(1,H(0))
+\end{equation*}
+
+
+This estimate is a close cousin of the
