@@ -1293,8 +1293,8 @@ Finally, covariates may not be strictly necessary for PS, but they can be extrem
 Below, we describe a Bayesian PS model fit in one step.
 However, the full process of PS analysis is a much more involved
 procedure.
-After a formal introduction in Section \ref{sec:psIntro},
-\S~\ref{sec:psModel} describes a set of sub-models for student hint
+After a formal introduction in Subsection \ref{sec:psIntro},
+Subsection \ref{sec:psModel} describes a set of sub-models for student hint
 requests, posttest scores, and treatment effects.
 Ideally, each of these models should be carefully tailored to each
 data application, and each must be rigorously tested.
@@ -1361,9 +1361,8 @@ replaced by $\eta (1)$, indicating that it is measuring
 were he or she assigned to the treatment condition.
 Whereas $\eta$ is only defined for students assigned to the treatment condition,
 $\eta(1)$ is defined for all the students in the study.
-Second, a modeling difference: since we did not dichotomize $\eta(1)$
-in this analysis, we modeled it as normal , not as a normal mixture, as in
-\eqref{eq:mixture}.
+Second, a modeling difference: instead of the normal mixture model
+\eqref{eq:mixture}, we modeled $\eta(1)$ as normal.
 With this change, the PS estimand became
 \begin{equation*}
 \tau(r)=\EE[Y(1)-Y(0)|\eta(1)=r]
@@ -1439,7 +1438,7 @@ We modeled students' posttest scores $Y$ as
 conditionally normal:
 \begin{equation}\label{eq:outcomeSubmodel}
  Y|\left(Z_i,\bm{x}_i,\bm{\theta},\eta(1)\right) \sim  \mathcal{N}\left(
-\gamma_{0b[i]}+\bm{x}_i^T\bm{\gamma}+a\eta(1)+Z_i\tau(\eta(1))+\zeta^{tch}_{t[i]}+\zeta^{scl}_{s[i]},\omega_{Z[i]}\right)
+\gamma_{0b[i]}+\bm{x}_i^T\bm{\gamma}+a\eta(1)+Z_i(b_0+b_1\eta(1))+\zeta^{tch}_{t[i]}+\zeta^{scl}_{s[i]},\omega_{Z[i]}\right)
 \end{equation}
 where $\gamma_{0b[i]}$ is a fixed effect for $i$'s randomization block, $\bm{\gamma}$ are the
 covariate coefficients, and $\zeta^{tch}$, and
@@ -1451,15 +1450,14 @@ that is not linearly related to
 $\eta(1)$, and other between-student variation in $Y$ that is not predicted by
 the mean model.
 
-Finally, we modeled treatment effects
-$\tau(\eta(1))$ as linear:
-\begin{equation}\label{eq:tauModel}
-\EE[Y(1)-Y(0)|\eta(1)]=\tau({\eta(1)})=b_0+b_1\eta(1)
-\end{equation}
+Model \eqref{eq:outcomeSubmodel} implies that treatment effects are
+linear in $\eta(1)$,
+$\EE[Y(1)-Y(0)|\eta(1)]=\tau({\eta(1)})=b_0+b_1\eta(1)$
+
 While more complex models for $\tau(\eta(1))$ are theoretically
 possible (for instance, \citet{jin2008principal} uses a quadratic
 model), in our experience non-linear effect models do not perform as
-well in model checks as the the linear model (\ref{eq:tauModel}).
+well in model checks as the the linear model.
 
 Covariates $\bm{X}$ were standardized prior to fitting.
 Prior distributions for the block fixed effects $\beta^Y_b$ and covariate coefficients
