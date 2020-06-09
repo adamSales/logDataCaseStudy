@@ -450,7 +450,7 @@ here, instead, it measures a student's proclivity to request a hint.
 The typical Rasch model includes a problem-level ``difficulty''
 parameter; here, it would measure the likelihood an individual problem
 elicits a hint request.
-That paramter is important in our context because the
+That parameter is important in our context because the
 specific problems a student works on may influence his or her hint
 requests.
 For instance, two students with the same underlying proclivity to request
@@ -473,7 +473,7 @@ possibility is not out of the question.
 With even more granular data, \eqref{eq:rasch} could be further
 elaborated, avoiding this assumption.
 In the Cognitive Tutor, problems often have multiple parts, and each part offers its own hints.
-Researchers in posession of data on each part of each worked problem could specify a model at the part-level, instead of at the problem-level like \eqref{eq:rasch}.
+Researchers in possession of data on each part of each worked problem could specify a model at the part-level, instead of at the problem-level like \eqref{eq:rasch}.
 Perhaps an even better option (suggested by an anonymous reviewer) would incorporate data on the specific skills required to solve each problem.
 While sections of the tutor differ from each other in the skills they teach, not every problem in each section includes the same set of skills; different problems requiring the same skill set will be similar in difficulty \citep[see, e.g.]{goldin2012learner,pavlik2009performance}.
 
@@ -597,7 +597,7 @@ case, propensity score matching) to estimate causal effects of a usage parameter
 Implementing the method requires data from members of the treatment group: usage (in our case, $H$), posttest scores or another outcome of interest, and a set of baseline covariates to control for confounding.
 Since the control group is not used, identification does not depend on randomization---in fact, this same approach could be (and is) used with non-experimental data.
 However, outside of a planned experiment, posttest scores may not be available.
-Our usage variable $H$ is binary, which is necessary for classical propensity score matching; alternatve methods are available for usage variable that are continuous \citep[e.g.][]{hirano2004propensity}, ordered \citep[e.g.][]{leon2005mixed}, categorical \citep[e.g.][]{lopez2017estimation} or other types.
+Our usage variable $H$ is binary, which is necessary for classical propensity score matching; alternative methods are available for usage variable that are continuous \citep[e.g.][]{hirano2004propensity}, ordered \citep[e.g.][]{leon2005mixed}, categorical \citep[e.g.][]{lopez2017estimation} or other types.
 Like all observational studies, it depends on the strong, untestable assumption of no unmeasured confounding.
 
 The approach we take here, following \citet{rosenbaum2002observational},
@@ -606,9 +606,9 @@ In the first, we construct a "match," identifying groups of students, some of wh
 The hope is that the distribution of $H$ within this match resembles what might have been seen if (counterfactually) $H$ had been randomized within matched groups.
 This stage is iterative: we construct a match, evaluate it (most importantly by checking if matched students have similar baseline covariate distributions), and if necessary construct a new match.
 In the second step, we estimate the average effect of $H$ on posttest scores, by comparing posttest scores between matched students with $H=1$ and $H=0$.
-In the third and final step, we account for the possiblity of unmeasured confounding in a sensitivity analysis.
+In the third and final step, we account for the possibility of unmeasured confounding in a sensitivity analysis.
 
-The next subsection will give more formal background on propensity score matching, including notation and idenfication assumptions. Following subsections will illustrate each of the three steps of propensity score matching.
+The next subsection will give more formal background on propensity score matching, including notation and identification assumptions. Following subsections will illustrate each of the three steps of propensity score matching.
 
 \subsection{Observational Study: Background}
 Let $Y_i$ represent subject $i$'s posttest score, and let $Z_i$ represent
@@ -1187,7 +1187,7 @@ standard error of \Sexpr{round(effects$tot_eff$std.error,2)}.
 That implies an average indirect effect of \Sexpr{round(effects[['tot_eff']][['coefficients']]*(mixProp),2)}, with
 a standard error of \Sexpr{round(effects$tot_eff$std.error*(mixProp),2)}.
 
-It is worth repeating that these estimates assume matched ignorabilty---no confounding between
+It is worth repeating that these estimates assume matched ignorability---no confounding between
 $H$ and $Y$ within matched sets.
 With this important caveat, this analysis suggests that the
 wide availability of a hints
@@ -1234,7 +1234,7 @@ effect of
 Adding covariates to the regression \eqref{eq:directEffReg} estimates a direct effect of
 \Sexpr{citopm(dir2.1ci)}.
 
-Table \ref{tab:mediation} summarizes our mediation results: assuming matched ignorability, assignment to CTA1 increases student test scores despite the availablity of hints (an indirect effect of \Sexpr{round(mixProp*effects[['tot_eff']][['coefficients']],2)} standard deviations), and the effect due to CTA1's other mechanisms is \Sexpr{round(dir2.1t[1],2)}.
+Table \ref{tab:mediation} summarizes our mediation results: assuming matched ignorability, assignment to CTA1 increases student test scores despite the availability of hints (an indirect effect of \Sexpr{round(mixProp*effects[['tot_eff']][['coefficients']],2)} standard deviations), and the effect due to CTA1's other mechanisms is \Sexpr{round(dir2.1t[1],2)}.
 
 \begin{table}
 \centering
@@ -1272,13 +1272,13 @@ rather than confounding control or assumptions about
 unmeasured confounders.
 Unlike the observational study or mediation analysis, PS in an RCT requires no assumptions about unmeasured confounding.
 PS analysis requires data on outcomes
-(e.g. posttest scores) in both tretment arms, as well as data on
+(e.g. posttest scores) in both treatment arms, as well as data on
 implementation.
 In classical PS
 \citep[e.g.][]{page2012principal,feller2016compared}, the intermediate
 variable, implementation, is discrete or categorical, leading to
 discrete strata.
-Other approachs \citep[e.g.]{gilbertHudgens,jin2008principal} allow
+Other approaches \citep[e.g.]{gilbertHudgens,jin2008principal} allow
 the intermediate variable to be continuous.
 The method we use here is based on \citet{aoas}, in which the variable
 defining principal strata is latent---specifically, the ``ability''
@@ -1479,7 +1479,8 @@ mean) and the red lines are random draws from the posterior
 distribution, showing estimation uncertainty.
 Eighty-eight percent of posterior draws of the slope of the
 $\hat{\tau}(\cdot)$ function were positive, implying a posterior
-probability of 0.88 that students who asked for hints
+probability of \Sexpr{sprintf('%1.2f',probPos)}
+that students who asked for hints
 with greater regularity benefited more from the CTA1 curriculum.
 The right hand panel plots one posterior draw of $\eta(1)$
 alongside observed outcomes $Y$.
@@ -1503,23 +1504,21 @@ which grows with $\eta(1)$.
 \label{fig:psResults}
 \end{figure}
 
-These results suggest that students who, if assigned to the treatment
-condition, would be more likely to request hints on challenging
-problems, tend to experience higher treatment effects.
-That is, it suggests that frequent hint requesters benefit more from
-assignment to the CTA1 condition than infrequent hint requesters.
+These results suggest that students who, under treatment, would tend
+to ask for hints on challenging problems, are most responsive to
+treatment.
 
 \section{Comparing Strategies}\label{sec:synthesis}
-The goals, assumptions, and processes of matching, mediation analysis,
-and principal stratification, when applied to implementation data from
-an EdTech RCT, each differ from each other, but also overlap in
-interesting ways.
+% The goals, assumptions, and processes of matching, mediation analysis,
+% and principal stratification, when applied to implementation data from
+% an EdTech RCT, each differ from each other, but also overlap in
+% interesting ways.
 In the case discussed here, the observational study and mediation
 approaches appear to give the opposite conclusion from principal
-stratification---matching and mediation suggest that exessive hint
+stratification---matching and mediation suggest that excessive hint
 requests hurt students' posttest scores, while principal
 stratification suggests that students who request more hints
-experiance higher treatment effects.
+experience higher treatment effects.
 This section will compare and contrast the three methods in terms of
  their necessary identification assumptions, their model fitting
  mechanics, and interpretation of their results.
@@ -1544,7 +1543,7 @@ require ignorability assumptions such as Strong Ignorability or
 Matched Ignorability.
 These may be particularly problematic in our study, since students who
 are more likely to request hints are also more likely to struggle with
-the material, and hence score lower on the posttest.
+the material.
 We addressed this concern in three ways: first, we focused our attention
 on the set of problems in the tutor in which students either requested
 a hint or made an error, second, with propensity score matching, and
@@ -1565,14 +1564,14 @@ These assumptions are impossible to verify from the data at hand;
 instead, judging their plausibility requires a keen understanding of student practice within
 the tutor.
 
-Mediation analysis builds on the matching design, and also requires an
+Mediation analysis builds on the matching design, and requires the same
 ignorability assumption; it must
 additionally overcome the hurdle of the almost complete lack of
 overlap between hint request behavior in the control group (i.e. zero)
 and in the treatment group.
-Our approach of dichotomizing hint request behavior as $H$ provides a
-way forward, at the cost of ignoring information that could be gleaned
-from more continuous measures of hint requests.
+Under our approach of dichotomizing hint request behavior, mediation
+analysis is essentially a way to interpret the results of the
+observational study in the context of the full RCT.
 
 In contrast, no ignorability assumptions are necessary for principal
 stratification.
@@ -1603,14 +1602,14 @@ design is simple and clear---subjects with $H=1$ are compared against
 matches with $H=0$.
 This transparency may help researchers assess the plausibility of the
 match, and diagnose potential problems with resulting estimates.
-Though PS does not depend on ignorability, it does depend on a highly
+Though principal stratification does not depend on ignorability, it does depend on a highly
 intricate and parametric modeling structure.
 If any part of the model is sufficiently misspecified, the results may
 be wrong.
 Perhaps worse, \citet{feller2016principal} argued that even well-specified
 models can give severely biased estimates.
-Extensive model interrogation and checking is necessary for PS
-analysis, but the complexity of the PS model makes this process
+Extensive model interrogation and checking is necessary for principal stratification
+analysis, but the complexity of the principal stratification model makes this process
 particularly difficult.
 \citet{aoas} gives some examples of potentially fruitful model
 checking procedures, which are also carried out in the online supplement.
@@ -1636,16 +1635,17 @@ their scores by an even greater amount.
 Like in the observational study and in mediation analysis, the
 principal stratification analysis found a negative correlation
 between hint requesting and posttest scores.
-Students who request more hints need more help, and thus score lower
-on the posttest.
-Fortunately, the PS analysis also suggests that these students
-receive more help----that is, they benefit more from CTA1---than do their peers who request fewer hints.
-However, it is unclear whether their larger treatment effects are due to their higher rate of hint requests, or to some other correlated factor.
+Those students who request more hints are those who need more help of
+some form, and tend to score lower on the posttest.
+Fortunately, the principal stratification analysis also suggests that these students
+may benefit more from CTA1 than their peers who request fewer hints.
+However, it is unclear whether their larger treatment effects are due
+to their higher rate of hint requests, or to some other related characteristic.
 
 Can these results be reconciled with the results from the previous two
 sections?
 Does requesting hints help or hurt?
-Technically, PS has nothing to say about the effect of hints---$\eta(1)$
+Technically, principal stratification has nothing to say about the effect of hints---$\eta(1)$
 is modeled as a student characteristic, not an intervention.
 (See \citealt{jin2008principal} for a nice discussion of this point.)
 Still, doesn't the correlation between treatment effects and hint
@@ -1659,9 +1659,12 @@ scores---a negative indirect effect---but that those students who are
 likely to request more hints also tend to experience greater direct
 effects.
 That is, it may be that the observational and mediational results are
-correct---that requesting hints lowers test scores---but that the PS
+correct---that requesting hints lowers test scores---but that the principal stratification
 results are also correct---students who request more hints tend to
 experience higher treatment effects, due to other mechanisms.
+(Finally, we should note that the principal stratification model was
+uncertain about the sign of $b_1$---there is a decent (though not large) probability that the
+the slope between $\eta(1)$ and treatment effects is negative.)
 
 \subsection{Choosing Between Methods}
 
@@ -1669,9 +1672,11 @@ The previous discussion suggests three criteria for choosing between
 the three approaches we've discussed here.
 First is the question the researcher seeks to answer.
 In their most straightforward interpretations, principal stratification
-is a method for examining treatment effect heterogeneity, whereas
-mediation analysis is a method for assessing causal mechanisms.
-That said, PS may also shed light on potential causal mechanisms---if,
+is a method for examining treatment effect heterogeneity (are students
+benefiting differently?), whereas
+mediation analysis is a method for assessing causal mechanisms (is the
+wide availability of hints in CTA1 beneficial to students?).
+That said, principal stratification may also shed light on potential causal mechanisms---if,
 indeed, treatment effects are higher for students who request more
 hints, then hints may play a role in the tutor's effectiveness.
 
@@ -1682,21 +1687,21 @@ process and the quality of observed covariates can translate into
 confidence about the results of an observational study or mediation
 analysis.
 Conversely, researchers unwilling to consider untestable ignorability
-assumptions will find PS an attractive alternative.
+assumptions will find principal stratification an attractive alternative.
 
 The final criterion is a researcher's comfort with complex statistical
 models.
 Researchers who are able and willing to experiment with a range of
 models for a dataset, and perhaps devise tests of model fit tailored
-to a specific problem, may be more confident in the fit of a PS model.
+to a specific problem, may be more confident in the fit of a principal stratification model.
 Researchers who prefer transparency and non-parametric or
 semi-parametric analysis may prefer matching studies.
 
 Additional philosophical concerns come in to play as well.
-For instance, unlike observational studies and PS, mediation analysis
+For instance, unlike observational studies and principal stratification, mediation analysis
 depends on strictly counterfactual quantities, such as $\EE Y(0,H(1))$,
 that can never occur.
-Analogous quantities in PS, such as $\EE [Y(0)|H(1)]$ are
+Analogous quantities in principal stratification, such as $\EE [Y(0)|H(1)]$ are
 unobservable, but nevertheless refer to averages of potential outcomes
 among actual experimental subjects.
 These concerns are important but beyond the scope of the current
@@ -1709,16 +1714,15 @@ believe variation in implementation is random or haphazard, or other
 factors).
 A wide variety of straightforward and transparent estimation techniques
 are available, such as the propensity score
-matching illustrated here, optionally also including covariates in the
-outcomes model for additional protection against bias.
+matching illustrated here.
 The result---the ATE of implementation on the outcome---is an
 intuitive estimand.
 
-Mediation analysis may have stronger standing where
-at least one well-represented level of the implementation
-variable is interpretable in the control condition.
-In our example, $H=0$ included both low hint usage in
-the treatment group and no access to hints in the control group.
+% Mediation analysis may have stronger standing where
+% at least one well-represented level of the implementation
+% variable is interpretable in the control condition.
+% In our example, $H=0$ included both low hint usage in
+% the treatment group and no access to hints in the control group.
 When employed, mediation analysis can contextualize the estimated
 implementation effect from the observational study in terms of the
 experiment's overall treatment
@@ -1727,7 +1731,19 @@ mechanism.
 
 However, where unobserved confounding is a serious threat, and complex
 statistical modeling (and model checking) is not a practical barrier,
-PS may be a better choice because no ignorability assumptions are necessary.
+principal stratification may be a better choice because no
+ignorability assumptions are necessary.
+
+Of course, there are approaches to modeling implementation beyond
+the three considered here. For instance, principal stratification
+based on non-parametric bounding \citep{bounding} or randomization
+inference \citep{nolen} would avoid the parametric assumptions of
+model-based principal stratification, as would a standard moderation
+analysis based on predicted implementation, $\hat{\eta}(1)$ instead of
+partially observed $\eta(1)$.
+Future work (by us, and, we hope, others) may develop these methods,
+and still others.
+
 % \begin{table}
 % \begin{tabular}{p{1in}p{1.5}p{2in}p{2in}}
 % & Observational Study&Mediation Analysis &Principal Stratification\\
@@ -1771,7 +1787,7 @@ Measurement of students' hint request rates played a central role in all three a
 The results were largely driven by three measurement decisions.
 First, our decision to consider only worked Cognitive Tutor problems on which students either requested a hint or made an error (or both) reduced the relationship between hint requests and student algebra I ability.
 Second, our decision to dichotomize hint request rates in the observational study and mediation analysis allowed us to use of a traditional matching estimator and to identify mediational estimands.
-Third, our decision to use a Rasch model to measure hint usage in the PS analysis accounted for differences between students in both the number and difficulty of worked CT problems.
+Third, our decision to use a Rasch model to measure hint usage in the principal stratification analysis accounted for differences between students in both the number and difficulty of worked CT problems.
 
 While questions of measurement has always been important in causal inference, analysis of EdTech log data brings them to the fore.
 Log datasets from technology products are large, multivariate, and complex, so careful thought is necessary in order to measure implementation constructs of interest.
@@ -1830,7 +1846,7 @@ print(xtable(balMod,caption='Covariate balance (standardized differences and Z-s
 \end{figure}
 
 %\clearpage
-\section{Stan Code for PS Model}
+\section{Stan Code for Principal Stratification Model}
 
 %\clearpage
 \subsection{Stan Code}
@@ -1850,69 +1866,146 @@ source('R/diagnosticPlots.r')
 @
 
 \subsection{Posterior Predictive Density Plots}
+Figures \ref{fig:ppdPooled}, \ref{fig:ppdTrt}, and \ref{fig:ppdCtl}
+compare the density of observed outcomes $y$ to 1000 random draws of
+the model-implied density, $y_{rep}$ for the full (``pooled'') sample,
+the treatment group, and the control group, respectively.
+They show a close, but not perfect, correspondence between the
+observed data and the model.
+The most noticeable difference is the left-truncation of the observed
+outcomes---the lower tail is lighter than would be expected from a
+normal distribution---suggesting floor effects on the posttest not
+considered in the model.
+The misspecification appears similar in both treatment groups.
+A model accounting for floor effects may fit the data more closely.
+These plots were made with the \texttt{bayesplot} package
+\citep{bayesplot} in \texttt{R}.
+
 \begin{figure}[!h]
 \centering
 \includegraphics[width=0.5\textwidth]{output/ppcYoverall.jpg}
+\caption{A comparison of the estimated density of observed outcomes
+  $y$ with 1000 random draws of the model-implied outcome density,
+  for the full dataset.}
+\label{fig:ppdPooled}
 \end{figure}
 
 \begin{figure}[!h]
 \centering
 \includegraphics[width=0.5\textwidth]{output/ppcYtrt.jpg}
+\caption{A comparison of the estimated density of observed outcomes
+  $y$ with 1000 random draws of the model-implied outcome density,
+  for the treatment group.}
+\label{fig:ppdTrt}
 \end{figure}
 
 \begin{figure}[!h]
 \centering
 \includegraphics[width=0.5\textwidth]{output/ppcYctl.jpg}
+\caption{A comparison of the estimated density of observed outcomes
+  $y$ with 1000 random draws of the model-implied outcome density,
+  for the control group.}
+\label{fig:ppdCtl}
 \end{figure}
 
 %\clearpage
 \subsection{Residual Plots}
+Figures \ref{fig:residFull}, \ref{fig:residTrt}, and
+\ref{fig:residCtl} plot residuals $Y_i-\hat{Y}_i$ against fitted
+values $\hat{Y}_i$ for the full sample, the treatment group, and the
+control group, respectively.
+Here, fitted values $\hat{Y}$ are posterior means---averages over all
+of the draws from the model.
+The residual plots reflect the floor effects apparent in the posterior
+predictive density plots---a subset of points appears to fall along a
+straight line in the bottom left of the plot.
+Otherwise, little structure is apparent.
+
+Figure \ref{fig:binnedResids} assesses the hint sub-model,
+\eqref{eq:rasch} and \eqref{eq:rasch2} by comparing the binned model-implied
+probabilities of hint requests on individual worked problems to residuals---the
+differences between these probabilities and the proportions of worked
+problems within each bin that resulted in an
+actual hint request \citep[c.f.][]{gelman2014bayesian}.
+Nine random draws from the posterior distribution are shown.
+Little structure is apparent in the binned residuals, suggesting that
+the model for hint requests fits well.
+
 \begin{figure}[!h]
 \centering
-\includegraphics[width=0.5\textwidth]{output/residPlotOverall.jpg}
+\includegraphics[width=\textwidth]{output/residPlotOverall.jpg}
+\caption{A residual plot for the full sample.}
+\label{fig:residFull}
 \end{figure}
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=0.5\textwidth]{output/residPlotTrt.jpg}
+\includegraphics[width=\textwidth]{output/residPlotTrt.jpg}
+\caption{A residual plot for the treatment group.}
+\label{fig:residTrt}
 \end{figure}
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=0.5\textwidth]{output/residPlotCtl.jpg}
+\includegraphics[width=\textwidth]{output/residPlotCtl.jpg}
+\caption{A residual plot for the control group}
+\label{fig:residCtl}
 \end{figure}
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=0.5\textwidth]{output/binnedplot.pdf}
+\includegraphics[width=\textwidth]{output/binnedplot.pdf}
 \caption{Binned residual plot for model of hint requests.}
+\label{fig:binnedResids}
 \end{figure}
+
+
+\subsection{Fake Data Simulation}
+Figure \ref{fig:fakeSim} implements a model assessment for principal
+stratification suggested in \citet{aoas}.
+In this method, we replace data from the real control group with duplicated
+outcome and covariate data from the treatment group (now re-labeled as
+control).
+In other words, each member of the treatment group appears in the
+dataset twice, once in the ``treatment'' group and once in the
+``control'' group.
+Only the ``treatment'' observations are linked with hint data.
+We also re-labeled teachers and schools in the ``control'' group so
+that the were distinct from the corresponding labels in the
+``treatment'' group.
+
+The upper left plot of \ref{fig:fakeSim} fits the same principal
+stratification model described in Section \ref{sec:psModel} to the new
+dataset, in which there is exactly no effect.
+In the other three panels of \ref{fig:fakeSim}, the model is fit to
+the fake data with simulated treatment effects added: a random
+treatment effect uncorrelated with $\eta(1)$, a treatment effect
+linear in $\eta(1)$ (as we estimated) and a treatment effect quadratic
+in $\eta(1)$.
+These fake datasets contain the same quirks as the real treatment
+group data (and hence the same model misspecification) but with known
+treatment effects.
+In the first three plots, our model recovered the truth, albeit with
+considerable uncertainty.
+In the bottom left (quadratic) plot, our model could not recover the
+true relationship between $\eta(1)$ and $\tau$ because we modeled
+$\tau$ as linear in $\eta(1)$. However, the model did not estimate
+a spurious positive or negative associations between $\eta(1)$ and $\tau$.
 
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=0.5\textwidth]{output/qqPlots.pdf}
-\caption{Q-Q plots for outcomes and fitted values}
+\includegraphics[width=\textwidth]{output/fakePlots.pdf}
+\caption{Comparisons between principal stratification model estimates
+  and true treatment effects when the treatment group is replicated
+  (without corresponding hint request data) and relabeled as control,
+  and (clockwise from upper left) no treatment effect, a
+  random treatment effect uncorrelated with $\eta(1)$, a treatment
+  effect linear in $\eta(1)$, or a treatment effect quadratic in
+  $\eta(1)$ is added to the original treatment group.}
+\label{fig:fakeSim}
 \end{figure}
-
 
 
 \end{document}
 
-
-
-When $i$, with $H_i=1$, is matched to several subjects with $H=0$,
-$Y_i(1,0)$ is estimated with the average of their observed outcomes.
-
-
-Now, for each member $i$ of the treatment group we have observed
-$Y_i(1,H(1))=Y_i$, and estimated or inferred
-$\hat{Y}_i(1,H(0))=\hat{Y}_i(1,0)$ from \eqref{eq:estY10}.
-Then, we can estimate $\EE \delta(1)$, the average indirect effect in the
-treatment group, by averaging over the treatment group:
-\begin{equation*}
- \hat{\EE \delta(1)}\equiv\widehat{\EE[\delta(0)]}=\frac{1}{n_T}\displaystyle\sum_{i:Z_i=1} Y_i-\hat{Y}_i(1,H(0))
-\end{equation*}
-
-
-This estimate is a close cousin of the

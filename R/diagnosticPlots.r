@@ -38,8 +38,8 @@ qplot(fitd[sdat$Z==0],sdat$Y[sdat$Z==0]-fitd[sdat$Z==0],xlab='Fitted Values',yla
 ggsave('output/residPlotCtl.jpg')
 
 
-pdf('output/qqPlots.pdf', height=3,width=6)
-par(mfrow=c(1,2))
+pdf('output/qqPlots.pdf', height=8,width=5)
+par(mfrow=c(2,1))
 qqnorm(sdat$Y[sdat$Z==1]-fitd[sdat$Z==1],main='Treatment Group')
 qqline(sdat$Y[sdat$Z==1]-fitd[sdat$Z==1])
 qqnorm(sdat$Y[sdat$Z==0]-fitd[sdat$Z==0],main='Control Group')
