@@ -23,11 +23,11 @@ cat('Warning: runFull=',runFull,'\n')
 cat('----------------------------------------------------\n\n')
 
 source('R/helperFunctions.r')
-source('~/Box Sync/rcode/matchingFunctions.r')
-source('~/Box Sync/rcode/hhh.r')
-source('~/Box Sync/rcode/printXbal.r')
+source('~/Box/rcode/matchingFunctions.r')
+source('~/Box/rcode/hhh.r')
+source('~/Box/rcode/printXbal.r')
 
-load('~/Box Sync/CT/data/RANDstudyData/HSdata.RData') ## for "error"
+load('~/Box/CT/data/RANDstudyData/HSdata.RData') ## for "error"
 if(runFull) source('R/prelimStan.r') else load('data/hintsData.RData')
 
 ## for printing nice CIs
@@ -281,32 +281,32 @@ cat('
 #########################
 ',as.character(Sys.time()),'\n')
 
-pdMain <- pdMod(psmod1)
-## pdMain <- within(pdMain,
-## {
-##     b0 <- b0/pooledSD
-##     b1 <- b1/pooledSD*iqr
-##     xmin <- xmin/mean(iqr)
-##     xmax <- xmax/mean(iqr)
-##     ymin <- ymin/pooledSD
-##     ymax <- ymax/pooledSD
-## }
-## )
+pooledSD <- with(sdat, sqrt(((sum(Z)-1)*var(Y[Z==1])+(sum(1-Z)-1)*var(Y[Z==0]))/(nstud-2)))
+samp <- seq(1,length(draws$b1),length=1000)
+Usamp <- draws$studEff[samp,]
+studEff95 <- quantile(Usamp,c(0.025,0.975))
 
-#tikzDevice::tikz('mainEffects.tex', standAlone=T,
-#     width=6,height=5)
-p1 <- ggplot(pdMain)+
-    geom_abline(aes(intercept=b0,slope=b1,group=id),color='red')+
-    coord_cartesian(xlim=c(min(pdMain$xmin),max(pdMain$xmax)),
-                    ylim=c(min(pdMain$ymin),max(pdMain$ymax)),expand=FALSE)+
-    geom_line(aes(x=x,y=y,group=truthOrAvg,linetype=truthOrAvg,color=truthOrAvg,alpha=truthOrAvg),size=1.5)+
-    xlab('$\\eta(1)$')+ylab('CTA1 Treatment Effect')+
-    labs(group=NULL,color=NULL,linetype=NULL)+
-    scale_color_manual(values=c('black','red','black'))+scale_linetype_manual(values=c('solid','solid','dotted'))+
-    scale_alpha_manual(values=c(1,0,1),guide=FALSE)+theme(legend.position='top')+
-    theme(text=element_text(size=15),legend.key.width=unit(.5,'in'))
-#dev.off()
-#tools::texi2dvi('mainEffects.tex', pdf = T, clean = T)
+
+pdMain <- tibble(b0=draws$b0[samp],b1=draws$b1[samp],truthOrAvg='Posterior\nDraws')
+pdMain <- pdMain%>%add_case(b0=mean(draws$b0),b1=mean(draws$b1),truthOrAvg='Posterior\nAverage')%>%
+  mutate(id=1:n())
+trtEff95 <-
+
+p1 <- ggplot(mapping=aes(x=studEff95,y=range(cbind(pdMain$b0,pdMain$b1)%*%rbind(1,studEff95))))+
+  geom_point(size=0)+
+  geom_abline(data=pdMain,
+              aes(intercept=b0,
+                  slope=b1,
+                  group=id,
+                  color=truthOrAvg,
+                  alpha=truthOrAvg,
+                  size=truthOrAvg))+
+  scale_color_manual(values=c('black','#FF00FF'))+#darkorange'))+
+  scale_alpha_manual(values=c(1,0.25),guide=FALSE)+
+  scale_size_manual(values=c(1.5,1))+
+  theme(legend.position='top')+
+  labs(x='$\\eta(1)$',y='CTA1 Treatment Effect',group=NULL,color=NULL,size=NULL,alpha=NULL)+
+  theme(text=element_text(size=15),legend.key.width=unit(.5,'in'))
 
 cat('
 #########################################
@@ -314,28 +314,22 @@ cat('
 #########################################
 ',as.character(Sys.time()),'\n')
 
-pooledSD <- with(sdat, sqrt(((sum(Z)-1)*var(Y[Z==1])+(sum(1-Z)-1)*var(Y[Z==0]))/(nstud-2)))
 draw <- which.min(abs(draws$b1-mean(draws$b1)))
-plotDat <- with(sdat,data.frame(Y=scale(Y,center=mean(Y[Z==0]),scale=pooledSD),
-                                   eta=scale(draws$studEff[draw,],scale=IQR(draws$studEff[draw,])),
-                                   Z=Z))
+plotDat <- with(sdat,data.frame(Y=Y,eta=draws$studEff[draw,], Z=Z))
 
 plotDat$treat <- ifelse(plotDat$Z==1,'Treatment','Control')
-plotDat$slope <- (draws$a1[draw]+ifelse(plotDat$treat=='Control',0,draws$b1[draw]))*IQR(draws$studEff[draw,])/pooledSD
-plotDat$int <- ifelse(plotDat$treat=='Control',0,draws$b0[draw]/pooledSD)
+plotDat$slope <- (draws$a1[draw]+ifelse(plotDat$treat=='Control',0,draws$b1[draw]))
+plotDat$int <- ifelse(plotDat$treat=='Control',0,draws$b0[draw])#/pooledSD)
 
-#plotDat <- within(plotDat, int <- int-( mean(int+slope*eta)-mean(plotDat$Y)))
-#plotDat <- plotDat[order(plotDat$treat),]
-plotDat$treat2 <- plotDat$treat
-
-p2 <- ggplot(plotDat,aes(eta,Y,fill=treat,group=treat,color=treat))+geom_point(size=1)+
-      coord_cartesian(xlim=quantile(plotDat$eta,c(0.005,0.995)),ylim=quantile(plotDat$Y,c(0.005,0.995)))+
-      geom_abline(aes(intercept=int,slope=slope,color=treat),size=4,alpha=1)+#+scale_alpha_discrete(range=c(0.4,.8))+
-      geom_abline(aes(intercept=int,slope=slope),color='black',size=2,alpha=1)+#+scale_alpha_discrete(range=c(0.4,.8))+
-    scale_colour_manual(values=c('red','blue'))+
-    labs(group=NULL,fill=NULL,alpha=NULL)+xlab('$\\eta(1)$')+
-    ylab('Posttest Score')+theme(legend.position='top',text=element_text(size=15))+
-        guides(color = guide_legend(title=NULL,override.aes=list(alpha=1,size=3),keywidth=3),linetype=guide_legend(title=NULL,keywidth=1,override.aes=list(size=1)))
+p2 <- ggplot(plotDat,aes(eta,Y,fill=treat,group=treat,color=treat))+
+  geom_point(alpha=0.15)+
+  coord_cartesian(xlim=quantile(plotDat$eta,c(0.005,0.995)))+
+  geom_abline(aes(intercept=int,slope=slope,color=treat),size=2,alpha=1)+
+  scale_colour_manual(values=c('red','blue'))+
+  scale_size_continuous(range=c(0.05,1))+
+  labs(group=NULL,fill=NULL,alpha=NULL)+xlab('$\\eta(1)$')+
+  ylab('Posttest Score')+theme(legend.position='top',text=element_text(size=15))+
+   guides(color = guide_legend(title=NULL,override.aes=list(alpha=1,size=3),keywidth=3),linetype=guide_legend(title=NULL,keywidth=1,override.aes=list(size=1)))
 
 tikzDevice::tikz(file = "output/psModel.tex",
   standAlone = T,
