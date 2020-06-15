@@ -10,6 +10,8 @@ library(tidyverse)
 library(rstan)
 library(lme4)
 library(estimatr)
+library(HDInterval)
+
 traceplot <- rstan::traceplot
 select <- dplyr::select
 options(stringsAsFactors=FALSE)
@@ -38,6 +40,8 @@ map_dfr <- function(.x, .f, ...){
   out <- map(.x,.f,...)
   as.data.frame(do.call('rbind',out))
 }
+
+capitalize <- function(x) paste0(toupper(substr(x,1,1)),substr(x,2,nchar(x)))
 
 citopm <- function(ci) paste(sprintf('%.2f',c(median(ci),(ci[2]-ci[1])/2)),collapse='$\\pm$')
 
@@ -252,8 +256,6 @@ dir2.1ci <- c(dir2.1ci$CI_L[1],dir2.1ci$CI_U[1])
 
 
 
-runFull <- FALSE
-
 cat('
 ############################
 ########## principal stratification
@@ -274,6 +276,9 @@ if(runFull){
 
 cat('extracting ps model',as.character(Sys.time()),'\n')
 draws <- rstan::extract(psmod1)
+
+probPos <- mean(draws$b1>0)
+b1ci <- hdi(draws$b1)
 
 cat('
 ############################
