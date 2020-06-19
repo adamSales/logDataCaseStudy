@@ -21,8 +21,8 @@ miss['xirt','Imputation Error'] <- sqrt(miss['xirt','Imputation Error'])/sd(covs
 balTest <- balanceTest(treatment~grade+esl+frl+race+sex+spec+xirt+cluster(schoolid2)+strata(pair),data=dat,report=c('adj.means','std.diffs','chisquare.test'),include.NA.flags=T)
 
 ## use "unstrat" for group means cuz no one knows/cares about "adjusted means"
-trtMeans <- round(balTest$results[,'Treatment','Unstrat']*100)
-ctlMeans <- round(balTest$results[,'Control','Unstrat']*100)
+trtMeans <- round(balTest$results[,'Treatment','--']*100)
+ctlMeans <- round(balTest$results[,'Control','--']*100)
 stdDiff <- sprintf('%.2f',balTest$results[,'std.diff','pair'])
 names(stdDiff) <- dimnames(balTest$results)[[1]]
 
@@ -83,8 +83,8 @@ for(vv in varbs){
     }
   } else cat0(
     varNames[vv],'&',miss[vv,2],'\\%&',impErr[vv],'& &',
-    sprintf('%.2f',balTest$results[vv,'Control','Unstrat']),'& ',
-    sprintf('%.2f',balTest$results[vv,'Treatment','Unstrat']),'& ',stdDiff[vv],'\\\\\n')
+    sprintf('%.2f',balTest$results[vv,'Control','--']),'& ',
+    sprintf('%.2f',balTest$results[vv,'Treatment','--']),'& ',stdDiff[vv],'\\\\\n')
   cat0('\\hline\n')
 }
 cat0('&&&\\multicolumn{4}{c}{Overall Covariate Balance: p=',results$balP,'}\\\\

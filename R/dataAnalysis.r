@@ -1,7 +1,12 @@
+devtools::dev_mode()
+#devtools::install_github("markmfredrickson/RItools@version_0.3.0")
+library(RItools)
+devtools::dev_mode()
+
+
 library(splines)
 library(gridExtra)
 library(optmatch)
-library(RItools)
 library(sandwich)
 library(clubSandwich)
 library(lmtest)
@@ -11,6 +16,7 @@ library(rstan)
 library(lme4)
 library(estimatr)
 library(HDInterval)
+
 
 traceplot <- rstan::traceplot
 select <- dplyr::select
@@ -140,6 +146,8 @@ m3 <- fullmatch(dist3,data=dat1)
 dat1$pretest <- dat1$xirt
 
 balMod <- xBalance(M~grade+race+pretest+spec+esl+state,strata=list(`Before Matching`=NULL,`After Matching`=~m3),report=c('std.diff','z.score','chisquare.test'),data=droplevels(dat1))
+
+balP <- balMod$overall['After.Matching','p.value']
 
 pdf('output/balancePlot.pdf')
 plot(balMod,colors=subwayPalette)

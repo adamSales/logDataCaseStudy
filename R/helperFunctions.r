@@ -9,6 +9,7 @@ makeStanDat <- function(dat,x,xInteract=FALSE,missingUsage=TRUE){
  dat <- droplevels(dat)
 
  x$section <- as.factor(x$section)
+ x$unit <- as.factor(x$unit)
 
  stanDat$nsecWorked <- nrow(x)
  stanDat$nstud <- nrow(dat)
@@ -16,12 +17,15 @@ makeStanDat <- function(dat,x,xInteract=FALSE,missingUsage=TRUE){
  stanDat$nschool <- nlevels(dat$schoolid2)
  stanDat$nsec <- nlevels(x$section)
  stanDat$npair <- nlevels(dat$pair)
+ stanDat$nunit <- nlevels(x$unit)
 
  stanDat$teacher <- as.numeric(as.factor(dat$teachid2))
  stanDat$pair <- as.numeric(dat$pair)
  stanDat$school <- as.numeric(dat$school)
  stanDat$studentM <- seq(stanDat$nstud)[match(x$field_id,dat$field_id)]
  stanDat$section <- as.numeric(x$section)
+ stanDat$unit <- as.numeric(x$unit)
+
 
  stanDat$grad <- as.numeric(x$hint)
 
@@ -30,10 +34,53 @@ makeStanDat <- function(dat,x,xInteract=FALSE,missingUsage=TRUE){
  stanDat$X <- scale(X)
  stanDat$ncov <- ncol(X)
 
+ stanDat$studID <- dat$field_id
 
  stanDat$Z <- as.numeric(dat$treatment)
 
  stanDat$Y <- dat$Y
+
+ stanDat
+}
+
+makeStanDatTrt <- function(dat,x,xInteract=FALSE,missingUsage=TRUE){
+  stanDat <- list()
+
+  dat <- filter(dat,treatment==1)
+
+  if(!missingUsage)
+    dat <- filter(dat,field_id%in%x$field_id|dat$treatment==0)
+
+  x <- droplevels(x)
+ dat <- droplevels(dat)
+
+ x$section <- as.factor(x$section)
+ x$unit <- as.factor(x$unit)
+
+ stanDat$nsecWorked <- nrow(x)
+ stanDat$nstud <- nrow(dat)
+ stanDat$nteacher <- nlevels(dat$teachid2)
+ stanDat$nschool <- nlevels(dat$schoolid2)
+ stanDat$nsec <- nlevels(x$section)
+ stanDat$npair <- nlevels(dat$pair)
+ stanDat$nunit <- nlevels(x$unit)
+
+ stanDat$teacher <- as.numeric(as.factor(dat$teachid2))
+ stanDat$pair <- as.numeric(dat$pair)
+ stanDat$school <- as.numeric(dat$school)
+ stanDat$studentM <- seq(stanDat$nstud)[match(x$field_id,dat$field_id)]
+ stanDat$section <- as.numeric(x$section)
+ stanDat$unit <- as.numeric(x$unit)
+
+
+ stanDat$grad <- as.numeric(x$hint)
+
+ X <- model.matrix(~poly(xirt,2)+race+sex+spec,data=dat)[,-1]
+ if(xInteract) X <- model.matrix(~poly(xirt,2)*(race+sex+spec)+(race+sex+spec)^2+state,data=dat)[,-1]
+ stanDat$X <- scale(X)
+ stanDat$ncov <- ncol(X)
+
+ stanDat$studID <- dat$field_id
 
  stanDat
 }
