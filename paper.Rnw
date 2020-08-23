@@ -91,12 +91,19 @@ load('output/analysis.RData')
 \maketitle
 
 \section{Introduction}
-From 2007 through 2010, the RAND corporation
-conducted one of the first effectiveness trials awarded through
-competitive grant programs sponsored by the US Department of
-Education's Institute of Education Sciences.  The randomized
-controlled trial (RCT) was
-designed to estimate the effect of school-wide adoption of the
+As educational technology (EdTech) booms, so do randomized controlled
+trials (RCTs) designed to evaluate edTech
+applications. A recent systematic review \citep{escueta2017education} cites 29
+published reports of RCTs evaluating ``computer assisted learning'' programs,
+all but one of which was published since 2001, and we are aware of
+numerous other such RCTs planned or ongoing.
+For instance, from 2007 through 2010, the RAND corporation
+conducted %one of the first effectiveness trials awarded through
+% competitive grant programs sponsored by the US Department of
+% Education's Institute of Education Sciences.  The
+an
+RCT %was
+designed to estimate the effectiveness of school-wide adoption of the
 Cognitive Tutor Algebra I (CTA1) curriculum, whose centerpiece is a
 computerized ``tutor'' that uses cognitive science principles to teach
 Algebra I \citep{anderson1985intelligent}.
@@ -104,11 +111,6 @@ The study \citep{pane2014effectiveness} found no effects in its first year, but 
 the second year of implementation students in high schools randomized to
 the CTA1 condition outperformed the control group on the posttest by a fifth of a
 standard deviation.
-As educational technology (EdTech) booms, so do RCTs in the mold of the RAND
-CTA1 study. A recent systematic review \citep{escueta2017education} cites 29
-published reports of RCTs of ``computer assisted learning'' programs,
-all but one of which was published since 2001. We are aware of
-numerous other such RCTs planned or ongoing.
 
 RCTs are invaluable tools for estimating these programs'
 efficacy. However, the interventions they study are highly
@@ -579,7 +581,7 @@ had they requested hints more often?
 Would high hint users have achieved higher posttest scores had the
 requested hints less often?
 
-This section will illustrate an observational study to answer these
+This section will illustrate an observational study, in an attempt to answer these
 questions.
 Generally speaking, the observational study approach discards the
 control group entirely and uses statistical confounder control (in our
@@ -935,18 +937,23 @@ The size of the effect may be as small as
 or as large as \Sexpr{max(abs(round(sens[['prec_eff']]['race',]*100)))}\% of a standard deviation.
 
 \section{Mediation Analysis}\label{sec:mediation}
-The goal of causal mediation analysis is to decompose a treatment
-effect into an ``indirect'' or ``mediated''
-effect and a ``direct'' effect.
-The indirect effect captures the component of the effect that is due
-to the mediator: the treatment affected the outcome by affecting the
-mediator, which itself, in turn, affected the outcome.
+What role did hint requests play in the CTA1 effect?
 Assignment to the treatment condition allowed students to request many
 hints during their work---how did the wide availability of hints affect their posttest scores?
-The direct effect is the component of the overall effect that operates via other mechanisms.
-For instance, how would assignment to CTA1 affect posttest scores were
-hints more limited?
+Conversely, how would assignment to CTA1 have affected posttest scores had
+hints been more limited?
 
+This section will illustrate mediation analysis, in an attempt to answer these
+questions.
+Mediation analysis decomposes the treatment
+effect into an ``indirect'' or ``mediated''
+effect and a ``direct'' effect.
+The indirect effect captures the component of the treatment effect that was due
+to a mediator, in this case hint requests.
+That is, the treatment affected the
+mediator---i.e. allowed students to request many hints---which, in
+turn, affected the outcome.
+The direct effect is the component of the overall effect that operated via other mechanisms.
 
 The method we present here builds on the results from the observational study in the previous section.
 In fact, in our analysis estimating indirect effects requires no more data than the observational study.
@@ -1247,16 +1254,22 @@ Avg. Direct Effect, covariate adjusted ($\\EE\\xi$) &',round(dir2.1t[1,1],2),'&'
 \end{table}
 
 \section{Principal Stratification}\label{sec:principalStratification}
+Was CTA1 more beneficial for students who tended to request more
+hints, or for those who tended to request fewer?
 
-In a principal stratification \citep[PS;][]{frangakis}  analysis, the researcher stratifies all students in
+This section will illustrate principal stratification
+\citep[PS;][]{frangakis}, in an attempt to answer this question.
+In PS, the researcher stratifies all students in
 the RCT---in both the treatment and control arms---based on how they
 \emph{would} use the software were they (perhaps counterfactually) assigned
 to the treatment condition.
 The goal is to estimate the average effect of
 assignment to the treatment condition separately in each stratum.
-In our analysis, we imagine that each student has his or her own proclivity to request hints, when possible: if assigned to treatment, each student would tend to request hints at a different rate.
-How does the effect of assignment to the CTA1 condition vary with these proclivities?
-Would the benefit of being assigned to the CTA1 condition be higher or lower for students who would tend to request more hints than for those who would tend to request fewer?
+In our analysis, we imagine that each student has his or her own
+proclivity to request hints, when possible: if assigned to treatment,
+each student would tend to request hints at a different rate.
+Then, we estimate varying treatment effects as a function of those
+proclivities.
 
 In an RCT, identification of these varying effects relies on
 randomization of treatment assignment,
